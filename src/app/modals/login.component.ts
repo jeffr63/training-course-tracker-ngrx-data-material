@@ -1,0 +1,87 @@
+import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-login',
+  template: `
+    <div style="margin:10px">
+      <h2 mat-dialog-title>Login</h2>
+      <mat-dialog-content>
+        <form [formGroup]="loginForm">
+          <mat-form-field appearance="outline">
+            <mat-label for="email">Email Address</mat-label>
+            <input
+              ngbAutofocus
+              type="email"
+              id="email"
+              matInput
+              formControlName="email"
+              placeholder="Enter email address"
+            />
+            <mat-error *ngIf="loginForm.controls.email.errors?.required && loginForm.controls.email?.touched">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="loginForm.controls.email.errors?.email && loginForm.controls.email?.touched">
+              Must enter valid email
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="mt-5">
+            <mat-label for="email">Password</mat-label>
+            <input type="password" id="password" matInput formControlName="password" />
+            <mat-error *ngIf="loginForm.controls.password.errors?.required && loginForm.controls.password?.touched">
+              Password is required
+            </mat-error>
+          </mat-form-field>
+        </form>
+      </mat-dialog-content>
+      <mat-dialog-actions [align]="'end'">
+        <button mat-flat-button color="primary" (click)="login()">Login</button>
+        <button mat-flat-button mat-dialog-close color="warn" (click)="cancel()" class="ml-8">Cancel</button>
+      </mat-dialog-actions>
+    </div>
+  `,
+  styles: [
+    `
+      mat-form-field {
+        width: 100%;
+      }
+
+      .mt-5 {
+        margin-top: 5px;
+      }
+
+      .ml-8 {
+        margin-left: 8px;
+      }
+    `,
+  ],
+})
+export class LoginComponent implements OnInit {
+  user = {
+    email: '',
+    password: '',
+  };
+  loginForm!: FormGroup;
+
+  constructor(public dialogRef: MatDialogRef<LoginComponent>, private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, , Validators.email]],
+      password: ['', Validators.required],
+    });
+  }
+
+  login(): void {
+    if (this.loginForm.valid) {
+      this.user.email = this.loginForm.controls.email.value;
+      this.user.password = this.loginForm.controls.password.value;
+      this.dialogRef.close(this.user);
+    }
+  }
+
+  cancel(): void {
+    this.dialogRef.close();
+  }
+}

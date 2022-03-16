@@ -1,0 +1,1136 @@
+{
+  "users": [
+    {
+      "email": "joe@joe.com",
+      "password": "$2a$10$nLQ7eabVMbf2jYhmpPnRMOGq3GPu6urmjTGVeOV7luhd4DWIlTS3m",
+      "name": "Joe Smith",
+      "role": "admin",
+      "id": 1
+    },
+    {
+      "email": "sam@joe.com",
+      "password": "$2a$10$FeRSUGdUiE5WfFibMbCAzOe9e/F1oAXaIpqbIT.5LGFTU6RtqQHGu",
+      "name": "Sam Jones",
+      "role": "user",
+      "id": 2
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "title": "ng-bootstrap Playbook",
+      "instructor": "Steve Michelotti",
+      "path": "Angular",
+      "source": "Pluralsight"
+    },
+    {
+      "id": 2,
+      "title": "Angular: The Big Picture",
+      "instructor": "Joe Eames",
+      "path": "Angular",
+      "source": "Pluralsight"
+    },
+    {
+      "id": 3,
+      "title": "Angular: Getting Started",
+      "instructor": "Deborah Kurata",
+      "path": "Angular",
+      "source": "Pluralsight"
+    },
+    {
+      "id": 4,
+      "title": "Angular CLI",
+      "instructor": "John Pappa",
+      "path": "Angular",
+      "source": "Pluralsight"
+    },
+    {
+      "title": "Angular Forms",
+      "instructor": "Mark Zamoyta",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 5
+    },
+    {
+      "title": "Play by Play: Angular 2 Quick Start with John Papa and Ward Bell",
+      "instructor": "John Papa and Ward Bell",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 6
+    },
+    {
+      "title": "Preparing for Migration from AngularJS(1.x) to Angular(2+)",
+      "instructor": "Joe Eames",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 7
+    },
+    {
+      "title": "Building Components with Angular 1.5",
+      "instructor": "Scott Allen",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 8
+    },
+    {
+      "title": "Java Fundamentals: The Java Language",
+      "instructor": "Jim Wilson",
+      "path": "Java",
+      "source": "Pluralsight",
+      "id": 9
+    },
+    {
+      "title": "Angular First Look",
+      "instructor": "John Papa",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 10
+    },
+    {
+      "title": "Visual Studio Code",
+      "instructor": "John Papa",
+      "path": "Visual Studio Code",
+      "source": "Pluralsight",
+      "id": 11
+    },
+    {
+      "title": "Play by Play: Angular 2/RxJS/HTTP and RESTful Services with John Papa and Dan Wahlin",
+      "instructor": "John Papa and Dan Wahlin",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 12
+    },
+    {
+      "title": "Play by Play: HTML, CSS, and JavaScript with Lea Verou",
+      "instructor": "Geoffrey Grosenback and Lea Verou",
+      "path": "CSS",
+      "source": "Pluralsight",
+      "id": 13
+    },
+    {
+      "title": "Java Fundamentals: The Core Platform",
+      "instructor": "Jim Wilson",
+      "path": "Java",
+      "source": "Pluralsight",
+      "id": 14
+    },
+    {
+      "title": "Java Fundamentals: Collections",
+      "instructor": "Richard Warburton",
+      "path": "Java",
+      "source": "Pluralsight",
+      "id": 15
+    },
+    {
+      "title": "Java Fundamentals: Generics",
+      "instructor": "Richard Warburton",
+      "path": "Java",
+      "source": "Pluralsight",
+      "id": 16
+    },
+    {
+      "title": "Java Web Fundamentals",
+      "instructor": "Kevin Jones",
+      "path": "Java",
+      "source": "Pluralsight",
+      "id": 17
+    },
+    {
+      "title": "Java Platform: Working with Databases Using JDBC",
+      "instructor": "Sekhar Srinivasan",
+      "path": "Java",
+      "source": "Pluralsight",
+      "id": 18
+    },
+    {
+      "title": "Applying Concurrency and Multi-threading to Common Java Patterns",
+      "instructor": "Jose Paumard",
+      "path": "Java",
+      "source": "Pluralsight",
+      "id": 19
+    },
+    {
+      "title": "Angular Reactive Forms",
+      "instructor": "Deborah Kurata",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 20
+    },
+    {
+      "title": "AngularJS Patterns: Clean Code",
+      "instructor": "John Papa",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 21
+    },
+    {
+      "title": "Introduction to Testing in Java",
+      "instructor": "Richard Warburton",
+      "path": "Java",
+      "source": "Pluralsight",
+      "id": 22
+    },
+    {
+      "title": "Working with Angular Animations",
+      "instructor": "Gary Simon",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 23
+    },
+    {
+      "title": "The Case for PowerShell",
+      "instructor": "Mark Minasi",
+      "path": "PowerShell",
+      "source": "Pluralsight",
+      "id": 24
+    },
+    {
+      "title": "PowerShell: Getting Started",
+      "instructor": "Michael Bender",
+      "path": "PowerShell",
+      "source": "Pluralsight",
+      "id": 25
+    },
+    {
+      "title": "Play by Play: Deploying an Angular 2 App to Azure with Git with John Papa and Shayne Boyer",
+      "instructor": "John Papa and Shayne Boyer",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 26
+    },
+    {
+      "title": "Angular Fundamentals",
+      "instructor": "Jim Cooper and Joe Eames",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 27
+    },
+    {
+      "title": "Code with Us: Angular Quick Start",
+      "instructor": "John Papa and Ward Bell",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 28
+    },
+    {
+      "title": "Play by Play: Understanding API Functionality Through Swagger",
+      "instructor": "John Papa and Shayne Boyer",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 29
+    },
+    {
+      "title": "Anvanced AngularJS Workflows",
+      "instructor": "Jonathan Mills",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 30
+    },
+    {
+      "title": "How Git Works",
+      "instructor": "Paolo Perrotta",
+      "path": "GitHub",
+      "source": "Pluralsight",
+      "id": 31
+    },
+    {
+      "title": "Mastering Git",
+      "instructor": "Paolo Perrotta",
+      "path": "Git",
+      "source": "Pluralsight",
+      "id": 32
+    },
+    {
+      "title": "Advanced Git",
+      "instructor": "Ben Hoskings",
+      "path": "GitHub",
+      "source": "Pluralsight",
+      "id": 33
+    },
+    {
+      "title": "GitHub for Windows Developers",
+      "instructor": "Brendan Enrick",
+      "path": "GitHub",
+      "source": "Pluralsight",
+      "id": 34
+    },
+    {
+      "title": "Git Fundamentals",
+      "instructor": "James Kovacs",
+      "path": "GitHub",
+      "source": "Pluralsight",
+      "id": 35
+    },
+    {
+      "title": "Advanced Git Tips and Tricks",
+      "instructor": "Enrico Campidoglio",
+      "path": "GitHub",
+      "source": "Pluralsight",
+      "id": 36
+    },
+    {
+      "title": "AngularJS: Get Started",
+      "instructor": "Scott Allen",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 37
+    },
+    {
+      "title": "Using Git with a GUI",
+      "instructor": "Xavier Morera",
+      "path": "GitHub",
+      "source": "Pluralsight",
+      "id": 38
+    },
+    {
+      "title": "AngularJS Fundamentals",
+      "instructor": "Jim Cooper and Joe Eames",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 39
+    },
+    {
+      "title": "AngularJS: The Big Picture",
+      "instructor": "Joe Eames",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 40
+    },
+    {
+      "title": "AngularJS Services In-depth",
+      "instructor": "Brice Wilson",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 41
+    },
+    {
+      "title": "AngularJS Best Practices",
+      "instructor": "Joe Eames",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 42
+    },
+    {
+      "title": "AngularJS Line of Business Applications",
+      "instructor": "Deborah Kurata",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 43
+    },
+    {
+      "title": "AngularJS Routing In-depth",
+      "instructor": "Brice Wilson",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 44
+    },
+    {
+      "title": "Integrating Angular with Node.js RESTful Services",
+      "instructor": "Dan Wahlin",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 45
+    },
+    {
+      "title": "AngularJS Directives Fundamentals",
+      "instructor": "Joe Eames",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 46
+    },
+    {
+      "title": "AngularJS Unit Testing in-depth, Using ngMock",
+      "instructor": "Bradley Braithwaite",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 47
+    },
+    {
+      "title": "Building a SPA Framework using AngularJS",
+      "instructor": "Mark Zamoyta",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 48
+    },
+    {
+      "title": "Play by Play: Insights from the Angular Team",
+      "instructor": "John Papa and Stephen Fluin",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 49
+    },
+    {
+      "title": "Building Apps with AngularFire 2",
+      "instructor": "Duncan Hunter",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 50
+    },
+    {
+      "title": "AngularJS with TypeScript",
+      "instructor": "Deborah Kurata",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 51
+    },
+    {
+      "title": "Using TypeScript for Large AngularJS Applications",
+      "instructor": "Justin Schwartzenberger",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 52
+    },
+    {
+      "title": "Building a JavaScript Development Environment",
+      "instructor": "Cory House",
+      "path": "Node.js",
+      "source": "Pluralsight",
+      "id": 53
+    },
+    {
+      "title": "Designing and Building Component-based AngularJS Applications",
+      "instructor": "Miquel Castro",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 54
+    },
+    {
+      "title": "Angular Forms",
+      "instructor": "Mark Zamoyta",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 55
+    },
+    {
+      "title": "Angular Routing",
+      "instructor": "Deborah Kurata",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 56
+    },
+    {
+      "title": "AngularJS In-Depth",
+      "instructor": "Lukas Ruebbelke",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 57
+    },
+    {
+      "title": "An AngularJS Playbook",
+      "instructor": "Scott Allen",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 58
+    },
+    {
+      "title": "Building Beautiful Angular Apps with PrimeNG",
+      "instructor": "Glenn Smith",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 59
+    },
+    {
+      "title": "Styling Angular Applications",
+      "instructor": "Brian Treese",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 60
+    },
+    {
+      "title": "Building Business Components Using Angular",
+      "instructor": "Paul D. Sheriff",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 61
+    },
+    {
+      "title": "Getting Started with Node.js Security with Express and Angular",
+      "instructor": "Brian Clark",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 62
+    },
+    {
+      "title": "Play by Play: Angular Design Solutions",
+      "instructor": "John Papa and Ward Bell",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 63
+    },
+    {
+      "title": "Rapid Angular Training",
+      "instructor": "Mark Zamoyta",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 64
+    },
+    {
+      "title": "Angular Best Practices",
+      "instructor": "Jim Cooper",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 65
+    },
+    {
+      "title": "Building an Angular Application with Node and Token Authentication",
+      "instructor": "Alexander Zanfir",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 66
+    },
+    {
+      "title": "React.js: Getting Started",
+      "instructor": "Samer Buna",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 67
+    },
+    {
+      "title": "React Fundamentals",
+      "instructor": "Liam McLennan",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 68
+    },
+    {
+      "title": "Rapid ES6 Training",
+      "instructor": "Mark Zamoyta",
+      "path": "JavaScript",
+      "source": "Pluralsight",
+      "id": 69
+    },
+    {
+      "title": "Building Application with React and Redux in ES6",
+      "instructor": "Cory House",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 70
+    },
+    {
+      "title": "Building Application with React and Flux",
+      "instructor": "Cory House",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 71
+    },
+    {
+      "title": "Building a Full-Stack App with React and Express",
+      "instructor": "Daniel Stern",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 72
+    },
+    {
+      "title": "Advanced React.js",
+      "instructor": "Samer Buna",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 73
+    },
+    {
+      "title": "Mastering React Testing with Jest",
+      "instructor": "Daniel Stern",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 74
+    },
+    {
+      "title": "Building Scalable React Apps",
+      "instructor": "Hendrik Swanepoel",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 75
+    },
+    {
+      "title": "Angular 2 End-to-end",
+      "instructor": "Reggie Dawson",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 76
+    },
+    {
+      "title": "Angular Services",
+      "instructor": "Brice Wilson",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 77
+    },
+    {
+      "title": "Migrating Application from AngularJS to Angular",
+      "instructor": "Joe Eames",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 78
+    },
+    {
+      "title": "Python: Getting Started",
+      "instructor": "Bo Milanovich",
+      "path": "Python",
+      "source": "Pluralsight",
+      "id": 79
+    },
+    {
+      "title": "Python Fundamentals",
+      "instructor": "Austin Bingham and Robert Smallshire",
+      "path": "Python",
+      "source": "Pluralsight",
+      "id": 80
+    },
+    {
+      "title": "Pig Latin: Getting Started",
+      "instructor": "Thomas Henson",
+      "path": "Hadoop",
+      "source": "Pluralsight",
+      "id": 81
+    },
+    {
+      "title": "Python - Beyond the Basics",
+      "instructor": "Austin Bingham and Robert Smallshire",
+      "path": "Python",
+      "source": "Pluralsight",
+      "id": 82
+    },
+    {
+      "title": "Getting Started with HDFS",
+      "instructor": "Thomas Henson",
+      "path": "Hadoop",
+      "source": "Pluralsight",
+      "id": 83
+    },
+    {
+      "title": "Writing Complex Analytical Queries with Hive",
+      "instructor": "Janani Ravi",
+      "path": "Hadoop",
+      "source": "Pluralsight",
+      "id": 84
+    },
+    {
+      "title": "SQL on Hadoop - Analyzing Bid Data with Hive",
+      "instructor": "Ahmad Alkilani",
+      "path": "Hadoop",
+      "source": "Pluralsight",
+      "id": 85
+    },
+    {
+      "title": "Shell Scripting with Bash",
+      "instructor": "Reindert-Jan Ekker",
+      "path": "Bash Shell",
+      "source": "Pluralsight",
+      "id": 86
+    },
+    {
+      "title": "Angular Material",
+      "instructor": "Ajden Towfeek",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 87
+    },
+    {
+      "title": "Constructing a User Interface with Angular",
+      "instructor": "David Mann",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 88
+    },
+    {
+      "title": "Angular Component Communication",
+      "instructor": "Deborah Kurata",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 89
+    },
+    {
+      "title": "Advanced Python",
+      "instructor": "Robert Smallshire",
+      "path": "Python",
+      "source": "Pluralsight",
+      "id": 90
+    },
+    {
+      "title": "Play by Play: Angular and ngrx",
+      "instructor": "Lars Klint and Duncan Hunter",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 91
+    },
+    {
+      "title": "Angular HTTP Communication",
+      "instructor": "Brice Wilson",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 92
+    },
+    {
+      "title": "Play by Play: Visual Studio Code Can Do That",
+      "instructor": "John Papa and Burke Holland",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 93
+    },
+    {
+      "title": "Play by Play: Building Enterprise Angular Apps with Nx",
+      "instructor": "Lars Klint and Duncan Hunter",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 94
+    },
+    {
+      "title": "Unit Testing in Angular",
+      "instructor": "Joe Eames",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 95
+    },
+    {
+      "title": "Play by Play: Build and Deploy Angular to the Cloud",
+      "instructor": "John Papa and Simona Cotin",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 96
+    },
+    {
+      "title": "Play by Play: Fundamentals of Angular Testing",
+      "instructor": "Lars Klint and Duncan Hunter",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 97
+    },
+    {
+      "title": "Angular NgRx: Getting Started",
+      "instructor": "Deborah Kurata and Duncan Hunter",
+      "id": 98,
+      "path": "Angular",
+      "source": "Pluralsight"
+    },
+    {
+      "title": "Securing Angular Apps with OpenID Connect and OAuth2",
+      "instructor": "Brian Noyes",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 99
+    },
+    {
+      "title": "Building Your First App with Spring Boot and Angular",
+      "instructor": "Dan Bunker",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 100
+    },
+    {
+      "title": "A Better CSS: LESS and SASS",
+      "instructor": "Shawn Wildermuth",
+      "path": "CSS",
+      "source": "Pluralsight",
+      "id": 101
+    },
+    {
+      "title": "Building a Responsive SPA Framework with Angular",
+      "instructor": "Mark Zamoyta",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 102
+    },
+    {
+      "title": "React and Flux for Angular Developers",
+      "instructor": "Tony Alicea",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 103
+    },
+    {
+      "title": "JavaScript Best Practices",
+      "instructor": "Jonathan Mills",
+      "path": "JavaScript",
+      "source": "Pluralsight",
+      "id": 104
+    },
+    {
+      "title": "Advanced Techniques in JavaScript and jQuery",
+      "instructor": "Kevin Murray",
+      "path": "JavaScript",
+      "source": "Pluralsight",
+      "id": 105
+    },
+    {
+      "title": "JavaScript Objects and ProtoTypes",
+      "instructor": "Jim Cooper",
+      "path": "JavaScript",
+      "source": "Pluralsight",
+      "id": 106
+    },
+    {
+      "title": "React: The Big Picture",
+      "instructor": "Cory House",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 107
+    },
+    {
+      "title": "RxJS: The Big Picture",
+      "instructor": "Brice WIlson",
+      "path": "RxJS",
+      "source": "Pluralsight",
+      "id": 108
+    },
+    {
+      "title": "Securing React Apps with Auth0",
+      "instructor": "Cory House",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 109
+    },
+    {
+      "title": "Styling React Components",
+      "instructor": "Jake Trent",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 110
+    },
+    {
+      "title": "Isomorphic React",
+      "instructor": "Daniel Stern",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 111
+    },
+    {
+      "title": "Testing React Applications with Jest",
+      "instructor": "Daniel Stern",
+      "path": "React",
+      "source": "Pluralsight",
+      "id": 112
+    },
+    {
+      "title": "Responsive Websites with Bootstrap 3",
+      "instructor": "Mark Zamoyta",
+      "path": "CSS",
+      "source": "Pluralsight",
+      "id": 113
+    },
+    {
+      "title": "Bootstrap 4 for the Developer",
+      "instructor": "Mario Duilio Macari",
+      "path": "CSS",
+      "source": "Pluralsight",
+      "id": 114
+    },
+    {
+      "title": "Practical Design Patterns in JavaScript",
+      "instructor": "Jonathan Mills",
+      "path": "JavaScript",
+      "source": "Pluralsight",
+      "id": 115
+    },
+    {
+      "title": "Using Redux to Manage State in Angular",
+      "instructor": "Hendrik Swanepoel",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 116
+    },
+    {
+      "title": "Mastering Flux and Redux",
+      "instructor": "Daniel Stern",
+      "path": "Redux",
+      "source": "Pluralsight",
+      "id": 117
+    },
+    {
+      "title": "HTML5 Fundamentals",
+      "instructor": "Craig Shoemaker",
+      "path": "HTML5",
+      "source": "Pluralsight",
+      "id": 118
+    },
+    {
+      "title": "Semantic HTML",
+      "instructor": "Susan Simkins",
+      "path": "HTML5",
+      "source": "Pluralsight",
+      "id": 119
+    },
+    {
+      "title": "HTML Fundamentals",
+      "instructor": "Matt Milner",
+      "path": "HTML5",
+      "source": "Pluralsight",
+      "id": 120
+    },
+    {
+      "title": "HTML, CSS, and JavaScript: The Big Picture",
+      "instructor": "Barry Lijbregts",
+      "path": "HTML5",
+      "source": "Pluralsight",
+      "id": 121
+    },
+    {
+      "title": "Meeting Web Accessibility Guidelines (Section 508/WCAG 2.0)",
+      "instructor": "Gerard K. Cohen",
+      "path": "HTML5",
+      "source": "Pluralsight",
+      "id": 122
+    },
+    {
+      "title": "Practical HTML5",
+      "instructor": "Gill Cleeren",
+      "path": "HTML5",
+      "source": "Pluralsight",
+      "id": 123
+    },
+    {
+      "title": "Responsive Web Design",
+      "instructor": "Unknown",
+      "path": "HTML5",
+      "source": "freeCodeCamp",
+      "id": 124
+    },
+    {
+      "title": "JavaScript Algorithms and Data Structures",
+      "instructor": "Unknown",
+      "path": "JavaScript",
+      "source": "freeCodeCamp",
+      "id": 125
+    },
+    {
+      "title": "Front End Libraries",
+      "instructor": "Unknown",
+      "path": "JavaScript",
+      "source": "freeCodeCamp",
+      "id": 126
+    },
+    {
+      "title": "JavaScript: Getting Started",
+      "instructor": "Mark Zamoyta",
+      "id": 127,
+      "path": "JavaScript",
+      "source": "Pluralsight"
+    },
+    {
+      "title": "JavaScript Fundamentals",
+      "instructor": "Mark Zamoyta",
+      "path": "JavaScript",
+      "source": "Pluralsight",
+      "id": 128
+    },
+    {
+      "title": "Angular Architecture and Best Practices",
+      "instructor": "Dan Wahlin",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 129
+    },
+    {
+      "title": "Developing Faster with Vue CLI",
+      "instructor": "John Papa",
+      "path": "Vue",
+      "source": "Pluralsight",
+      "id": 130
+    },
+    {
+      "title": "Vue.js: Getting Started",
+      "instructor": "Chad Campbell",
+      "path": "Vue",
+      "source": "Pluralsight",
+      "id": 131
+    },
+    {
+      "title": "Single Page Application with Vue.js",
+      "instructor": "Bill Stavroulakis",
+      "path": "Vue",
+      "source": "Pluralsight",
+      "id": 132
+    },
+    {
+      "title": "Creating a Site with CSS Grid and Bootstrap",
+      "instructor": "Maio Duillio",
+      "path": "Bootstrap",
+      "id": 133,
+      "source": "Pluralsight"
+    },
+    {
+      "title": "Bootstrap 3",
+      "instructor": "Shawn Wildermuth",
+      "path": "Bootstrap",
+      "source": "Pluralsight",
+      "id": 134
+    },
+    {
+      "title": "Extending Bootstrap with CSS, Javascript and jQuery",
+      "instructor": "Paul D. Sheriff",
+      "path": "Bootstrap",
+      "source": "Pluralsight",
+      "id": 135
+    },
+    {
+      "title": "Angular Forms",
+      "instructor": "Mark Zamoyta",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 136
+    },
+    {
+      "title": "Structuring Angular Applications with Angular Libraries",
+      "instructor": "Fabian GoseBrink",
+      "path": "Angular",
+      "source": "Pluralsight",
+      "id": 137
+    },
+    {
+      "title": "Web Accessibility: Getting Started",
+      "instructor": "Brain Treese",
+      "path": "HTML",
+      "source": "Pluralsight",
+      "id": 138
+    },
+    {
+      "title": "Play by Play: Angular Internationalization with John Papa and Brian Clark",
+      "instructor": "John Papa and Brian Clark",
+      "path": "AngularJS",
+      "source": "Pluralsight",
+      "id": 139
+    },
+    {
+      "title": "Vue Fundamentals",
+      "instructor": "Jim Cooper",
+      "path": "Vue",
+      "source": "Pluralsight",
+      "id": 140
+    },
+    {
+      "title": "Building Business Applications with vue.js and MongoDB",
+      "instructor": "Mark Scott",
+      "path": "Vue",
+      "source": "Pluralsight",
+      "id": 141
+    },
+    {
+      "title": "Making a Web Form Accessible",
+      "instructor": "Fiona Holder",
+      "path": "HTML5",
+      "source": "Pluralsight",
+      "id": 142
+    },
+    {
+      "title": "Amazing Backends for Angular Devs with NestJS",
+      "instructor": "Ely Lucas",
+      "path": "NestJS",
+      "source": "YouTube",
+      "id": 143
+    },
+    {
+      "title": "A Deep Look at Angular Elements",
+      "instructor": "Manfred Steyer",
+      "path": "Angular",
+      "source": "YouTube",
+      "id": 144
+    },
+    {
+      "title": "Crash Course: Angular and ngrx",
+      "instructor": "Aspen Payton",
+      "path": "Angular",
+      "source": "YouTube",
+      "id": 145
+    },
+    {
+      "title": "Blast Off with Angular Material",
+      "instructor": "Rachel Noccioli",
+      "path": "Angular",
+      "source": "YouTube",
+      "id": 146
+    },
+    {
+      "title": "Building Progressive Web Apps with Ionic",
+      "instructor": "Michael Callaghan",
+      "path": "Ionic",
+      "source": "Pluralsight",
+      "id": 147
+    },
+    {
+      "title": "Ionic CLI",
+      "instructor": "Michael Callaghan",
+      "path": "Ionic",
+      "source": "Pluralsight",
+      "id": 148
+    },
+    {
+      "title": "NestJS Crash Course",
+      "instructor": "Travery Media",
+      "path": "NestJS",
+      "source": "YouTube",
+      "id": 149
+    },
+    {
+      "title": "Intro to NestJS Framework for Reliable Server-side Apss on NodeJS",
+      "instructor": "IPenywis",
+      "path": "NestJS",
+      "source": "YouTube",
+      "id": 150
+    },
+    {
+      "title": "Creating Cross Platform Apps with Ionic and Electron",
+      "instructor": "Michael Callaghan",
+      "path": "Ionic",
+      "source": "Pluralsight",
+      "id": 151
+    },
+    {
+      "title": "Advanced Web Apps 2019 | Unit Testing in Angular",
+      "instructor": "Lars Bilde",
+      "path": "Angular",
+      "source": "YouTube",
+      "id": 152
+    }
+  ],
+  "paths": [
+    {
+      "id": 1,
+      "name": "Angular"
+    },
+    {
+      "id": 2,
+      "name": "CSS"
+    },
+    {
+      "id": 3,
+      "name": "Bootstrap"
+    },
+    {
+      "id": 4,
+      "name": "HTML5"
+    },
+    {
+      "id": 5,
+      "name": "React"
+    },
+    {
+      "id": 6,
+      "name": "Redux"
+    },
+    {
+      "name": "AngularJS",
+      "id": 7
+    },
+    {
+      "name": "JavaScript",
+      "id": 8
+    }
+  ],
+  "sources": [
+    {
+      "id": 1,
+      "name": "Pluralsight"
+    },
+    {
+      "id": 2,
+      "name": "freeCodeCamp"
+    },
+    {
+      "id": 3,
+      "name": "Instructor Led"
+    },
+    {
+      "id": 4,
+      "name": "YouTube"
+    }
+  ]
+}
