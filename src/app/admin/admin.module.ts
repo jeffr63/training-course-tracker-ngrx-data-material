@@ -12,18 +12,21 @@ import { SourceEditComponent } from './source-edit.component';
 import { UserEditComponent } from './user-edit.component';
 import { UserListComponent } from './user-list.component';
 import { MaterialModule } from '../material.module';
+import { UserTitleResolverService } from '../services/user-title-resolver.service';
+import { PathTitleResolverService } from '../services/path-title-resolver.service';
+import { SourceTitleResolverService } from '../services/source-title-resolver.service';
 
 const routes = [
   {
     path: '',
     children: [
       { path: '', component: AdminComponent },
-      { path: 'sources', component: SourceListComponent },
-      { path: 'sources/:id', component: SourceEditComponent },
-      { path: 'paths', component: PathListComponent },
-      { path: 'paths/:id', component: PathEditComponent },
-      { path: 'users', component: UserListComponent },
-      { path: 'users/:id', component: UserEditComponent },
+      { path: 'sources', title: 'CourseList - Sources', component: SourceListComponent },
+      { path: 'sources/:id', title: SourceTitleResolverService, component: SourceEditComponent },
+      { path: 'paths', title: 'CourseList - Paths', component: PathListComponent },
+      { path: 'paths/:id', title: PathTitleResolverService, component: PathEditComponent },
+      { path: 'users', title: 'CourseList - Users', component: UserListComponent },
+      { path: 'users/:id', title: UserTitleResolverService, component: UserEditComponent },
     ],
     canActivate: [CanActivateAdmin],
   },

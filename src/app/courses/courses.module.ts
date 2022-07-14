@@ -8,6 +8,7 @@ import { CourseEditComponent } from './course-edit.component';
 import { CourseListComponent } from './course-list.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MaterialModule } from '../material.module';
+import { CourseTitleResolverService } from './course-title-resolver.service';
 
 const routes = [
   {
@@ -16,6 +17,7 @@ const routes = [
       { path: '', component: CourseListComponent },
       {
         path: ':id',
+        title: CourseTitleResolverService,
         component: CourseEditComponent,
         canActivate: [CanActivateEdit],
       },
