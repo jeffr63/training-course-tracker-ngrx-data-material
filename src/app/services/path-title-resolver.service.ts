@@ -15,9 +15,9 @@ export class PathTitleResolverService implements Resolve<string> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');
     if (id == 'new') {
-      return 'CourseList - New Path';
+      return 'New Path';
     } else {
-      return this.pathService.getByKey(id).pipe(map((path) => `CourseList - ${path.name}`));
+      return this.pathService.getByKey(id).pipe(map((path) => path.name));
     }
   }
 }

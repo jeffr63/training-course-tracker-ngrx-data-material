@@ -22,6 +22,8 @@ import { LoginComponent } from './modals/login.component';
 import { MenuComponent } from './menu/menu.component';
 import { TestComponent } from './shared/test/test.component';
 import { MaterialModule } from './material.module';
+import { TitleStrategy } from '@angular/router';
+import { CustomTitleStrategyService } from './services/custom-title-strategy.service';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
   root: 'http://localhost:3000',
@@ -46,7 +48,10 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
     }),
     AppRoutingModule,
   ],
-  providers: [{ provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig }],
+  providers: [
+    { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
+    { provide: TitleStrategy, useClass: CustomTitleStrategyService },
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

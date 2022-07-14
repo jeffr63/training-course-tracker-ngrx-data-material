@@ -7,15 +7,15 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'admin',
-    title: 'CourseList - Administration',
+    title: 'Administration',
     loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule),
   },
   {
     path: 'courses',
-    title: 'CourseList - Courses',
+    title: 'Courses',
     loadChildren: () => import('./courses/courses.module').then((m) => m.CoursesModule),
   },
-  { path: 'home', title: 'CourseList - Home', component: DashboardComponent },
+  { path: 'home', title: 'Home', component: DashboardComponent },
   { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];
 

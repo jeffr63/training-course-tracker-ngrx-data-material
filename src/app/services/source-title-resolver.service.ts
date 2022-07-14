@@ -15,9 +15,9 @@ export class SourceTitleResolverService implements Resolve<string> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');
     if (id == 'new') {
-      return 'CourseList - New Source';
+      return 'New Source';
     } else {
-      return this.sourceService.getByKey(id).pipe(map((source) => `CourseList - ${source.name}`));
+      return this.sourceService.getByKey(id).pipe(map((source) => source.name));
     }
   }
 }

@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, TitleStrategy } from '@angular/router';
 
 import { AdminComponent } from './admin.component';
 import { CanActivateAdmin } from '../auth/canActiveateAdmin.guard';
+import { CustomTitleStrategyService } from './../services/custom-title-strategy.service';
 import { PathListComponent } from './path-list.component';
 import { PathEditComponent } from './path-edit.component';
 import { SourceListComponent } from './source-list.component';
@@ -21,11 +22,11 @@ const routes = [
     path: '',
     children: [
       { path: '', component: AdminComponent },
-      { path: 'sources', title: 'CourseList - Sources', component: SourceListComponent },
+      { path: 'sources', title: 'Sources', component: SourceListComponent },
       { path: 'sources/:id', title: SourceTitleResolverService, component: SourceEditComponent },
-      { path: 'paths', title: 'CourseList - Paths', component: PathListComponent },
+      { path: 'paths', title: 'Paths', component: PathListComponent },
       { path: 'paths/:id', title: PathTitleResolverService, component: PathEditComponent },
-      { path: 'users', title: 'CourseList - Users', component: UserListComponent },
+      { path: 'users', title: 'Users', component: UserListComponent },
       { path: 'users/:id', title: UserTitleResolverService, component: UserEditComponent },
     ],
     canActivate: [CanActivateAdmin],

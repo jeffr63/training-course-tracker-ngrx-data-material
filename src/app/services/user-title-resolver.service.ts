@@ -15,9 +15,9 @@ export class UserTitleResolverService implements Resolve<string> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');
     if (id == 'new') {
-      return 'CourseList - New User';
+      return 'New User';
     } else {
-      return this.userService.getByKey(id).pipe(map((user) => `CourseList - ${user.name}`));
+      return this.userService.getByKey(id).pipe(map((user) => user.name));
     }
   }
 }

@@ -15,9 +15,9 @@ export class CourseTitleResolverService implements Resolve<string> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');
     if (id == 'new') {
-      return 'CourseList - New Course';
+      return 'New Course';
     } else {
-      return this.courseService.getByKey(id).pipe(map((course) => `CourseList - ${course.title}`));
+      return this.courseService.getByKey(id).pipe(map((course) => course.title));
     }
   }
 }
