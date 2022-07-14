@@ -1,1 +1,1 @@
-json-server data\db.json
+json-server-auth data\db.json

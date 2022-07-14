@@ -1079,6 +1079,13 @@
       "path": "Angular",
       "source": "YouTube",
       "id": 152
+    },
+    {
+      "title": "Flutter Course for Beginners",
+      "instructor": "Vandid Nahavandirpoor",
+      "path": "Flutter",
+      "source": "freeCodeCamp",
+      "id": 153
     }
   ],
   "paths": [
@@ -1113,6 +1120,10 @@
     {
       "name": "JavaScript",
       "id": 8
+    },
+    {
+      "name": "Flutter",
+      "id": 9
     }
   ],
   "sources": [
