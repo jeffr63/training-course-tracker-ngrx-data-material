@@ -20,7 +20,6 @@ import { entityConfig } from './entity-metadata';
 import { environment } from '../environments/environment.prod';
 import { LoginComponent } from './modals/login.component';
 import { MenuComponent } from './menu/menu.component';
-import { TestComponent } from './shared/test/test.component';
 import { MaterialModule } from './material.module';
 import { TitleStrategy } from '@angular/router';
 import { CustomTitleStrategyService } from './services/custom-title-strategy.service';
@@ -31,7 +30,7 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
 };
 
 @NgModule({
-  declarations: [AppComponent, DashboardComponent, MenuComponent, LoginComponent, DeleteComponent, TestComponent],
+  declarations: [AppComponent, DashboardComponent, MenuComponent, LoginComponent, DeleteComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
