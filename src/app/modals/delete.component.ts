@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MaterialModule } from '../material.module';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 import { ModalDataService } from './modal-data.service';
 
 @Component({
   selector: 'app-delete',
+  standalone: true,
+  imports: [MaterialModule, MatDialogModule, MatIconModule],
+
   template: `
     <div style="margin:10px">
       <h2 mat-dialog-title>Delete?</h2>

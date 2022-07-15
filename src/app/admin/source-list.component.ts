@@ -1,8 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MaterialModule } from '../material.module';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 import { DeleteComponent } from '../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';
@@ -11,6 +16,16 @@ import { SourceService } from '../services/source.service';
 
 @Component({
   selector: 'app-source-list',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MaterialModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    RouterModule,
+  ],
 
   template: `
     <section class="mt-5">

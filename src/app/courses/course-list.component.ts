@@ -1,17 +1,23 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { MaterialModule } from '../material.module';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalDataService } from '../modals/modal-data.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { AuthService } from '../auth/auth.service';
 import { Course } from '../shared/course';
 import { CourseService } from './course.service';
 import { DeleteComponent } from './../modals/delete.component';
+import { ModalDataService } from '../modals/modal-data.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-course-list',
+  standalone: true,
+  imports: [CommonModule, MaterialModule, MatFormFieldModule, RouterModule],
 
   template: `
     <section class="mt-5">

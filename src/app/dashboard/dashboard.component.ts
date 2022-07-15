@@ -1,13 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { MaterialModule } from '../material.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { Observable, of } from 'rxjs';
 import * as _ from 'lodash';
 
 import { Course, CourseData } from '../shared/course';
 import { CourseService } from '../courses/course.service';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
+  imports: [MaterialModule, MatGridListModule, MatCardModule, NgxChartsModule],
 
   template: `
     <section>

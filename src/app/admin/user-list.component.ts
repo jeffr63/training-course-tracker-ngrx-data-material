@@ -1,8 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MaterialModule } from '../material.module';
+import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 import { DeleteComponent } from '../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';
@@ -11,6 +16,9 @@ import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-user-list',
+  standalone: true,
+  imports: [CommonModule, MaterialModule, MatCardModule, MatTableModule, MatFormFieldModule, RouterModule],
+
   template: `
     <section class="mt-5">
       <header>

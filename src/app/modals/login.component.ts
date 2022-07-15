@@ -1,9 +1,14 @@
-import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MaterialModule } from '../material.module';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [MaterialModule, MatFormFieldModule, MatDialogModule, ReactiveFormsModule],
+
   template: `
     <div style="margin:10px">
       <h2 mat-dialog-title>Login</h2>

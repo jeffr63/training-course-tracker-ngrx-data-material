@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { MaterialModule } from '../material.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
+  standalone: true,
+  imports: [MaterialModule, MatGridListModule, MatCardModule, RouterModule],
 
   template: `
     <section>

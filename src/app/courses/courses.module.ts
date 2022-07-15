@@ -1,24 +1,18 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { CanActivateEdit } from '../auth/canActiveateEdit.guard';
-import { CourseEditComponent } from './course-edit.component';
-import { CourseListComponent } from './course-list.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../material.module';
 import { CourseTitleResolverService } from './course-title-resolver.service';
 
 const routes = [
   {
     path: '',
     children: [
-      { path: '', component: CourseListComponent },
+      { path: '', loadComponent: () => import('./course-list.component').then((m) => m.CourseListComponent) },
       {
         path: ':id',
         title: CourseTitleResolverService,
-        component: CourseEditComponent,
+        loadComponent: () => import('./course-edit.component').then((m) => m.CourseEditComponent),
         canActivate: [CanActivateEdit],
       },
     ],
@@ -26,8 +20,6 @@ const routes = [
 ];
 
 @NgModule({
-  declarations: [CourseEditComponent, CourseListComponent],
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule.forChild(routes)],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [RouterModule.forChild(routes)],
 })
 export class CoursesModule {}

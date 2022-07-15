@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Location } from '@angular/common';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule, Location } from '@angular/common';
+import { MaterialModule } from '../material.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 
 import { Subscription } from 'rxjs';
 
@@ -10,6 +14,16 @@ import { SourceService } from '../services/source.service';
 
 @Component({
   selector: 'app-source-edit',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MaterialModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
 
   template: `
     <mat-card>
