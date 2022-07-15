@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../material.module';
@@ -7,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MaterialModule, MatFormFieldModule, MatDialogModule, ReactiveFormsModule],
+  imports: [CommonModule, MaterialModule, MatFormFieldModule, MatDialogModule, ReactiveFormsModule],
 
   template: `
     <div style="margin:10px">

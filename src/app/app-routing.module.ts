@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'admin',
@@ -18,9 +17,3 @@ const routes: Routes = [
   { path: 'home', title: 'Home', component: DashboardComponent },
   { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
