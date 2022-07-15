@@ -8,7 +8,7 @@ import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { environment } from './environments/environment';
-import { routes } from './app/app-routing.module';
+import { APP_ROUTES } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { entityConfig } from './app/entity-metadata';
 import { HttpClientModule } from '@angular/common/http';
@@ -37,7 +37,7 @@ bootstrapApplication(AppComponent, {
         maxAge: 5,
         logOnly: environment.production,
       }),
-      RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })
+      RouterModule.forRoot(APP_ROUTES, { relativeLinkResolution: 'legacy' })
     ),
     { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
     { provide: TitleStrategy, useClass: CustomTitleStrategyService },

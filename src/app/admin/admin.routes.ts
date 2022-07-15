@@ -1,12 +1,9 @@
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-
 import { CanActivateAdmin } from '../auth/canActiveateAdmin.guard';
 import { UserTitleResolverService } from '../services/user-title-resolver.service';
 import { PathTitleResolverService } from '../services/path-title-resolver.service';
 import { SourceTitleResolverService } from '../services/source-title-resolver.service';
 
-const routes = [
+export const ADMIN_ROUTES = [
   {
     path: '',
     children: [
@@ -45,8 +42,3 @@ const routes = [
     canActivate: [CanActivateAdmin],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-})
-export class AdminModule {}

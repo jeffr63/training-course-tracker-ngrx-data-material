@@ -1,10 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-
 import { CanActivateEdit } from '../auth/canActiveateEdit.guard';
 import { CourseTitleResolverService } from './course-title-resolver.service';
 
-const routes = [
+export const COURSES_ROUTES = [
   {
     path: '',
     children: [
@@ -18,8 +15,3 @@ const routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-})
-export class CoursesModule {}
