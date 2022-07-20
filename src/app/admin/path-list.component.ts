@@ -12,7 +12,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 import { DeleteComponent } from '../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';
-import { Path } from '../shared/paths';
+import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
 
 @Component({

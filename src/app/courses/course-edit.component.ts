@@ -8,11 +8,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { Observable, Subscription } from 'rxjs';
 
-import { Course } from '../shared/course';
+import { Course } from '../models/course';
 import { CourseService } from './course.service';
-import { Path } from '../shared/paths';
+import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
-import { Source } from '../shared/sources';
+import { Source } from '../models/sources';
 import { SourceService } from '../services/source.service';
 
 @Component({

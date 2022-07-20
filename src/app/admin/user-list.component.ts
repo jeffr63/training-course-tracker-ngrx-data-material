@@ -11,7 +11,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 import { DeleteComponent } from '../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';
-import { User } from '../shared/user';
+import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 
 @Component({

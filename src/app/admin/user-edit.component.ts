@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 
 import { UserService } from '../services/user.service';
-import { User } from '../shared/user';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-user-edit',

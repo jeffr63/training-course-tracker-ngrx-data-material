@@ -8,7 +8,7 @@ import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { AuthService } from '../auth/auth.service';
-import { Course } from '../shared/course';
+import { Course } from '../models/course';
 import { CourseService } from './course.service';
 import { DeleteComponent } from './../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';

@@ -11,7 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { EntityDataModule } from '@ngrx/data';
 import { CourseService } from '../courses/course.service';
-import { CourseData } from '../shared/course';
+import { CourseData } from '../models/course';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
