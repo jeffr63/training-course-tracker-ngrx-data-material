@@ -64,8 +64,8 @@ import { ModalDataService } from '../modals/modal-data.service';
         <tr mat-header-row *matHeaderRowDef="dataColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: dataColumns; let even = even" [ngClass]="{ gray: even }"></tr>
 
-        <tr mat-row *matNoDataRow>
-          <mat-cell colspan="4">No data matching the filter</mat-cell>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="5">No data matching the filter</td>
         </tr>
       </table>
 

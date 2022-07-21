@@ -48,8 +48,8 @@ import { UserService } from '../services/user.service';
         <tr mat-row *matRowDef="let row; columns: dataColumns; let even = even" [ngClass]="{ gray: even }"></tr>
 
         <!-- Row shown when there is no matching data. -->
-        <tr mat-row *matNoDataRow>
-          <mat-cell colspan="4">No data matching the filter</mat-cell>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter</td>
         </tr>
       </table>
 
