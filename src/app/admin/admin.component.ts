@@ -11,7 +11,10 @@ import { Router, RouterModule } from '@angular/router';
 
   template: `
     <section>
-      <h1 class="display-4">Administration</h1>
+      <div class="header">
+        <h1 class="mat-display-2">Administration</h1>
+      </div>
+
       <mat-grid-list cols="3">
         <mat-grid-tile>
           <mat-card>
