@@ -39,7 +39,7 @@ import { ModalDataService } from '../modals/modal-data.service';
           <ng-container *ngIf="column.type === 'actions'">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element">
-              <a
+              <button
                 mat-icon-button
                 color="primary"
                 (click)="editCourse(element.id)"
@@ -47,7 +47,7 @@ import { ModalDataService } from '../modals/modal-data.service';
                 *ngIf="authService.isAuthenticated"
               >
                 <mat-icon>edit</mat-icon>
-              </a>
+              </button>
               <button
                 mat-icon-button
                 color="warn"

@@ -38,9 +38,9 @@ import { Column } from '../models/column';
           <ng-container *ngIf="column.type === 'actions'">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element">
-              <a mat-icon-button color="primary" (click)="editPath(element.id)" title="Edit">
+              <button mat-icon-button color="primary" (click)="editPath(element.id)" title="Edit">
                 <mat-icon>edit</mat-icon>
-              </a>
+              </button>
               <button mat-icon-button color="warn" (click)="deletePath(element.id)" title="Delete">
                 <mat-icon>delete</mat-icon>
               </button>
