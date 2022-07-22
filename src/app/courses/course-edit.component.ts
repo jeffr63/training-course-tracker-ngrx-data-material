@@ -2,9 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
-import { MaterialModule } from '../material.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 import { Observable, Subscription } from 'rxjs';
 
@@ -14,11 +15,13 @@ import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
 import { Source } from '../models/sources';
 import { SourceService } from '../services/source.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-course-edit',
   standalone: true,
-  imports: [CommonModule, MaterialModule, MatCardModule, MatFormFieldModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule, ReactiveFormsModule, RouterModule],
 
   template: `
     <mat-card>
@@ -85,7 +88,7 @@ import { SourceService } from '../services/source.service';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="warn" (click)="save()" title="Save" [disabled]="!courseEditForm.valid">
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!courseEditForm.valid">
           <mat-icon>save</mat-icon> Save
         </button>
         <a mat-flat-button color="accent" class="ml-10" [routerLink]="['/courses']"

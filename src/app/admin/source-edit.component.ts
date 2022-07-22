@@ -2,10 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
-import { MaterialModule } from '../material.module';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 import { Subscription } from 'rxjs';
 
@@ -17,10 +18,11 @@ import { SourceService } from '../services/source.service';
   standalone: true,
   imports: [
     CommonModule,
-    MaterialModule,
+    MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     ReactiveFormsModule,
     RouterModule,
   ],
@@ -48,7 +50,7 @@ import { SourceService } from '../services/source.service';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="warn" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
           <mat-icon>save</mat-icon> Save
         </button>
         <a mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/sources']"

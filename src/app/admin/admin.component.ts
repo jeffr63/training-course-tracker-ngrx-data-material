@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MaterialModule } from '../material.module';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { Router, RouterModule } from '@angular/router';
@@ -7,7 +7,7 @@ import { Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [MaterialModule, MatGridListModule, MatCardModule, RouterModule],
+  imports: [MatButtonModule, MatGridListModule, MatCardModule, RouterModule],
 
   template: `
     <section>

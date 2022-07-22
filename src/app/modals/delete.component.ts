@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../material.module';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -9,7 +8,7 @@ import { ModalDataService } from './modal-data.service';
 @Component({
   selector: 'app-delete',
   standalone: true,
-  imports: [CommonModule, MaterialModule, MatDialogModule, MatIconModule],
+  imports: [CommonModule, MatDialogModule, MatIconModule],
 
   template: `
     <div style="margin:10px">

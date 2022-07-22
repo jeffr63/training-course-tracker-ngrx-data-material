@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MaterialModule } from '../material.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 
@@ -13,7 +12,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MaterialModule, MatGridListModule, MatCardModule, NgxChartsModule],
+  imports: [MatGridListModule, MatCardModule, NgxChartsModule],
 
   template: `
     <section>

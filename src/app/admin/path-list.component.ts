@@ -1,23 +1,24 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../material.module';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, MatSortable } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortable, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
+import { Column } from '../models/column';
 import { DeleteComponent } from '../modals/delete.component';
+import { ListHeaderComponent } from '../shared/list-header.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
-import { ListHeaderComponent } from '../shared/list-header.component';
-import { Column } from '../models/column';
 
 @Component({
   selector: 'app-path-list',
   standalone: true,
-  imports: [CommonModule, ListHeaderComponent, MaterialModule, RouterModule],
+  imports: [CommonModule, ListHeaderComponent, MatButtonModule, MatIconModule, MatPaginatorModule, MatSortModule, MatTableModule, RouterModule],
 
   template: `
     <section class="mt-5">

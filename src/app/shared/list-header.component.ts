@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MaterialModule } from '../material.module';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-list-header',
   standalone: true,
-  imports: [CommonModule, MaterialModule, MatFormFieldModule, MatIconModule],
+  imports: [CommonModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule],
 
   template: `
     <header>

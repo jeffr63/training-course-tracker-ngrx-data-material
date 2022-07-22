@@ -2,10 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
-import { MaterialModule } from '../material.module';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { Subscription } from 'rxjs';
 
@@ -17,12 +19,14 @@ import { User } from '../models/user';
   standalone: true,
   imports: [
     CommonModule,
-    MaterialModule,
+    MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
     MatIconModule,
-    RouterModule,
+    MatInputModule,
+    MatRadioModule,
     ReactiveFormsModule,
+    RouterModule,
   ],
 
   template: `
@@ -65,7 +69,7 @@ import { User } from '../models/user';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="warn" (click)="save()" title="Save" [disabled]="!userEditForm.valid">
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!userEditForm.valid">
           <mat-icon>save</mat-icon> Save
         </button>
         <a mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/users']"

@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { MaterialModule } from '../material.module';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AuthService } from '../auth/auth.service';
@@ -12,7 +11,7 @@ import { LoginComponent } from '../modals/login.component';
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule, MaterialModule, MatToolbarModule, MatButtonModule, RouterModule],
+  imports: [CommonModule, MatDialogModule, MatToolbarModule, MatButtonModule, RouterModule],
 
   template: `
     <mat-toolbar color="primary">
