@@ -1,6 +1,8 @@
 export interface Column {
   key: string;
-  title: string;
+  name: string;
   width: string;
-  type: string;
+  type: 'sort' | 'action' | '';
+  position?: 'right' | 'left';
+  sortDefault?: boolean;
 }

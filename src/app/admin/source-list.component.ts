@@ -1,68 +1,39 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortable, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 import { DeleteComponent } from '../modals/delete.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { Source } from '../models/sources';
 import { SourceService } from '../services/source.service';
-import { ListHeaderComponent } from '../shared/list-header.component';
 import { Column } from '../models/column';
+import { DisplayTableComponent } from '../shared/display-table.component';
+import { Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-source-list',
   standalone: true,
-  imports: [CommonModule, ListHeaderComponent, MatButtonModule, MatIconModule, MatPaginatorModule, MatSortModule, MatTableModule, RouterModule],
+  imports: [CommonModule, DisplayTableComponent, RouterModule],
 
   template: `
     <section class="mt-5">
-      <app-list-header
-        [isAuthenticated]="isAuthenticated"
-        (addNew)="newSource()"
-        (applyFilter)="applyFilter($event)"
-      ></app-list-header>
-
-      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-        <ng-container [matColumnDef]="column.key" *ngFor="let column of columns">
-          <ng-container *ngIf="column.type === 'sort'">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: {{ column.width }}">
-              {{ column.title }}
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
-          </ng-container>
-          <ng-container *ngIf="column.type === 'actions'">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <button mat-icon-button color="primary" (click)="editSource(element.id)" title="Edit">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" (click)="deleteSource(element.id)" title="Delete">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="dataColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: dataColumns; let even = even" [ngClass]="{ gray: even }"></tr>
-
-        <!-- Row shown when there is no matching data. -->
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="2">No data matching the filter</td>
-        </tr>
-      </table>
-
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        [pageSize]="10"
-        aria-label="Select page of sources"
-      ></mat-paginator>
+      <app-display-table
+        *ngIf="sources"
+        [isAuthenticated]="true"
+        [isFilterable]="true"
+        [includeAdd]="true"
+        [isPageable]="true"
+        [paginationSizes]="[5, 10, 25, 100]"
+        [defaultPageSize]="10"
+        [disableClear]="true"
+        [tableData]="sources"
+        [tableColumns]="columns"
+        (sort)="sortData($event)"
+        (add)="newSource()"
+        (delete)="deleteSource($event)"
+        (edit)="editSource($event)"
+      ></app-display-table>
     </section>
   `,
 
@@ -79,16 +50,10 @@ import { Column } from '../models/column';
 })
 export class SourceListComponent implements OnInit {
   columns: Column[] = [
-    { key: 'name', title: 'Source', width: '600px', type: 'sort' },
-    { key: 'action', title: '', width: '', type: 'actions' },
+    { key: 'name', name: 'Source', width: '600px', type: 'sort', position: 'left', sortDefault: true },
+    { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
-  dataColumns = this.columns.map((col) => col.key);
-  isAuthenticated = true;
   sources: Source[];
-  dataSource!: MatTableDataSource<Source>;
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private sourceService: SourceService,
@@ -99,11 +64,6 @@ export class SourceListComponent implements OnInit {
 
   ngOnInit() {
     this.getAllSources(true);
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   deleteSource(id) {
@@ -128,7 +88,12 @@ export class SourceListComponent implements OnInit {
 
   getAllSources(setInitialSort: boolean): void {
     this.sourceService.getAll().subscribe({
-      next: (data) => this.setDataSource(data, setInitialSort),
+      next: (data) => {
+        this.sources = data;
+        // if (setInitialSort) {
+        //   this.sortData({ active: 'name', direction: 'asc' });
+        // }
+      },
     });
   }
 
@@ -136,13 +101,19 @@ export class SourceListComponent implements OnInit {
     this.router.navigate(['/admin/sources/new']);
   }
 
-  setDataSource(data, setInitialSort: boolean) {
-    this.dataSource = new MatTableDataSource(data);
-    this.dataSource.paginator = this.paginator;
-    if (setInitialSort) {
-      this.sort.sort({ id: 'name', start: 'asc' } as MatSortable);
+  sortData(sortParameters: Sort) {
+    const keyName = sortParameters.active;
+    if (sortParameters.direction === 'asc') {
+      this.sources = this.sources.sort((a: Source, b: Source) =>
+        a[keyName].localeCompare(b[keyName], 'en', { sensitivity: 'case' })
+      );
+    } else if (sortParameters.direction === 'desc') {
+      this.sources = this.sources.sort((a: Source, b: Source) =>
+        b[keyName].localeCompare(a[keyName], 'en', { sensitivity: 'case' })
+      );
+    } else {
+      this.getAllSources(false);
+      return this.sources;
     }
-    this.sort.disableClear = true;
-    this.dataSource.sort = this.sort;
   }
 }

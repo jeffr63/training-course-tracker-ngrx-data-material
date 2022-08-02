@@ -4,11 +4,12 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
 import { ModalDataService } from './modal-data.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-delete',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatIconModule],
+  imports: [CommonModule, MatDialogModule, MatIconModule, MatButtonModule],
 
   template: `
     <div style="margin:10px">

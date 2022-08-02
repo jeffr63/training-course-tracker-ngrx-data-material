@@ -1,88 +1,46 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortable, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Sort } from '@angular/material/sort';
 
 import { AuthService } from '../auth/auth.service';
 import { Column } from '../models/column';
 import { Course } from '../models/course';
 import { CourseService } from './course.service';
 import { DeleteComponent } from './../modals/delete.component';
-import { ListHeaderComponent } from '../shared/list-header.component';
+import { DisplayTableComponent } from '../shared/display-table.component';
 import { ModalDataService } from '../modals/modal-data.service';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, ListHeaderComponent, MatButtonModule, MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule, RouterModule],
+  imports: [CommonModule, DisplayTableComponent, RouterModule],
 
   template: `
     <section class="mt-5">
-      <app-list-header
+      <app-display-table
+        *ngIf="courses"
         [isAuthenticated]="authService.isAuthenticated"
-        (addNew)="newCourse()"
-        (applyFilter)="applyFilter($event)"
-      ></app-list-header>
-
-      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-        <ng-container [matColumnDef]="column.key" *ngFor="let column of columns">
-          <ng-container *ngIf="column.type === 'sort'">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="min-width: {{ column.width }}">
-              {{ column.title }}
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
-          </ng-container>
-          <ng-container *ngIf="column.type === 'actions'">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="editCourse(element.id)"
-                title="Edit"
-                *ngIf="authService.isAuthenticated"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                color="warn"
-                (click)="deleteCourse(element.id)"
-                title="Delete"
-                *ngIf="authService.isAuthenticated"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="dataColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: dataColumns; let even = even" [ngClass]="{ gray: even }"></tr>
-
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="5">No data matching the filter</td>
-        </tr>
-      </table>
-
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        [pageSize]="10"
-        aria-label="Select page of courses"
-      ></mat-paginator>
+        [isFilterable]="true"
+        [includeAdd]="true"
+        [isPageable]="true"
+        [paginationSizes]="[5, 10, 25, 100]"
+        [defaultPageSize]="10"
+        [disableClear]="true"
+        [tableData]="courses"
+        [tableColumns]="columns"
+        (sort)="sortData($event)"
+        (add)="newCourse()"
+        (delete)="deleteCourse($event)"
+        (edit)="editCourse($event)"
+      ></app-display-table>
     </section>
   `,
 
   styles: [
     `
-      table {
-        width: 100%;
-      }
       section {
         margin: 10px 20px;
       }
@@ -91,18 +49,15 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class CourseListComponent implements OnInit {
   columns: Column[] = [
-    { key: 'title', title: 'Title', width: '600px', type: 'sort' },
-    { key: 'instructor', title: 'Instructor', width: '400px', type: 'sort' },
-    { key: 'path', title: 'Path', width: '150px', type: 'sort' },
-    { key: 'source', title: 'Source', width: '150px', type: 'sort' },
-    { key: 'action', title: '', width: '', type: 'actions' },
+    { key: 'title', name: 'Title', width: '600px', type: 'sort', position: 'left', sortDefault: true },
+    { key: 'instructor', name: 'Instructor', width: '400px', type: 'sort', position: 'left' },
+    { key: 'path', name: 'Path', width: '150px', type: 'sort', position: 'left' },
+    { key: 'source', name: 'Source', width: '150px', type: 'sort', position: 'left' },
+    { key: 'action', name: '', width: '50px', type: 'action', position: 'left' },
   ];
-  dataColumns = this.columns.map((col) => col.key);
-  dataSource!: MatTableDataSource<Course>;
+  public defaultSortColumn = 'title';
   loading = false;
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  courses: Course[];
 
   constructor(
     private courseService: CourseService,
@@ -114,11 +69,6 @@ export class CourseListComponent implements OnInit {
 
   ngOnInit() {
     this.getAllCourses(true);
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   deleteCourse(id) {
@@ -144,7 +94,12 @@ export class CourseListComponent implements OnInit {
 
   getAllCourses(setInitialSort: boolean): void {
     this.courseService.getAll().subscribe({
-      next: (data) => this.setDataSource(data, setInitialSort),
+      next: (data) => {
+        this.courses = data;
+        // if (setInitialSort) {
+        //   this.sortData({ active: 'title', direction: 'asc' });
+        // }
+      },
     });
   }
 
@@ -152,13 +107,15 @@ export class CourseListComponent implements OnInit {
     this.router.navigate(['/courses/new']);
   }
 
-  setDataSource(data, setInitialSort: boolean) {
-    this.dataSource = new MatTableDataSource(data);
-    this.dataSource.paginator = this.paginator;
-    if (setInitialSort) {
-      this.sort.sort({ id: 'title', start: 'asc' } as MatSortable);
+  sortData(sortParameters: Sort) {
+    const keyName = sortParameters.active;
+    if (sortParameters.direction === 'asc') {
+      this.courses = this.courses.sort((a: Course, b: Course) => a[keyName].localeCompare(b[keyName]));
+    } else if (sortParameters.direction === 'desc') {
+      this.courses = this.courses.sort((a: Course, b: Course) => b[keyName].localeCompare(a[keyName]));
+    } else {
+      this.getAllCourses(false);
+      return this.courses;
     }
-    this.sort.disableClear = true;
-    this.dataSource.sort = this.sort;
   }
 }
