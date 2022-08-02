@@ -29,7 +29,6 @@ import { Sort } from '@angular/material/sort';
         [disableClear]="true"
         [tableData]="sources"
         [tableColumns]="columns"
-        (sort)="sortData($event)"
         (add)="newSource()"
         (delete)="deleteSource($event)"
         (edit)="editSource($event)"
@@ -63,7 +62,7 @@ export class SourceListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getAllSources(true);
+    this.getAllSources();
   }
 
   deleteSource(id) {
@@ -77,7 +76,7 @@ export class SourceListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result == 'delete') {
         this.sourceService.delete(id);
-        this.getAllSources(false);
+        this.getAllSources();
       }
     });
   }
@@ -86,34 +85,15 @@ export class SourceListComponent implements OnInit {
     this.router.navigate(['/admin/sources', id]);
   }
 
-  getAllSources(setInitialSort: boolean): void {
+  getAllSources(): void {
     this.sourceService.getAll().subscribe({
       next: (data) => {
         this.sources = data;
-        // if (setInitialSort) {
-        //   this.sortData({ active: 'name', direction: 'asc' });
-        // }
       },
     });
   }
 
   newSource() {
     this.router.navigate(['/admin/sources/new']);
-  }
-
-  sortData(sortParameters: Sort) {
-    const keyName = sortParameters.active;
-    if (sortParameters.direction === 'asc') {
-      this.sources = this.sources.sort((a: Source, b: Source) =>
-        a[keyName].localeCompare(b[keyName], 'en', { sensitivity: 'case' })
-      );
-    } else if (sortParameters.direction === 'desc') {
-      this.sources = this.sources.sort((a: Source, b: Source) =>
-        b[keyName].localeCompare(a[keyName], 'en', { sensitivity: 'case' })
-      );
-    } else {
-      this.getAllSources(false);
-      return this.sources;
-    }
   }
 }

@@ -29,7 +29,6 @@ import { Sort } from '@angular/material/sort';
         [disableClear]="true"
         [tableData]="paths"
         [tableColumns]="columns"
-        (sort)="sortData($event)"
         (add)="newPath()"
         (delete)="deletePath($event)"
         (edit)="editPath($event)"
@@ -63,7 +62,7 @@ export class PathListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getAllPaths(true);
+    this.getAllPaths();
   }
 
   deletePath(id) {
@@ -77,7 +76,7 @@ export class PathListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result == 'delete') {
         this.pathService.delete(id);
-        this.getAllPaths(false);
+        this.getAllPaths();
       }
     });
   }
@@ -86,30 +85,15 @@ export class PathListComponent implements OnInit {
     this.router.navigate(['/admin/paths', id]);
   }
 
-  getAllPaths(setInitialSort: boolean): void {
+  getAllPaths(): void {
     this.pathService.getAll().subscribe({
       next: (data) => {
         this.paths = data;
-        if (setInitialSort) {
-          this.sortData({ active: 'name', direction: 'asc' });
-        }
       },
     });
   }
 
   newPath() {
     this.router.navigate(['/admin/paths/new']);
-  }
-
-  sortData(sortParameters: Sort) {
-    const keyName = sortParameters.active;
-    if (sortParameters.direction === 'asc') {
-      this.paths = this.paths.sort((a: Path, b: Path) => a[keyName].localeCompare(b[keyName]));
-    } else if (sortParameters.direction === 'desc') {
-      this.paths = this.paths.sort((a: Path, b: Path) => b[keyName].localeCompare(a[keyName]));
-    } else {
-      this.getAllPaths(false);
-      return this.paths;
-    }
   }
 }

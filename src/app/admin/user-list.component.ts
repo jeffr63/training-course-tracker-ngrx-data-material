@@ -30,7 +30,6 @@ import { Column } from '../models/column';
         [disableClear]="true"
         [tableData]="users"
         [tableColumns]="columns"
-        (sort)="sortData($event)"
         (delete)="deleteUser($event)"
         (edit)="editUser($event)"
       ></app-display-table>
@@ -65,7 +64,7 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getAllUsers(true);
+    this.getAllUsers();
   }
 
   deleteUser(id) {
@@ -79,7 +78,7 @@ export class UserListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result == 'delete') {
         this.userService.delete(id);
-        this.getAllUsers(false);
+        this.getAllUsers();
       }
     });
   }
@@ -88,26 +87,11 @@ export class UserListComponent implements OnInit {
     this.router.navigate(['/admin/users', id]);
   }
 
-  getAllUsers(setInitialSort: boolean): void {
+  getAllUsers(): void {
     this.userService.getAll().subscribe({
       next: (data) => {
         this.users = data;
-        if (setInitialSort) {
-          this.sortData({ active: 'name', direction: 'asc' });
-        }
       },
     });
-  }
-
-  sortData(sortParameters: Sort) {
-    const keyName = sortParameters.active;
-    if (sortParameters.direction === 'asc') {
-      this.users = this.users.sort((a: User, b: User) => a[keyName].localeCompare(b[keyName]));
-    } else if (sortParameters.direction === 'desc') {
-      this.users = this.users.sort((a: User, b: User) => b[keyName].localeCompare(a[keyName]));
-    } else {
-      this.getAllUsers(false);
-      return this.users;
-    }
   }
 }

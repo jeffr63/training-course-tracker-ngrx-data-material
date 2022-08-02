@@ -22,16 +22,15 @@ import { ModalDataService } from '../modals/modal-data.service';
     <section class="mt-5">
       <app-display-table
         *ngIf="courses"
+        [includeAdd]="true"
         [isAuthenticated]="authService.isAuthenticated"
         [isFilterable]="true"
-        [includeAdd]="true"
         [isPageable]="true"
         [paginationSizes]="[5, 10, 25, 100]"
         [defaultPageSize]="10"
         [disableClear]="true"
         [tableData]="courses"
         [tableColumns]="columns"
-        (sort)="sortData($event)"
         (add)="newCourse()"
         (delete)="deleteCourse($event)"
         (edit)="editCourse($event)"
@@ -68,7 +67,7 @@ export class CourseListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getAllCourses(true);
+    this.getAllCourses();
   }
 
   deleteCourse(id) {
@@ -83,7 +82,7 @@ export class CourseListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result == 'delete') {
         this.courseService.delete(id);
-        this.getAllCourses(false);
+        this.getAllCourses();
       }
     });
   }
@@ -92,30 +91,15 @@ export class CourseListComponent implements OnInit {
     this.router.navigate(['/courses', id]);
   }
 
-  getAllCourses(setInitialSort: boolean): void {
+  getAllCourses(): void {
     this.courseService.getAll().subscribe({
       next: (data) => {
         this.courses = data;
-        // if (setInitialSort) {
-        //   this.sortData({ active: 'title', direction: 'asc' });
-        // }
       },
     });
   }
 
   newCourse() {
     this.router.navigate(['/courses/new']);
-  }
-
-  sortData(sortParameters: Sort) {
-    const keyName = sortParameters.active;
-    if (sortParameters.direction === 'asc') {
-      this.courses = this.courses.sort((a: Course, b: Course) => a[keyName].localeCompare(b[keyName]));
-    } else if (sortParameters.direction === 'desc') {
-      this.courses = this.courses.sort((a: Course, b: Course) => b[keyName].localeCompare(a[keyName]));
-    } else {
-      this.getAllCourses(false);
-      return this.courses;
-    }
   }
 }

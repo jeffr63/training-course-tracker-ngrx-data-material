@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortable, MatSortModule, Sort } from '@angular/material/sort';
+import { MatSort, MatSortable, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 import { Column } from '../models/column';
@@ -165,16 +165,15 @@ export class DisplayTableComponent implements OnInit, AfterViewInit {
   @Input() set tableData(data: any[]) {
     this.setTableDataSource(data);
   }
-  @Input() isPageable = false;
-  @Input() isFilterable = false;
   @Input() isAuthenticated = false;
+  @Input() isFilterable = false;
+  @Input() isPageable = false;
   @Input() includeAdd = false;
-  @Input() tableColumns: Column[] = [];
   @Input() paginationSizes: number[] = [5, 10, 15];
   @Input() defaultPageSize = this.paginationSizes[1];
   @Input() disableClear = false;
+  @Input() tableColumns: Column[] = [];
 
-  @Output() sort: EventEmitter<Sort> = new EventEmitter();
   @Output() add: EventEmitter<any> = new EventEmitter();
   @Output() delete: EventEmitter<number> = new EventEmitter();
   @Output() edit: EventEmitter<number> = new EventEmitter();
@@ -189,7 +188,6 @@ export class DisplayTableComponent implements OnInit, AfterViewInit {
         defaultSort = column.key;
       }
     });
-    console.log(defaultSort);
     if (defaultSort !== '') {
       this.matSort.sort({ id: defaultSort, start: 'asc' } as MatSortable);
     }
