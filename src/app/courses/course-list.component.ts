@@ -1,9 +1,8 @@
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
-import { Sort } from '@angular/material/sort';
 
 import { AuthService } from '../auth/auth.service';
 import { Column } from '../models/column';
@@ -16,7 +15,7 @@ import { ModalDataService } from '../modals/modal-data.service';
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, DisplayTableComponent, RouterModule],
+  imports: [DisplayTableComponent, NgIf, RouterModule],
 
   template: `
     <section class="mt-5">

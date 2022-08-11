@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-delete',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatIconModule, MatButtonModule],
+  imports: [MatDialogModule, MatIconModule, MatButtonModule, NgIf],
 
   template: `
     <div style="margin:10px">

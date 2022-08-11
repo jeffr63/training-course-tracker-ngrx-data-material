@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { NgIf } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Column } from '../models/column';
 import { DeleteComponent } from '../modals/delete.component';
@@ -9,12 +9,11 @@ import { DisplayTableComponent } from '../shared/display-table.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
-import { Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-path-list',
   standalone: true,
-  imports: [CommonModule, DisplayTableComponent, RouterModule],
+  imports: [DisplayTableComponent, NgIf, RouterModule],
 
   template: `
     <section class="mt-5">

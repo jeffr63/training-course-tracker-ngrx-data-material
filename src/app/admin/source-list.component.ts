@@ -1,20 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { NgIf } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Column } from '../models/column';
 import { DeleteComponent } from '../modals/delete.component';
+import { DisplayTableComponent } from '../shared/display-table.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { Source } from '../models/sources';
 import { SourceService } from '../services/source.service';
-import { Column } from '../models/column';
-import { DisplayTableComponent } from '../shared/display-table.component';
-import { Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-source-list',
   standalone: true,
-  imports: [CommonModule, DisplayTableComponent, RouterModule],
+  imports: [DisplayTableComponent, NgIf, RouterModule],
 
   template: `
     <section class="mt-5">

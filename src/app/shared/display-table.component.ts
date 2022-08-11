@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -15,7 +15,6 @@ import { Column } from '../models/column';
   selector: 'app-display-table',
   standalone: true,
   imports: [
-    CommonModule,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
@@ -23,6 +22,9 @@ import { Column } from '../models/column';
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
+    NgIf,
+    NgClass,
+    NgForOf,
   ],
   template: `
     <ng-container>

@@ -1,22 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
-import { Sort } from '@angular/material/sort';
 
+import { Column } from '../models/column';
 import { DeleteComponent } from '../modals/delete.component';
 import { DisplayTableComponent } from '../shared/display-table.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
-import { Column } from '../models/column';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, DisplayTableComponent, RouterModule],
-
+  imports: [DisplayTableComponent, NgIf, RouterModule],
   template: `
     <section class="mt-5">
       <app-display-table
