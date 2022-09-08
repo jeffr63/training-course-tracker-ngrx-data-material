@@ -90,7 +90,7 @@ export class PathEditComponent implements OnInit, OnDestroy {
   pathEditForm!: FormGroup;
   private path = <Path>{};
   private isNew = true;
-  private sub = new Subscription();
+  private sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,

@@ -119,7 +119,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   componentActive = true;
   user = <User>{};
   userEditForm!: FormGroup;
-  private sub = new Subscription();
+  private sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -160,7 +160,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   save() {
     const patchData = this.userEditForm.getRawValue();
-    this.sub.add(this.userService.patch(this.user.id, patchData).subscribe());
+    const userSub = this.userService.patch(this.user.id, patchData).subscribe();
     this.location.back();
+    userSub?.unsubscribe();
   }
 }

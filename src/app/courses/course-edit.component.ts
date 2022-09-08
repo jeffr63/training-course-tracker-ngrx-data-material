@@ -143,7 +143,7 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   courseEditForm!: FormGroup;
   private course = <Course>{};
   private isNew = true;
-  private sub = new Subscription();
+  private sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,

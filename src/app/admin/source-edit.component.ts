@@ -90,7 +90,7 @@ export class SourceEditComponent implements OnInit, OnDestroy {
   sourceEditForm!: FormGroup;
   private source = <Source>{};
   private isNew = true;
-  private sub = new Subscription();
+  private sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,

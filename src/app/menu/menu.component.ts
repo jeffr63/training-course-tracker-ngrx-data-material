@@ -7,6 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AuthService } from '../auth/auth.service';
 import { LoginComponent } from '../modals/login.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -49,6 +50,7 @@ export class MenuComponent {
   public isNavbarCollapsed = true;
   email: string;
   password: string;
+  sub: Subscription;
 
   constructor(public auth: AuthService, private dialog: MatDialog, private router: Router) {}
 
@@ -58,11 +60,15 @@ export class MenuComponent {
       data: { email: this.email, password: this.password },
     });
 
-    dialogRef.afterClosed().subscribe({
-      next: (result) => {
-        this.auth.login(result.email, result.password).subscribe();
-      },
-    });
+    this.sub.add(
+      dialogRef.afterClosed().subscribe({
+        next: (result) => {
+          this.sub.add(this.auth.login(result.email, result.password).subscribe());
+        },
+      })
+    );
+
+    this.sub.unsubscribe();
   }
 
   logout() {
