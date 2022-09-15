@@ -1,8 +1,9 @@
 import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
+import { Subject, take, takeUntil } from 'rxjs';
 
 import { AuthService } from '../auth/auth.service';
 import { Column } from '../models/column';
@@ -45,7 +46,7 @@ import { ModalDataService } from '../modals/modal-data.service';
     `,
   ],
 })
-export class CourseListComponent implements OnInit {
+export class CourseListComponent implements OnInit, OnDestroy {
   columns: Column[] = [
     { key: 'title', name: 'Title', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'instructor', name: 'Instructor', width: '400px', type: 'sort', position: 'left' },
@@ -56,6 +57,7 @@ export class CourseListComponent implements OnInit {
   public defaultSortColumn = 'title';
   loading = false;
   courses: Course[];
+  componentIsDestroyed = new Subject<boolean>();
 
   constructor(
     private courseService: CourseService,
@@ -69,6 +71,11 @@ export class CourseListComponent implements OnInit {
     this.getAllCourses();
   }
 
+  ngOnDestroy(): void {
+    this.componentIsDestroyed.next(true);
+    this.componentIsDestroyed.complete();
+  }
+
   deleteCourse(id) {
     const modalOptions = {
       title: 'Are you sure you want to delete this course?',
@@ -78,12 +85,15 @@ export class CourseListComponent implements OnInit {
     this.modalDataService.setDeleteModalOptions(modalOptions);
     const dialogRef = this.dialog.open(DeleteComponent, { width: '500px' });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result == 'delete') {
-        this.courseService.delete(id);
-        this.getAllCourses();
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe((result) => {
+        if (result == 'delete') {
+          this.courseService.delete(id);
+          this.getAllCourses();
+        }
+      });
   }
 
   editCourse(id) {
@@ -91,11 +101,14 @@ export class CourseListComponent implements OnInit {
   }
 
   getAllCourses(): void {
-    this.courseService.getAll().subscribe({
-      next: (data) => {
-        this.courses = data;
-      },
-    });
+    this.courseService
+      .getAll()
+      .pipe(takeUntil(this.componentIsDestroyed))
+      .subscribe({
+        next: (data) => {
+          this.courses = data;
+        },
+      });
   }
 
   newCourse() {

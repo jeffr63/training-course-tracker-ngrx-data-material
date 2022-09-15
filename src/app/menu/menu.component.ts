@@ -7,6 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AuthService } from '../auth/auth.service';
 import { LoginComponent } from '../modals/login.component';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -58,11 +59,14 @@ export class MenuComponent {
       data: { email: this.email, password: this.password },
     });
 
-    dialogRef.afterClosed().subscribe({
-      next: (result) => {
-        this.auth.login(result.email, result.password).subscribe();
-      },
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.auth.login(result.email, result.password).pipe(take(1)).subscribe();
+        },
+      });
   }
 
   logout() {

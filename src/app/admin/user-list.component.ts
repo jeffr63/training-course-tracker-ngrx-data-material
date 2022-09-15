@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
@@ -10,6 +10,7 @@ import { DisplayTableComponent } from '../shared/display-table.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
+import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-list',
@@ -44,7 +45,7 @@ import { UserService } from '../services/user.service';
     `,
   ],
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
   columns: Column[] = [
     { key: 'name', name: 'Name', width: '400px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'email', name: 'Email', width: '400px', type: 'sort', position: 'left' },
@@ -52,6 +53,7 @@ export class UserListComponent implements OnInit {
     { key: 'action', name: '', width: '50px', type: 'action', position: 'left' },
   ];
   users: User[];
+  componentIsDestroyed = new Subject<boolean>();
 
   constructor(
     private userService: UserService,
@@ -64,6 +66,11 @@ export class UserListComponent implements OnInit {
     this.getAllUsers();
   }
 
+  ngOnDestroy() {
+    this.componentIsDestroyed.next(true);
+    this.componentIsDestroyed.complete();
+  }
+
   deleteUser(id) {
     const modalOptions = {
       title: 'Are you sure you want to delete this user?',
@@ -72,12 +79,15 @@ export class UserListComponent implements OnInit {
     };
     this.modalDataService.setDeleteModalOptions(modalOptions);
     const dialogRef = this.dialog.open(DeleteComponent, { width: '500px' });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result == 'delete') {
-        this.userService.delete(id);
-        this.getAllUsers();
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe((result) => {
+        if (result == 'delete') {
+          this.userService.delete(id);
+          this.getAllUsers();
+        }
+      });
   }
 
   editUser(id: number) {
@@ -85,10 +95,13 @@ export class UserListComponent implements OnInit {
   }
 
   getAllUsers(): void {
-    this.userService.getAll().subscribe({
-      next: (data) => {
-        this.users = data;
-      },
-    });
+    this.userService
+      .getAll()
+      .pipe(takeUntil(this.componentIsDestroyed))
+      .subscribe({
+        next: (data) => {
+          this.users = data;
+        },
+      });
   }
 }

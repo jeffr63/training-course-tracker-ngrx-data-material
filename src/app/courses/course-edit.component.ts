@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { Course } from '../models/course';
 import { CourseService } from './course.service';
@@ -143,6 +143,7 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   courseEditForm!: FormGroup;
   private course = <Course>{};
   private isNew = true;
+  private componentIsDestroyed = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
@@ -176,18 +177,23 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.componentActive = false;
+    this.componentIsDestroyed.next(true);
+    this.componentIsDestroyed.complete();
   }
 
   loadFormValues(id) {
-    this.courseService.getByKey(id).subscribe((course: Course) => {
-      this.course = { ...course };
-      this.courseEditForm.patchValue({
-        title: course.title,
-        instructor: course.instructor,
-        path: course.path,
-        source: course.source,
+    this.courseService
+      .getByKey(id)
+      .pipe(takeUntil(this.componentIsDestroyed))
+      .subscribe((course: Course) => {
+        this.course = { ...course };
+        this.courseEditForm.patchValue({
+          title: course.title,
+          instructor: course.instructor,
+          path: course.path,
+          source: course.source,
+        });
       });
-    });
   }
 
   save() {

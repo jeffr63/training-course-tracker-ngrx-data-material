@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+
+import { Subject, take, takeUntil } from 'rxjs';
 
 import { Column } from '../models/column';
 import { DeleteComponent } from '../modals/delete.component';
@@ -46,12 +48,13 @@ import { SourceService } from '../services/source.service';
     `,
   ],
 })
-export class SourceListComponent implements OnInit {
+export class SourceListComponent implements OnInit, OnDestroy {
   columns: Column[] = [
     { key: 'name', name: 'Source', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
   sources: Source[];
+  componentIsDestroyed = new Subject<boolean>();
 
   constructor(
     private sourceService: SourceService,
@@ -64,6 +67,11 @@ export class SourceListComponent implements OnInit {
     this.getAllSources();
   }
 
+  ngOnDestroy(): void {
+    this.componentIsDestroyed.next(true);
+    this.componentIsDestroyed.complete();
+  }
+
   deleteSource(id) {
     const modalOptions = {
       title: 'Are you sure you want to delete this source?',
@@ -72,12 +80,15 @@ export class SourceListComponent implements OnInit {
     };
     this.modalDataService.setDeleteModalOptions(modalOptions);
     const dialogRef = this.dialog.open(DeleteComponent, { width: '500px' });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result == 'delete') {
-        this.sourceService.delete(id);
-        this.getAllSources();
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe((result) => {
+        if (result == 'delete') {
+          this.sourceService.delete(id);
+          this.getAllSources();
+        }
+      });
   }
 
   editSource(id: number) {
@@ -85,11 +96,14 @@ export class SourceListComponent implements OnInit {
   }
 
   getAllSources(): void {
-    this.sourceService.getAll().subscribe({
-      next: (data) => {
-        this.sources = data;
-      },
-    });
+    this.sourceService
+      .getAll()
+      .pipe(takeUntil(this.componentIsDestroyed))
+      .subscribe({
+        next: (data) => {
+          this.sources = data;
+        },
+      });
   }
 
   newSource() {

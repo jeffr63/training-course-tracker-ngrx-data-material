@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject, takeUntil } from 'rxjs';
 import * as _ from 'lodash';
 
 import { Course, CourseData } from '../models/course';
@@ -58,17 +58,26 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
   styles: [],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   courses$: Observable<CourseData[]>;
   sources$: Observable<CourseData[]>;
+  componentIsDestroyed = new Subject<boolean>();
 
   constructor(private courseService: CourseService) {}
 
   ngOnInit() {
-    this.courseService.getAll().subscribe((courses: Course[]) => {
-      this.courses$ = this.getByPathValue(courses);
-      this.sources$ = this.getBySourceValue(courses);
-    });
+    this.courseService
+      .getAll()
+      .pipe(takeUntil(this.componentIsDestroyed))
+      .subscribe((courses: Course[]) => {
+        this.courses$ = this.getByPathValue(courses);
+        this.sources$ = this.getBySourceValue(courses);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.componentIsDestroyed.next(true);
+    this.componentIsDestroyed.complete();
   }
 
   getByPathValue(courses: Course[]): Observable<CourseData[]> {

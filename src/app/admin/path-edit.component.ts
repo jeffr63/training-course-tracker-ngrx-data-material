@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
+import { Subject, takeUntil } from 'rxjs';
+
 import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
 
@@ -88,6 +90,7 @@ export class PathEditComponent implements OnInit, OnDestroy {
   pathEditForm!: FormGroup;
   private path = <Path>{};
   private isNew = true;
+  componentIsDestroyed = new Subject<boolean>();
 
   constructor(
     private route: ActivatedRoute,
@@ -103,16 +106,25 @@ export class PathEditComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((params) => {
       if (params.id !== 'new') {
         this.isNew = false;
-        this.pathService.getByKey(params.id).subscribe((path: Path) => {
-          this.path = { ...path };
-          this.pathEditForm.get('name').setValue(this.path.name);
-        });
+        this.loadFormValues(params.id);
       }
     });
   }
 
   ngOnDestroy() {
     this.componentActive = false;
+    this.componentIsDestroyed.next(true);
+    this.componentIsDestroyed.complete();
+  }
+
+  loadFormValues(id: number) {
+    this.pathService
+      .getByKey(id)
+      .pipe(takeUntil(this.componentIsDestroyed))
+      .subscribe((path: Path) => {
+        this.path = { ...path };
+        this.pathEditForm.get('name').setValue(this.path.name);
+      });
   }
 
   save() {
