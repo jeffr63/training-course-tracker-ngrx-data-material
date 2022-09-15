@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,7 +9,6 @@ import { DisplayTableComponent } from '../shared/display-table.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-path-list',
@@ -47,13 +46,12 @@ import { Subscription } from 'rxjs';
     `,
   ],
 })
-export class PathListComponent implements OnInit, OnDestroy {
+export class PathListComponent implements OnInit {
   columns: Column[] = [
     { key: 'name', name: 'Path', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
   paths: Path[];
-  sub: Subscription;
 
   constructor(
     private pathService: PathService,
@@ -66,10 +64,6 @@ export class PathListComponent implements OnInit, OnDestroy {
     this.getAllPaths();
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
-
   deletePath(id) {
     const modalOptions = {
       title: 'Are you sure you want to delete this path?',
@@ -78,13 +72,12 @@ export class PathListComponent implements OnInit, OnDestroy {
     };
     this.modalDataService.setDeleteModalOptions(modalOptions);
     const dialogRef = this.dialog.open(DeleteComponent, { width: '500px' });
-    const dialogSub = dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result == 'delete') {
         this.pathService.delete(id);
         this.getAllPaths();
       }
     });
-    dialogSub?.unsubscribe();
   }
 
   editPath(id: number) {
@@ -92,7 +85,7 @@ export class PathListComponent implements OnInit, OnDestroy {
   }
 
   getAllPaths(): void {
-    this.sub = this.pathService.getAll().subscribe({
+    this.pathService.getAll().subscribe({
       next: (data) => {
         this.paths = data;
       },

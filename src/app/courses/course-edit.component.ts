@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { Course } from '../models/course';
 import { CourseService } from './course.service';
@@ -143,7 +143,6 @@ export class CourseEditComponent implements OnInit, OnDestroy {
   courseEditForm!: FormGroup;
   private course = <Course>{};
   private isNew = true;
-  private sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -162,24 +161,12 @@ export class CourseEditComponent implements OnInit, OnDestroy {
       source: ['', Validators.required],
     });
 
-    this.sub.add(
-      this.route.params.subscribe((params) => {
-        if (params.id !== 'new') {
-          this.isNew = false;
-          this.sub.add(
-            this.courseService.getByKey(params.id).subscribe((course: Course) => {
-              this.course = { ...course };
-              this.courseEditForm.patchValue({
-                title: course.title,
-                instructor: course.instructor,
-                path: course.path,
-                source: course.source,
-              });
-            })
-          );
-        }
-      })
-    );
+    this.route.params.subscribe((params) => {
+      if (params.id !== 'new') {
+        this.isNew = false;
+        this.loadFormValues(params.id);
+      }
+    });
 
     this.pathService.getAll();
     this.paths$ = this.pathService.entities$;
@@ -189,7 +176,18 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.componentActive = false;
-    this.sub.unsubscribe();
+  }
+
+  loadFormValues(id) {
+    this.courseService.getByKey(id).subscribe((course: Course) => {
+      this.course = { ...course };
+      this.courseEditForm.patchValue({
+        title: course.title,
+        instructor: course.instructor,
+        path: course.path,
+        source: course.source,
+      });
+    });
   }
 
   save() {

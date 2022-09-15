@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { Subscription } from 'rxjs';
 
 import { Source } from '../models/sources';
 import { SourceService } from '../services/source.service';
@@ -90,7 +89,6 @@ export class SourceEditComponent implements OnInit, OnDestroy {
   sourceEditForm!: FormGroup;
   private source = <Source>{};
   private isNew = true;
-  private sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -104,24 +102,19 @@ export class SourceEditComponent implements OnInit, OnDestroy {
       name: ['', Validators.required],
     });
 
-    this.sub.add(
-      this.route.params.subscribe((params) => {
-        if (params.id !== 'new') {
-          this.isNew = false;
-          this.sub.add(
-            this.sourceService.getByKey(params.id).subscribe((source: Source) => {
-              this.source = { ...source };
-              this.sourceEditForm.get('name').setValue(this.source.name);
-            })
-          );
-        }
-      })
-    );
+    this.route.params.subscribe((params) => {
+      if (params.id !== 'new') {
+        this.isNew = false;
+        this.sourceService.getByKey(params.id).subscribe((source: Source) => {
+          this.source = { ...source };
+          this.sourceEditForm.get('name').setValue(this.source.name);
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
     this.componentActive = false;
-    this.sub.unsubscribe();
   }
 
   save() {

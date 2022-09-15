@@ -8,8 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { Subscription } from 'rxjs';
-
 import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
 
@@ -90,7 +88,6 @@ export class PathEditComponent implements OnInit, OnDestroy {
   pathEditForm!: FormGroup;
   private path = <Path>{};
   private isNew = true;
-  private sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -103,25 +100,19 @@ export class PathEditComponent implements OnInit, OnDestroy {
     this.pathEditForm = this.fb.group({
       name: ['', Validators.required],
     });
-
-    this.sub.add(
-      this.route.params.subscribe((params) => {
-        if (params.id !== 'new') {
-          this.isNew = false;
-          this.sub.add(
-            this.pathService.getByKey(params.id).subscribe((path: Path) => {
-              this.path = { ...path };
-              this.pathEditForm.get('name').setValue(this.path.name);
-            })
-          );
-        }
-      })
-    );
+    this.route.params.subscribe((params) => {
+      if (params.id !== 'new') {
+        this.isNew = false;
+        this.pathService.getByKey(params.id).subscribe((path: Path) => {
+          this.path = { ...path };
+          this.pathEditForm.get('name').setValue(this.path.name);
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
     this.componentActive = false;
-    this.sub.unsubscribe();
   }
 
   save() {

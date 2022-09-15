@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,7 +9,6 @@ import { DisplayTableComponent } from '../shared/display-table.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { Source } from '../models/sources';
 import { SourceService } from '../services/source.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-source-list',
@@ -47,13 +46,12 @@ import { Subscription } from 'rxjs';
     `,
   ],
 })
-export class SourceListComponent implements OnInit, OnDestroy {
+export class SourceListComponent implements OnInit {
   columns: Column[] = [
     { key: 'name', name: 'Source', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
   sources: Source[];
-  sub: Subscription;
 
   constructor(
     private sourceService: SourceService,
@@ -66,10 +64,6 @@ export class SourceListComponent implements OnInit, OnDestroy {
     this.getAllSources();
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
-
   deleteSource(id) {
     const modalOptions = {
       title: 'Are you sure you want to delete this source?',
@@ -78,13 +72,12 @@ export class SourceListComponent implements OnInit, OnDestroy {
     };
     this.modalDataService.setDeleteModalOptions(modalOptions);
     const dialogRef = this.dialog.open(DeleteComponent, { width: '500px' });
-    const dialogSub = dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result == 'delete') {
         this.sourceService.delete(id);
         this.getAllSources();
       }
     });
-    dialogSub?.unsubscribe();
   }
 
   editSource(id: number) {
@@ -92,7 +85,7 @@ export class SourceListComponent implements OnInit, OnDestroy {
   }
 
   getAllSources(): void {
-    this.sub = this.sourceService.getAll().subscribe({
+    this.sourceService.getAll().subscribe({
       next: (data) => {
         this.sources = data;
       },

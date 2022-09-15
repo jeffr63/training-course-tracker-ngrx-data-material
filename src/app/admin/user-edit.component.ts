@@ -9,8 +9,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 
-import { Subscription } from 'rxjs';
-
 import { UserService } from '../services/user.service';
 import { User } from '../models/user';
 
@@ -119,7 +117,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
   componentActive = true;
   user = <User>{};
   userEditForm!: FormGroup;
-  private sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -135,33 +132,27 @@ export class UserEditComponent implements OnInit, OnDestroy {
       role: ['', Validators.required],
     });
 
-    this.sub.add(
-      this.route.params.subscribe((params) => {
-        if (params.id !== 'new') {
-          this.sub.add(
-            this.userService.getByKey(params.id).subscribe((user: User) => {
-              this.user = { ...user };
-              this.userEditForm.patchValue({
-                name: user.name,
-                email: user.email,
-                role: user.role,
-              });
-            })
-          );
-        }
-      })
-    );
+    this.route.params.subscribe((params) => {
+      if (params.id !== 'new') {
+        this.userService.getByKey(params.id).subscribe((user: User) => {
+          this.user = { ...user };
+          this.userEditForm.patchValue({
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          });
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
     this.componentActive = false;
-    this.sub.unsubscribe();
   }
 
   save() {
     const patchData = this.userEditForm.getRawValue();
-    const userSub = this.userService.patch(this.user.id, patchData).subscribe();
+    this.userService.patch(this.user.id, patchData).subscribe();
     this.location.back();
-    userSub?.unsubscribe();
   }
 }
