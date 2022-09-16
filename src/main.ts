@@ -1,6 +1,6 @@
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
-import { RouterModule, TitleStrategy } from '@angular/router';
+import { provideRouter, TitleStrategy } from '@angular/router';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -36,10 +36,10 @@ bootstrapApplication(AppComponent, {
       StoreDevtoolsModule.instrument({
         maxAge: 5,
         logOnly: environment.production,
-      }),
-      RouterModule.forRoot(APP_ROUTES, { relativeLinkResolution: 'legacy' })
+      })
     ),
     { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
     { provide: TitleStrategy, useClass: CustomTitleStrategyService },
+    provideRouter(APP_ROUTES),
   ],
 }).catch((err) => console.error(err));

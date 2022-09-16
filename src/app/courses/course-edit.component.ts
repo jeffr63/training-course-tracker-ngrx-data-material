@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe, Location, NgForOf, NgIf } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -32,7 +32,7 @@ import { MatButtonModule } from '@angular/material/button';
     NgForOf,
     NgIf,
     ReactiveFormsModule,
-    RouterModule,
+    RouterLinkWithHref,
   ],
 
   template: `

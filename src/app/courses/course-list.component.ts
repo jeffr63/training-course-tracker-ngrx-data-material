@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, take, takeUntil } from 'rxjs';
@@ -16,7 +16,7 @@ import { ModalDataService } from '../modals/modal-data.service';
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [DisplayTableComponent, NgIf, RouterModule],
+  imports: [DisplayTableComponent, NgIf],
 
   template: `
     <section class="mt-5">

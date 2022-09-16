@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLinkWithHref } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -15,7 +15,7 @@ import { PathService } from '../services/path.service';
 @Component({
   selector: 'app-path-list',
   standalone: true,
-  imports: [DisplayTableComponent, NgIf, RouterModule],
+  imports: [DisplayTableComponent, NgIf, RouterLinkWithHref],
 
   template: `
     <section class="mt-5">

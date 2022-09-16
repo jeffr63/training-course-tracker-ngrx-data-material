@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLinkWithHref } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -12,28 +12,22 @@ import { take } from 'rxjs';
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [MatDialogModule, MatToolbarModule, MatButtonModule, NgIf, RouterModule],
+  imports: [MatDialogModule, MatToolbarModule, MatButtonModule, NgIf, RouterLinkWithHref],
 
   template: `
     <mat-toolbar color="primary">
-      <button mat-button class="primary" [routerLink]="['/']" id="brand">
+      <a mat-button class="primary" [routerLink]="['/']" id="brand">
         <h3 class="text-white">Training Courses Tracker</h3>
-      </button>
+      </a>
       <span style="flex: 1 1 auto;"></span>
-      <button mat-button class="primary" [routerLink]="['/']" id="home">Home</button>
-      <button mat-button class="primary" [routerLink]="['/courses']" id="courses">Courses</button>
+      <a mat-button class="primary" [routerLink]="['/']" id="home">Home</a>
+      <a mat-button class="primary" [routerLink]="['/courses']" id="courses">Courses</a>
       <button mat-button class="primary" *ngIf="auth.isAuthenticated === false" (click)="open()" id="login">
         Login
       </button>
-      <button
-        mat-button
-        class="primary"
-        [routerLink]="['/admin']"
-        *ngIf="auth.isAuthenticated && auth.isAdmin"
-        id="admin"
-      >
+      <a mat-button class="primary" [routerLink]="['/admin']" *ngIf="auth.isAuthenticated && auth.isAdmin" id="admin">
         Admin
-      </button>
+      </a>
       <button mat-button class="primary" *ngIf="auth.isAuthenticated" (click)="logout()" id="logout">Logout</button>
     </mat-toolbar>
   `,

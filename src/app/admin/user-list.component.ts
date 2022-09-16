@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -15,7 +15,7 @@ import { Subject, take, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [DisplayTableComponent, NgIf, RouterModule],
+  imports: [DisplayTableComponent, NgIf],
   template: `
     <section class="mt-5">
       <app-display-table
