@@ -39,16 +39,16 @@ import { PathService } from '../services/path.service';
 
   styles: [
     `
-           table {
-             width: 100%;
-           }
-           section {
-             margin: 10px 20px;
-           }
-         `,
+      table {
+        width: 100%;
+      }
+      section {
+        margin: 10px 20px;
+      }
+    `,
   ],
 })
-export class PathListComponent implements OnInit, OnDestroy {
+export default class PathListComponent implements OnInit, OnDestroy {
   columns: Column[] = [
     { key: 'name', name: 'Path', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },

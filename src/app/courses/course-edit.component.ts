@@ -136,7 +136,7 @@ import { MatButtonModule } from '@angular/material/button';
     `,
   ],
 })
-export class CourseEditComponent implements OnInit, OnDestroy {
+export default class CourseEditComponent implements OnInit, OnDestroy {
   loading = false;
   componentActive = true;
   paths$: Observable<Path[]>;

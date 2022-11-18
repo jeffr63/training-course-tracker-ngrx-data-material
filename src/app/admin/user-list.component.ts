@@ -36,16 +36,16 @@ import { Subject, take, takeUntil } from 'rxjs';
   `,
   styles: [
     `
-           table {
-             width: 100%;
-           }
-           section {
-             margin: 10px 20px;
-           }
-         `,
+      table {
+        width: 100%;
+      }
+      section {
+        margin: 10px 20px;
+      }
+    `,
   ],
 })
-export class UserListComponent implements OnInit, OnDestroy {
+export default class UserListComponent implements OnInit, OnDestroy {
   columns: Column[] = [
     { key: 'name', name: 'Name', width: '400px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'email', name: 'Email', width: '400px', type: 'sort', position: 'left' },

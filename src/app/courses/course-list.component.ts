@@ -40,13 +40,13 @@ import { ModalDataService } from '../modals/modal-data.service';
 
   styles: [
     `
-           section {
-             margin: 10px 20px;
-           }
-         `,
+      section {
+        margin: 10px 20px;
+      }
+    `,
   ],
 })
-export class CourseListComponent implements OnInit, OnDestroy {
+export default class CourseListComponent implements OnInit, OnDestroy {
   columns: Column[] = [
     { key: 'title', name: 'Title', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'instructor', name: 'Instructor', width: '400px', type: 'sort', position: 'left' },

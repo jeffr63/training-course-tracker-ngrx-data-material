@@ -1,44 +1,46 @@
+import { Route } from '@angular/router';
+
 import { CanActivateAdmin } from '../auth/canActiveateAdmin.guard';
 import { UserTitleResolverService } from '../services/user-title-resolver.service';
 import { PathTitleResolverService } from '../services/path-title-resolver.service';
 import { SourceTitleResolverService } from '../services/source-title-resolver.service';
 
-export const ADMIN_ROUTES = [
+export default [
   {
     path: '',
     children: [
-      { path: '', loadComponent: () => import('./admin.component').then((m) => m.AdminComponent) },
+      { path: '', loadComponent: () => import('./admin.component') },
       {
         path: 'sources',
         title: 'Sources',
-        loadComponent: () => import('./source-list.component').then((m) => m.SourceListComponent),
+        loadComponent: () => import('./source-list.component'),
       },
       {
         path: 'sources/:id',
         title: SourceTitleResolverService,
-        loadComponent: () => import('./source-edit.component').then((m) => m.SourceEditComponent),
+        loadComponent: () => import('./source-edit.component'),
       },
       {
         path: 'paths',
         title: 'Paths',
-        loadComponent: () => import('./path-list.component').then((m) => m.PathListComponent),
+        loadComponent: () => import('./path-list.component'),
       },
       {
         path: 'paths/:id',
         title: PathTitleResolverService,
-        loadComponent: () => import('./path-edit.component').then((m) => m.PathEditComponent),
+        loadComponent: () => import('./path-edit.component'),
       },
       {
         path: 'users',
         title: 'Users',
-        loadComponent: () => import('./user-list.component').then((m) => m.UserListComponent),
+        loadComponent: () => import('./user-list.component'),
       },
       {
         path: 'users/:id',
         title: UserTitleResolverService,
-        loadComponent: () => import('./user-edit.component').then((m) => m.UserEditComponent),
+        loadComponent: () => import('./user-edit.component'),
       },
     ],
     canActivate: [CanActivateAdmin],
   },
-];
+] as Route[];
