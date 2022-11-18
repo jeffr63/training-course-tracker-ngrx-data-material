@@ -4,20 +4,30 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatButtonModule, MatFormFieldModule, MatInputModule, MatDialogModule, NgIf, ReactiveFormsModule],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    NgIf,
+    ReactiveFormsModule,
+  ],
 
   template: `
     <div style="margin:10px">
       <h2 mat-dialog-title>Login</h2>
       <mat-dialog-content>
         <form [formGroup]="loginForm">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="mt-5">
             <mat-label for="email">Email Address</mat-label>
+            <mat-icon matIconSuffix>mail_outline</mat-icon>
             <input
               ngbAutofocus
               type="email"
@@ -35,7 +45,8 @@ import { MatInputModule } from '@angular/material/input';
           </mat-form-field>
           <mat-form-field appearance="outline" class="mt-5">
             <mat-label for="email">Password</mat-label>
-            <input type="password" id="password" matInput formControlName="password" />
+            <mat-icon (click)="flag = !flag" matIconSuffix>{{ flag ? 'visibility' : 'visibility_off' }}</mat-icon>
+            <input id="password" matInput formControlName="password" [type]="flag ? 'password' : 'text'" />
             <mat-error *ngIf="loginForm.controls.password.errors?.required && loginForm.controls.password?.touched">
               Password is required
             </mat-error>
@@ -50,18 +61,18 @@ import { MatInputModule } from '@angular/material/input';
   `,
   styles: [
     `
-           mat-form-field {
-             width: 100%;
-           }
-     
-           .mt-5 {
-             margin-top: 5px;
-           }
-     
-           .ml-8 {
-             margin-left: 8px;
-           }
-         `,
+      mat-form-field {
+        width: 100%;
+      }
+
+      .mt-5 {
+        margin-top: 5px;
+      }
+
+      .ml-8 {
+        margin-left: 8px;
+      }
+    `,
   ],
 })
 export class LoginComponent implements OnInit {
@@ -70,6 +81,7 @@ export class LoginComponent implements OnInit {
     password: '',
   };
   loginForm!: FormGroup;
+  flag = true;
 
   constructor(public dialogRef: MatDialogRef<LoginComponent>, private fb: FormBuilder) {}
 

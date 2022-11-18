@@ -53,37 +53,37 @@ import { SourceService } from '../services/source.service';
         <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
           <mat-icon>save</mat-icon> Save
         </button>
-        <a mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/sources']"
-          ><mat-icon>cancel</mat-icon> Cancel</a
-        >
+        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/sources']">
+          <mat-icon>cancel</mat-icon> Cancel
+        </button>
       </mat-card-actions>
     </mat-card>
   `,
 
   styles: [
     `
-           /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
-           mat-card {
-             margin: 30px;
-             padding-left: 15px;
-             padding-right: 15px;
-             width: 30%;
-           }
-     
-           mat-content {
-             width: 100%;
-           }
-     
-           mat-form-field {
-             flex-direction: column;
-             align-items: flex-start;
-             width: 100%;
-           }
-     
-           .ml-10 {
-             margin-left: 10px;
-           }
-         `,
+      /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+      mat-card {
+        margin: 30px;
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 30%;
+      }
+
+      mat-content {
+        width: 100%;
+      }
+
+      mat-form-field {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+      }
+
+      .ml-10 {
+        margin-left: 10px;
+      }
+    `,
   ],
 })
 export class SourceEditComponent implements OnInit, OnDestroy {
