@@ -50,18 +50,18 @@ import { MatInputModule } from '@angular/material/input';
   `,
   styles: [
     `
-      mat-form-field {
-        width: 100%;
-      }
-
-      .mt-5 {
-        margin-top: 5px;
-      }
-
-      .ml-8 {
-        margin-left: 8px;
-      }
-    `,
+           mat-form-field {
+             width: 100%;
+           }
+     
+           .mt-5 {
+             margin-top: 5px;
+           }
+     
+           .ml-8 {
+             margin-left: 8px;
+           }
+         `,
   ],
 })
 export class LoginComponent implements OnInit {

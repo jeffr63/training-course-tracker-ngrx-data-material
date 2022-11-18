@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,11 +26,11 @@ import { User } from '../models/user';
     MatRadioModule,
     NgIf,
     ReactiveFormsModule,
-    RouterLinkWithHref
+    RouterLink
   ],
 
   template: `
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-title>User Edit</mat-card-title>
       <mat-card-content>
         <form *ngIf="userEditForm" [formGroup]="userEditForm">
@@ -81,38 +81,39 @@ import { User } from '../models/user';
 
   styles: [
     `
-      mat-card {
-        margin: 30px;
-        padding-left: 15px;
-        padding-right: 15px;
-        width: 30%;
-      }
-
-      mat-content {
-        width: 100%;
-      }
-
-      mat-form-field {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-      }
-
-      .ml-10 {
-        margin-left: 10px;
-      }
-
-      .radio-group {
-        display: flex;
-        flex-direction: column;
-        margin: 15px 0;
-        align-items: flex-start;
-      }
-
-      .radio-button {
-        margin: 5px;
-      }
-    `,
+           /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+           mat-card {
+             margin: 30px;
+             padding-left: 15px;
+             padding-right: 15px;
+             width: 30%;
+           }
+     
+           mat-content {
+             width: 100%;
+           }
+     
+           mat-form-field {
+             flex-direction: column;
+             align-items: flex-start;
+             width: 100%;
+           }
+     
+           .ml-10 {
+             margin-left: 10px;
+           }
+     
+           .radio-group {
+             display: flex;
+             flex-direction: column;
+             margin: 15px 0;
+             align-items: flex-start;
+           }
+     
+           .radio-button {
+             margin: 5px;
+           }
+         `,
   ],
 })
 export class UserEditComponent implements OnInit, OnDestroy {

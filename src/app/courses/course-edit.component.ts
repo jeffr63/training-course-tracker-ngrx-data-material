@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe, Location, NgForOf, NgIf } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -32,11 +32,11 @@ import { MatButtonModule } from '@angular/material/button';
     NgForOf,
     NgIf,
     ReactiveFormsModule,
-    RouterLinkWithHref,
+    RouterLink,
   ],
 
   template: `
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-title>Course Edit</mat-card-title>
       <mat-card-content>
         <form *ngIf="courseEditForm" [formGroup]="courseEditForm">
@@ -112,27 +112,28 @@ import { MatButtonModule } from '@angular/material/button';
 
   styles: [
     `
-      mat-card {
-        margin: 30px;
-        padding-left: 15px;
-        padding-right: 15px;
-        width: 30%;
-      }
-
-      mat-content {
-        width: 100%;
-      }
-
-      mat-form-field {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-      }
-
-      .ml-10 {
-        margin-left: 10px;
-      }
-    `,
+           /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+           mat-card {
+             margin: 30px;
+             padding-left: 15px;
+             padding-right: 15px;
+             width: 30%;
+           }
+     
+           mat-content {
+             width: 100%;
+           }
+     
+           mat-form-field {
+             flex-direction: column;
+             align-items: flex-start;
+             width: 100%;
+           }
+     
+           .ml-10 {
+             margin-left: 10px;
+           }
+         `,
   ],
 })
 export class CourseEditComponent implements OnInit, OnDestroy {

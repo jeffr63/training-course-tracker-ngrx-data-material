@@ -30,7 +30,7 @@ import { Column } from '../models/column';
     <ng-container>
       <!-- Filter -->
       <ng-container *ngIf="isFilterable">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>Filter </mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="filter" />
         </mat-form-field>
@@ -128,31 +128,31 @@ import { Column } from '../models/column';
   `,
   styles: [
     `
-      table {
-        width: 100%;
-      }
-      th,
-      td {
-        padding: 10px !important;
-      }
-      mat-form-field {
-        width: 40%;
-      }
-      .text-right {
-        text-align: right !important;
-      }
-      .ml-5 {
-        margin-left: 5px;
-      }
-      .fl1 {
-        float: right;
-        vertical-align: middle;
-      }
-      .mat-form-field {
-        font-size: 14px;
-        width: 80%;
-      }
-    `,
+           table {
+             width: 100%;
+           }
+           th,
+           td {
+             padding: 10px !important;
+           }
+           mat-form-field {
+             width: 40%;
+           }
+           .text-right {
+             text-align: right !important;
+           }
+           .ml-5 {
+             margin-left: 5px;
+           }
+           .fl1 {
+             float: right;
+             vertical-align: middle;
+           }
+           .mat-mdc-form-field {
+             font-size: 14px;
+             width: 80%;
+           }
+         `,
   ],
 })
 export class DisplayTableComponent implements OnInit, AfterViewInit {

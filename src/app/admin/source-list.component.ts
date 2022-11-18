@@ -39,13 +39,13 @@ import { SourceService } from '../services/source.service';
 
   styles: [
     `
-      table {
-        width: 100%;
-      }
-      section {
-        margin: 10px 20px;
-      }
-    `,
+           table {
+             width: 100%;
+           }
+           section {
+             margin: 10px 20px;
+           }
+         `,
   ],
 })
 export class SourceListComponent implements OnInit, OnDestroy {

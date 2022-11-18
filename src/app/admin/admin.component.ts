@@ -2,22 +2,22 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { Router, RouterLinkWithHref} from '@angular/router';
+import { Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [MatButtonModule, MatGridListModule, MatCardModule, RouterLinkWithHref],
+  imports: [MatButtonModule, MatGridListModule, MatCardModule, RouterLink],
 
   template: `
     <section>
       <div class="header">
-        <h1 class="mat-display-2">Administration</h1>
+        <h1 class="mat-headline-3">Administration</h1>
       </div>
 
       <mat-grid-list cols="3">
         <mat-grid-tile>
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title color="primary">Paths</mat-card-title>
             </mat-card-header>
@@ -29,7 +29,7 @@ import { Router, RouterLinkWithHref} from '@angular/router';
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title color="primary">Sources</mat-card-title>
             </mat-card-header>
@@ -41,7 +41,7 @@ import { Router, RouterLinkWithHref} from '@angular/router';
         </mat-grid-tile>
 
         <mat-grid-tile>
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title color="primary">Users</mat-card-title>
             </mat-card-header>
@@ -57,18 +57,19 @@ import { Router, RouterLinkWithHref} from '@angular/router';
 
   styles: [
     `
-      mat-card {
-        width: 80%;
-        margin: 0 auto;
-      }
-      .center {
-        text-align: center;
-      }
-
-      section {
-        margin: 10px;
-      }
-    `,
+           /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+           mat-card {
+             width: 80%;
+             margin: 0 auto;
+           }
+           .center {
+             text-align: center;
+           }
+     
+           section {
+             margin: 10px;
+           }
+         `,
   ],
 })
 export class AdminComponent {

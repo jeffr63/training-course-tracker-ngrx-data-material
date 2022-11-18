@@ -40,10 +40,10 @@ import { ModalDataService } from '../modals/modal-data.service';
 
   styles: [
     `
-      section {
-        margin: 10px 20px;
-      }
-    `,
+           section {
+             margin: 10px 20px;
+           }
+         `,
   ],
 })
 export class CourseListComponent implements OnInit, OnDestroy {
