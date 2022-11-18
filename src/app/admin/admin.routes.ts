@@ -1,9 +1,10 @@
+import { inject } from '@angular/core';
 import { Route } from '@angular/router';
 
-import { CanActivateAdmin } from '../auth/canActiveateAdmin.guard';
-import { UserTitleResolverService } from '../services/user-title-resolver.service';
+import { AuthService } from '../auth/auth.service';
 import { PathTitleResolverService } from '../services/path-title-resolver.service';
 import { SourceTitleResolverService } from '../services/source-title-resolver.service';
+import { UserTitleResolverService } from '../services/user-title-resolver.service';
 
 export default [
   {
@@ -41,6 +42,6 @@ export default [
         loadComponent: () => import('./user-edit.component'),
       },
     ],
-    canActivate: [CanActivateAdmin],
+    canActivate: [() => inject(AuthService).isLoggedInAsAdmin()],
   },
 ] as Route[];

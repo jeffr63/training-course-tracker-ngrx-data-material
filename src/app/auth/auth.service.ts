@@ -78,4 +78,12 @@ export class AuthService {
 
     return JSON.parse(jsonPayload);
   }
+
+  isLoggedIn() {
+    return this.isAuthenticated;
+  }
+
+  isLoggedInAsAdmin() {
+    return this.isAuthenticated && this.isAdmin;
+  }
 }

@@ -1,6 +1,7 @@
+import { inject } from '@angular/core';
 import { Route } from '@angular/router';
 
-import { CanActivateEdit } from '../auth/canActiveateEdit.guard';
+import { AuthService } from '../auth/auth.service';
 import { CourseTitleResolverService } from './course-title-resolver.service';
 
 export default [
@@ -12,7 +13,7 @@ export default [
         path: ':id',
         title: CourseTitleResolverService,
         loadComponent: () => import('./course-edit.component'),
-        canActivate: [CanActivateEdit],
+        canActivate: [() => inject(AuthService).isLoggedIn()],
       },
     ],
   },
