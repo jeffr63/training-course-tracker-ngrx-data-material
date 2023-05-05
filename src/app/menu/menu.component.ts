@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -50,11 +50,13 @@ import { take } from 'rxjs';
   ],
 })
 export class MenuComponent {
+  auth = inject(AuthService);
+  dialog = inject(MatDialog);
+  router = inject(Router);
+
   public isNavbarCollapsed = true;
   email: string;
   password: string;
-
-  constructor(public auth: AuthService, private dialog: MatDialog, private router: Router) {}
 
   open() {
     const dialogRef = this.dialog.open(LoginComponent, {

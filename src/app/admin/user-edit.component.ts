@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 
-import { Subject, take, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 
 import { UserService } from '../services/user.service';
 import { User } from '../models/user';
@@ -117,17 +117,14 @@ import { User } from '../models/user';
   ],
 })
 export default class UserEditComponent implements OnInit, OnDestroy {
-  componentActive = true;
+  route = inject(ActivatedRoute);
+  location = inject(Location);
+  userService = inject(UserService);
+  fb = inject(FormBuilder);
+
+  destroyed$ = new ReplaySubject<void>(1);
   user = <User>{};
   userEditForm!: FormGroup;
-  componentIsDestroyed = new Subject<boolean>();
-
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location,
-    private userService: UserService,
-    private fb: FormBuilder
-  ) {}
 
   ngOnInit() {
     this.userEditForm = this.fb.group({
@@ -144,15 +141,13 @@ export default class UserEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.componentActive = false;
-    this.componentIsDestroyed.next(true);
-    this.componentIsDestroyed.complete();
+    this.destroyed$.next();
   }
 
   loadFormValues(id: number) {
     this.userService
       .getByKey(id)
-      .pipe(takeUntil(this.componentIsDestroyed))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((user: User) => {
         this.user = { ...user };
         this.userEditForm.patchValue({

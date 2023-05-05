@@ -1,18 +1,17 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { map, Observable, Subscription } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { ActivatedRouteSnapshot } from '@angular/router';
+
+import { map, Observable } from 'rxjs';
 
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserTitleResolverService implements Resolve<string> {
-  private sub = new Subscription();
+export class UserTitleResolverService {
+  userService = inject(UserService);
 
-  constructor(private userService: UserService) {}
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): string | Observable<string> | Promise<string> {
+  resolve(route: ActivatedRouteSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');
     if (id == 'new') {
       return 'New User';

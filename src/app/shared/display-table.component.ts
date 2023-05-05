@@ -180,8 +180,6 @@ export class DisplayTableComponent implements OnInit, AfterViewInit {
   @Output() delete: EventEmitter<number> = new EventEmitter();
   @Output() edit: EventEmitter<number> = new EventEmitter();
 
-  constructor() {}
-
   ngOnInit(): void {
     const columnNames = this.tableColumns.map((column: Column) => column.key);
     let defaultSort = '';

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -72,6 +72,4 @@ import { Router, RouterLink } from '@angular/router';
     `,
   ],
 })
-export default class AdminComponent {
-  constructor(router: Router) {}
-}
+export default class AdminComponent {}

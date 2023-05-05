@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { map } from 'rxjs/operators';
@@ -14,10 +14,10 @@ class AuthToken {
   providedIn: 'root',
 })
 export class AuthService {
+  http = inject(HttpClient);
+
   public isAdmin = false;
   public isAuthenticated = false;
-
-  constructor(private http: HttpClient) {}
 
   login(email: string, password: string) {
     return this.http.post<any>('http://localhost:3000/login', { email, password }).pipe(

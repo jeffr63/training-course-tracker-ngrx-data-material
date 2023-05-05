@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { Subject, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 import { Source } from '../models/sources';
 import { SourceService } from '../services/source.service';
@@ -87,18 +87,15 @@ import { SourceService } from '../services/source.service';
   ],
 })
 export default class SourceEditComponent implements OnInit, OnDestroy {
-  componentActive = true;
-  sourceEditForm!: FormGroup;
-  private source = <Source>{};
-  private isNew = true;
-  componentIsDestroyed = new Subject<boolean>();
+  fb = inject(FormBuilder);
+  location = inject(Location);
+  route = inject(ActivatedRoute);
+  sourceService = inject(SourceService);
 
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location,
-    private sourceService: SourceService,
-    private fb: FormBuilder
-  ) {}
+  destroyed$ = new ReplaySubject<void>(1);
+  isNew = true;
+  source = <Source>{};
+  sourceEditForm!: FormGroup;
 
   ngOnInit() {
     this.sourceEditForm = this.fb.group({
@@ -114,15 +111,13 @@ export default class SourceEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.componentActive = false;
-    this.componentIsDestroyed.next(true);
-    this.componentIsDestroyed.complete();
+    this.destroyed$.next();
   }
 
   loadFormValues(id: number) {
     this.sourceService
       .getByKey(id)
-      .pipe(takeUntil(this.componentIsDestroyed))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((source: Source) => {
         this.source = { ...source };
         this.sourceEditForm.get('name').setValue(this.source.name);

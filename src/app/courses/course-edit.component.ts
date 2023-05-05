@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe, Location, NgForOf, NgIf } from '@angular/common';
@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 
 import { Course } from '../models/course';
 import { CourseService } from './course.service';
@@ -137,23 +137,19 @@ import { MatButtonModule } from '@angular/material/button';
   ],
 })
 export default class CourseEditComponent implements OnInit, OnDestroy {
-  loading = false;
-  componentActive = true;
+  courseService = inject(CourseService);
+  fb = inject(FormBuilder);
+  location = inject(Location);
+  pathService = inject(PathService);
+  route = inject(ActivatedRoute);
+  sourceService = inject(SourceService);
+
+  destroyed$ = new ReplaySubject<void>(1);
+  course = <Course>{};
+  courseEditForm!: FormGroup;
+  isNew = true;
   paths$: Observable<Path[]>;
   sources$: Observable<Source[]>;
-  courseEditForm!: FormGroup;
-  private course = <Course>{};
-  private isNew = true;
-  private componentIsDestroyed = new Subject<boolean>();
-
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location,
-    private courseService: CourseService,
-    private pathService: PathService,
-    private sourceService: SourceService,
-    private fb: FormBuilder
-  ) {}
 
   ngOnInit() {
     this.courseEditForm = this.fb.group({
@@ -177,15 +173,13 @@ export default class CourseEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.componentActive = false;
-    this.componentIsDestroyed.next(true);
-    this.componentIsDestroyed.complete();
+    this.destroyed$.next();
   }
 
   loadFormValues(id) {
     this.courseService
       .getByKey(id)
-      .pipe(takeUntil(this.componentIsDestroyed))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((course: Course) => {
         this.course = { ...course };
         this.courseEditForm.patchValue({

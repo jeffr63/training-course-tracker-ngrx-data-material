@@ -10,13 +10,11 @@ export class ModalDataService {
     warning: '',
   };
 
-  constructor() {}
+  getDeleteModalOtions(): any {
+    return this.deleteModalOptions;
+  }
 
   setDeleteModalOptions(options: any) {
     this.deleteModalOptions = options;
-  }
-
-  getDeleteModalOtions(): any {
-    return this.deleteModalOptions;
   }
 }

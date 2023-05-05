@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { Subject, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 import { Path } from '../models/paths';
 import { PathService } from '../services/path.service';
@@ -87,18 +87,15 @@ import { PathService } from '../services/path.service';
   ],
 })
 export default class PathEditComponent implements OnInit, OnDestroy {
-  componentActive = true;
-  pathEditForm!: FormGroup;
-  private path = <Path>{};
-  private isNew = true;
-  componentIsDestroyed = new Subject<boolean>();
+  fb = inject(FormBuilder);
+  location = inject(Location);
+  pathService = inject(PathService);
+  route = inject(ActivatedRoute);
 
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location,
-    private pathService: PathService,
-    private fb: FormBuilder
-  ) {}
+  destroyed$ = new ReplaySubject<void>(1);
+  isNew = true;
+  path = <Path>{};
+  pathEditForm!: FormGroup;
 
   ngOnInit() {
     this.pathEditForm = this.fb.group({
@@ -113,15 +110,13 @@ export default class PathEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.componentActive = false;
-    this.componentIsDestroyed.next(true);
-    this.componentIsDestroyed.complete();
+    this.destroyed$.next();
   }
 
   loadFormValues(id: number) {
     this.pathService
       .getByKey(id)
-      .pipe(takeUntil(this.componentIsDestroyed))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((path: Path) => {
         this.path = { ...path };
         this.pathEditForm.get('name').setValue(this.path.name);

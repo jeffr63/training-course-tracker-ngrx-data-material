@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subject, take, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 
 import { Column } from '../models/column';
 import { DeleteComponent } from '../modals/delete.component';
@@ -49,27 +49,24 @@ import { PathService } from '../services/path.service';
   ],
 })
 export default class PathListComponent implements OnInit, OnDestroy {
+  pathService = inject(PathService);
+  dialog = inject(MatDialog);
+  modalDataService = inject(ModalDataService);
+  router = inject(Router);
+
   columns: Column[] = [
     { key: 'name', name: 'Path', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
   paths: Path[];
-  componentIsDestroyed = new Subject<boolean>();
-
-  constructor(
-    private pathService: PathService,
-    private dialog: MatDialog,
-    private modalDataService: ModalDataService,
-    private router: Router
-  ) {}
+  destroyed$ = new ReplaySubject<void>(1);
 
   ngOnInit() {
     this.getAllPaths();
   }
 
   ngOnDestroy(): void {
-    this.componentIsDestroyed.next(true);
-    this.componentIsDestroyed.complete();
+    this.destroyed$.next();
   }
 
   deletePath(id) {
@@ -98,7 +95,7 @@ export default class PathListComponent implements OnInit, OnDestroy {
   getAllPaths(): void {
     this.pathService
       .getAll()
-      .pipe(takeUntil(this.componentIsDestroyed))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (data) => {
           this.paths = data;

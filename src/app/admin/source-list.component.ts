@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subject, take, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 
 import { Column } from '../models/column';
 import { DeleteComponent } from '../modals/delete.component';
@@ -49,27 +49,24 @@ import { SourceService } from '../services/source.service';
   ],
 })
 export default class SourceListComponent implements OnInit, OnDestroy {
+  sourceService = inject(SourceService);
+  dialog = inject(MatDialog);
+  modalDataService = inject(ModalDataService);
+  router = inject(Router);
+
   columns: Column[] = [
     { key: 'name', name: 'Source', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
+  destroyed$ = new ReplaySubject<void>(1);
   sources: Source[];
-  componentIsDestroyed = new Subject<boolean>();
-
-  constructor(
-    private sourceService: SourceService,
-    private dialog: MatDialog,
-    private modalDataService: ModalDataService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.getAllSources();
   }
 
   ngOnDestroy(): void {
-    this.componentIsDestroyed.next(true);
-    this.componentIsDestroyed.complete();
+    this.destroyed$.next();
   }
 
   deleteSource(id) {
@@ -98,7 +95,7 @@ export default class SourceListComponent implements OnInit, OnDestroy {
   getAllSources(): void {
     this.sourceService
       .getAll()
-      .pipe(takeUntil(this.componentIsDestroyed))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (data) => {
           this.sources = data;

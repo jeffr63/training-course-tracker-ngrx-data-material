@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { DisplayTableComponent } from '../shared/display-table.component';
 import { ModalDataService } from '../modals/modal-data.service';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
-import { Subject, take, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-list',
@@ -46,29 +46,26 @@ import { Subject, take, takeUntil } from 'rxjs';
   ],
 })
 export default class UserListComponent implements OnInit, OnDestroy {
+  dialog = inject(MatDialog);
+  modalDataService = inject(ModalDataService);
+  router = inject(Router);
+  userService = inject(UserService);
+
   columns: Column[] = [
     { key: 'name', name: 'Name', width: '400px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'email', name: 'Email', width: '400px', type: 'sort', position: 'left' },
     { key: 'role', name: 'Role', width: '150px', type: 'sort', position: 'left' },
     { key: 'action', name: '', width: '50px', type: 'action', position: 'left' },
   ];
+  destroyed$ = new ReplaySubject<void>(1);
   users: User[];
-  componentIsDestroyed = new Subject<boolean>();
-
-  constructor(
-    private userService: UserService,
-    private dialog: MatDialog,
-    private modalDataService: ModalDataService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.getAllUsers();
   }
 
   ngOnDestroy() {
-    this.componentIsDestroyed.next(true);
-    this.componentIsDestroyed.complete();
+    this.destroyed$.next();
   }
 
   deleteUser(id) {
@@ -97,7 +94,7 @@ export default class UserListComponent implements OnInit, OnDestroy {
   getAllUsers(): void {
     this.userService
       .getAll()
-      .pipe(takeUntil(this.componentIsDestroyed))
+      .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (data) => {
           this.users = data;
