@@ -10,7 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 
 import { APP_ROUTES } from './app.routes';
-import { CustomTitleStrategyService } from './services/custom-title-strategy.service';
+import { CustomTitleStrategyService } from './shared/resolvers/custom-title-strategy.service';
 import { environment } from '../environments/environment';
 import { entityConfig } from './entity-metadata';
 

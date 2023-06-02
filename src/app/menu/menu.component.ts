@@ -6,8 +6,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 
-import { AuthService } from '../auth/auth.service';
-import { LoginComponent } from '../modals/login.component';
+import { AuthService } from '../shared/services/auth.service';
+import { LoginComponent } from '../shared/modals/login.component';
 import { take } from 'rxjs';
 
 @Component({

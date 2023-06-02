@@ -5,8 +5,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import * as _ from 'lodash';
 
-import { Course, CourseData } from '../models/course';
-import { CourseService } from '../courses/course.service';
+import { Course, CourseData } from '../shared/models/course';
+import { CourseService } from '../shared/services/course.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({

@@ -9,12 +9,12 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 
-import { Course } from '../models/course';
-import { CourseService } from './course.service';
-import { Path } from '../models/paths';
-import { PathService } from '../services/path.service';
-import { Source } from '../models/sources';
-import { SourceService } from '../services/source.service';
+import { Course } from '../shared/models/course';
+import { CourseService } from '../shared/services/course.service';
+import { Path } from '../shared/models/paths';
+import { PathService } from '../shared/services/path.service';
+import { Source } from '../shared/models/sources';
+import { SourceService } from '../shared/services/source.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 

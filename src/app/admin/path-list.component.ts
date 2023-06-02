@@ -5,12 +5,12 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 
-import { Column } from '../models/column';
-import { DeleteComponent } from '../modals/delete.component';
-import { DisplayTableComponent } from '../shared/display-table.component';
-import { ModalDataService } from '../modals/modal-data.service';
-import { Path } from '../models/paths';
-import { PathService } from '../services/path.service';
+import { Column } from '../shared/models/column';
+import { DeleteComponent } from '../shared/modals/delete.component';
+import { DisplayTableComponent } from '../shared/display-table/display-table.component';
+import { ModalDataService } from '../shared/modals/modal-data.service';
+import { Path } from '../shared/models/paths';
+import { PathService } from '../shared/services/path.service';
 
 @Component({
   selector: 'app-path-list',

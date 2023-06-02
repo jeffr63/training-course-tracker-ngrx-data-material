@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { Column } from '../models/column';
-import { DeleteComponent } from '../modals/delete.component';
-import { DisplayTableComponent } from '../shared/display-table.component';
-import { ModalDataService } from '../modals/modal-data.service';
-import { User } from '../models/user';
-import { UserService } from '../services/user.service';
+import { Column } from '../shared/models/column';
+import { DeleteComponent } from '../shared/modals/delete.component';
+import { DisplayTableComponent } from '../shared/display-table/display-table.component';
+import { ModalDataService } from '../shared/modals/modal-data.service';
+import { User } from '../shared/models/user';
+import { UserService } from '../shared/services/user.service';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 
 @Component({

@@ -11,8 +11,8 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 
-import { UserService } from '../services/user.service';
-import { User } from '../models/user';
+import { UserService } from '../shared/services/user.service';
+import { User } from '../shared/models/user';
 
 @Component({
   selector: 'app-user-edit',

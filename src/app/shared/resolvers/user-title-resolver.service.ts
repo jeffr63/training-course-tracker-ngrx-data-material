@@ -1,22 +1,22 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
-import { SourceService } from './source.service';
+import { UserService } from '../services/user.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SourceTitleResolverService {
-  sourceService = inject(SourceService);
+export class UserTitleResolverService {
+  userService = inject(UserService);
 
   resolve(route: ActivatedRouteSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');
     if (id == 'new') {
-      return 'New Source';
+      return 'New User';
     } else {
-      return this.sourceService.getByKey(id).pipe(map((source) => source.name));
+      return this.userService.getByKey(id).pipe(map((user) => user.name));
     }
   }
 }

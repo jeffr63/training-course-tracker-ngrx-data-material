@@ -10,8 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 
 import { ReplaySubject, takeUntil } from 'rxjs';
 
-import { Path } from '../models/paths';
-import { PathService } from '../services/path.service';
+import { Path } from '../shared/models/paths';
+import { PathService } from '../shared/services/path.service';
 
 @Component({
   selector: 'app-path-edit',

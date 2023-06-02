@@ -3,20 +3,20 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
-import { UserService } from './user.service';
+import { CourseService } from '../services/course.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserTitleResolverService {
-  userService = inject(UserService);
+export class CourseTitleResolverService {
+  courseService = inject(CourseService);
 
   resolve(route: ActivatedRouteSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');
     if (id == 'new') {
-      return 'New User';
+      return 'New Course';
     } else {
-      return this.userService.getByKey(id).pipe(map((user) => user.name));
+      return this.courseService.getByKey(id).pipe(map((course) => course.title));
     }
   }
 }

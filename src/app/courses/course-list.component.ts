@@ -5,13 +5,13 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, take, takeUntil } from 'rxjs';
 
-import { AuthService } from '../auth/auth.service';
-import { Column } from '../models/column';
-import { Course } from '../models/course';
-import { CourseService } from './course.service';
-import { DeleteComponent } from './../modals/delete.component';
-import { DisplayTableComponent } from '../shared/display-table.component';
-import { ModalDataService } from '../modals/modal-data.service';
+import { AuthService } from '../shared/services/auth.service';
+import { Column } from '../shared/models/column';
+import { Course } from '../shared/models/course';
+import { CourseService } from '../shared/services/course.service';
+import { DeleteComponent } from '../shared/modals/delete.component';
+import { DisplayTableComponent } from '../shared/display-table/display-table.component';
+import { ModalDataService } from '../shared/modals/modal-data.service';
 
 @Component({
   selector: 'app-course-list',

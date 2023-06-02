@@ -10,8 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 
 import { ReplaySubject, takeUntil } from 'rxjs';
 
-import { Source } from '../models/sources';
-import { SourceService } from '../services/source.service';
+import { Source } from '../shared/models/sources';
+import { SourceService } from '../shared/services/source.service';
 
 @Component({
   selector: 'app-source-edit',
