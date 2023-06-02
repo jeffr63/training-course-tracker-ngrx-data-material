@@ -23,21 +23,11 @@ import { take } from 'rxjs';
       <span style="flex: 1 1 auto;"></span>
       <button mat-flat-button color="primary" [routerLink]="['/']" id="home">Home</button>
       <button mat-flat-button color="primary" [routerLink]="['/courses']" id="courses">Courses</button>
-      <button mat-flat-button color="primary" *ngIf="auth.isAuthenticated === false" (click)="open()" id="login">
-        Login
-      </button>
-      <button
-        mat-flat-button
-        color="primary"
-        [routerLink]="['/admin']"
-        *ngIf="auth.isAuthenticated && auth.isAdmin"
-        id="admin"
-      >
+      <button mat-flat-button color="primary" *ngIf="!isLoggedIn()" (click)="open()" id="login">Login</button>
+      <button mat-flat-button color="primary" [routerLink]="['/admin']" *ngIf="isLoggedInAsAdmin()" id="admin">
         Admin
       </button>
-      <button mat-flat-button color="primary" *ngIf="auth.isAuthenticated" (click)="logout()" id="logout">
-        Logout
-      </button>
+      <button mat-flat-button color="primary" *ngIf="isLoggedIn()" (click)="logout()" id="logout">Logout</button>
     </mat-toolbar>
   `,
 
@@ -50,11 +40,12 @@ import { take } from 'rxjs';
   ],
 })
 export class MenuComponent {
-  auth = inject(AuthService);
-  dialog = inject(MatDialog);
-  router = inject(Router);
+  private auth = inject(AuthService);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
 
-  public isNavbarCollapsed = true;
+  isLoggedIn = this.auth.isLoggedIn;
+  isLoggedInAsAdmin = this.auth.isLoggedInAsAdmin;
   email: string;
   password: string;
 

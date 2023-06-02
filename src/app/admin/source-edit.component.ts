@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, OnInit, inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,11 +6,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 import { Source } from '../shared/models/sources';
 import { SourceService } from '../shared/services/source.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-source-edit',
@@ -86,13 +85,12 @@ import { SourceService } from '../shared/services/source.service';
     `,
   ],
 })
-export default class SourceEditComponent implements OnInit, OnDestroy {
-  fb = inject(FormBuilder);
-  location = inject(Location);
-  route = inject(ActivatedRoute);
-  sourceService = inject(SourceService);
+export default class SourceEditComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private location = inject(Location);
+  private sourceService = inject(SourceService);
 
-  destroyed$ = new ReplaySubject<void>(1);
+  @Input() id;
   isNew = true;
   source = <Source>{};
   sourceEditForm!: FormGroup;
@@ -102,22 +100,16 @@ export default class SourceEditComponent implements OnInit, OnDestroy {
       name: ['', Validators.required],
     });
 
-    this.route.params.subscribe((params) => {
-      if (params.id !== 'new') {
+      if (this.id !== 'new') {
         this.isNew = false;
-        this.loadFormValues(params.id);
+        this.loadFormValues(+this.id);
       }
-    });
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
   }
 
   loadFormValues(id: number) {
     this.sourceService
       .getByKey(id)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(take(1))
       .subscribe((source: Source) => {
         this.source = { ...source };
         this.sourceEditForm.get('name').setValue(this.source.name);

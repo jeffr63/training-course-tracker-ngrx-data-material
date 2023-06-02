@@ -9,7 +9,7 @@ import { PathService } from '../services/path.service';
   providedIn: 'root',
 })
 export class PathTitleResolverService {
-  pathService = inject(PathService);
+  private pathService = inject(PathService);
 
   resolve(route: ActivatedRouteSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');

@@ -1,13 +1,13 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { toSignal } from '@angular/core/rxjs-interop';
 
-import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
 import * as _ from 'lodash';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { Course, CourseData } from '../shared/models/course';
 import { CourseService } from '../shared/services/course.service';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +25,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
             <mat-card-content>
               <ngx-charts-pie-chart
                 [view]="[400, 400]"
-                [results]="courses$ | async"
+                [results]="courses()"
                 [labels]="true"
                 [doughnut]="true"
                 [arcWidth]="0.5"
@@ -43,7 +43,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
             <mat-card-content>
               <ngx-charts-pie-chart
                 [view]="[400, 400]"
-                [results]="sources$ | async"
+                [results]="sources()"
                 [labels]="true"
                 [doughnut]="true"
                 [arcWidth]="0.5"
@@ -58,28 +58,14 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
   styles: [],
 })
-export class DashboardComponent implements OnInit, OnDestroy {
-  courseService = inject(CourseService);
+export class DashboardComponent {
+  private courseService = inject(CourseService);
 
-  courses$: Observable<CourseData[]>;
-  destroyed$ = new ReplaySubject<void>(1);
-  sources$: Observable<CourseData[]>;
+  #courses = toSignal(this.courseService.getAll(), { initialValue: [] });
+  courses = computed(() => this.getByPathValue(this.#courses()));
+  sources = computed(() => this.getBySourceValue(this.#courses()));
 
-  ngOnInit() {
-    this.courseService
-      .getAll()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((courses: Course[]) => {
-        this.courses$ = this.getByPathValue(courses);
-        this.sources$ = this.getBySourceValue(courses);
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-  }
-
-  getByPathValue(courses: Course[]): Observable<CourseData[]> {
+  getByPathValue(courses: Course[]): CourseData[] {
     let byPath = _.chain(courses)
       .groupBy('path')
       .map((values, key) => {
@@ -96,10 +82,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
       .value();
     byPath = _.orderBy(byPath, 'value', 'desc');
-    return of(byPath);
+    return byPath;
   }
 
-  getBySourceValue(course: Course[]): Observable<CourseData[]> {
+  getBySourceValue(course: Course[]): CourseData[] {
     let bySource = _.chain(course)
       .groupBy('source')
       .map((values, key) => {
@@ -116,6 +102,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
       .value();
     bySource = _.orderBy(bySource, 'value', 'desc');
-    return of(bySource);
+    return bySource;
   }
 }

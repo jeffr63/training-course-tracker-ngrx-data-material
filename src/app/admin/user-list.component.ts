@@ -11,6 +11,7 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
 import { User } from '../shared/models/user';
 import { UserService } from '../shared/services/user.service';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-list',
@@ -19,7 +20,7 @@ import { ReplaySubject, take, takeUntil } from 'rxjs';
   template: `
     <section class="mt-5">
       <app-display-table
-        *ngIf="users"
+        *ngIf="users()"
         [isAuthenticated]="true"
         [isFilterable]="true"
         [includeAdd]="false"
@@ -27,7 +28,7 @@ import { ReplaySubject, take, takeUntil } from 'rxjs';
         [paginationSizes]="[5, 10, 25, 100]"
         [defaultPageSize]="10"
         [disableClear]="true"
-        [tableData]="users"
+        [tableData]="users()"
         [tableColumns]="columns"
         (delete)="deleteUser($event)"
         (edit)="editUser($event)"
@@ -45,11 +46,11 @@ import { ReplaySubject, take, takeUntil } from 'rxjs';
     `,
   ],
 })
-export default class UserListComponent implements OnInit, OnDestroy {
-  dialog = inject(MatDialog);
-  modalDataService = inject(ModalDataService);
-  router = inject(Router);
-  userService = inject(UserService);
+export default class UserListComponent implements OnInit {
+  private dialog = inject(MatDialog);
+  private modalDataService = inject(ModalDataService);
+  private router = inject(Router);
+  private userService = inject(UserService);
 
   columns: Column[] = [
     { key: 'name', name: 'Name', width: '400px', type: 'sort', position: 'left', sortDefault: true },
@@ -57,15 +58,10 @@ export default class UserListComponent implements OnInit, OnDestroy {
     { key: 'role', name: 'Role', width: '150px', type: 'sort', position: 'left' },
     { key: 'action', name: '', width: '50px', type: 'action', position: 'left' },
   ];
-  destroyed$ = new ReplaySubject<void>(1);
-  users: User[];
+  users = toSignal(this.userService.entities$, { initialValue: [] });
 
   ngOnInit() {
     this.getAllUsers();
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
   }
 
   deleteUser(id) {
@@ -92,13 +88,6 @@ export default class UserListComponent implements OnInit, OnDestroy {
   }
 
   getAllUsers(): void {
-    this.userService
-      .getAll()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (data) => {
-          this.users = data;
-        },
-      });
+    this.userService.getAll().pipe(take(1));
   }
 }

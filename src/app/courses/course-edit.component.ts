@@ -1,13 +1,15 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe, Location, NgForOf, NgIf } from '@angular/common';
+import { Component, OnInit, inject, Input } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { RouterLink } from '@angular/router';
 
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 import { Course } from '../shared/models/course';
 import { CourseService } from '../shared/services/course.service';
@@ -15,8 +17,6 @@ import { Path } from '../shared/models/paths';
 import { PathService } from '../shared/services/path.service';
 import { Source } from '../shared/models/sources';
 import { SourceService } from '../shared/services/source.service';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-course-edit',
@@ -136,15 +136,14 @@ import { MatButtonModule } from '@angular/material/button';
     `,
   ],
 })
-export default class CourseEditComponent implements OnInit, OnDestroy {
-  courseService = inject(CourseService);
-  fb = inject(FormBuilder);
-  location = inject(Location);
-  pathService = inject(PathService);
-  route = inject(ActivatedRoute);
-  sourceService = inject(SourceService);
+export default class CourseEditComponent implements OnInit {
+  private courseService = inject(CourseService);
+  private fb = inject(FormBuilder);
+  private location = inject(Location);
+  private pathService = inject(PathService);
+  private sourceService = inject(SourceService);
 
-  destroyed$ = new ReplaySubject<void>(1);
+  @Input() id;
   course = <Course>{};
   courseEditForm!: FormGroup;
   isNew = true;
@@ -159,12 +158,10 @@ export default class CourseEditComponent implements OnInit, OnDestroy {
       source: ['', Validators.required],
     });
 
-    this.route.params.subscribe((params) => {
-      if (params.id !== 'new') {
-        this.isNew = false;
-        this.loadFormValues(params.id);
-      }
-    });
+    if (this.id !== 'new') {
+      this.isNew = false;
+      this.loadFormValues(+this.id);
+    }
 
     this.pathService.getAll();
     this.paths$ = this.pathService.entities$;
@@ -172,14 +169,10 @@ export default class CourseEditComponent implements OnInit, OnDestroy {
     this.sources$ = this.sourceService.entities$;
   }
 
-  ngOnDestroy() {
-    this.destroyed$.next();
-  }
-
   loadFormValues(id) {
     this.courseService
       .getByKey(id)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(take(1))
       .subscribe((course: Course) => {
         this.course = { ...course };
         this.courseEditForm.patchValue({

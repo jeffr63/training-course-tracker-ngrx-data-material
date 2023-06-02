@@ -1,9 +1,10 @@
+import { Component, OnInit, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, take, takeUntil } from 'rxjs';
+
+import { take } from 'rxjs';
 
 import { AuthService } from '../shared/services/auth.service';
 import { Column } from '../shared/models/column';
@@ -21,15 +22,15 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
   template: `
     <section class="mt-5">
       <app-display-table
-        *ngIf="courses"
+        *ngIf="courses()"
         [includeAdd]="true"
-        [isAuthenticated]="authService.isAuthenticated"
+        [isAuthenticated]="isAuthenticated()"
         [isFilterable]="true"
         [isPageable]="true"
         [paginationSizes]="[5, 10, 25, 100]"
         [defaultPageSize]="10"
         [disableClear]="true"
-        [tableData]="courses"
+        [tableData]="courses()"
         [tableColumns]="columns"
         (add)="newCourse()"
         (delete)="deleteCourse($event)"
@@ -46,7 +47,16 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
     `,
   ],
 })
-export default class CourseListComponent implements OnInit, OnDestroy {
+export default class CourseListComponent implements OnInit {
+  private courseService = inject(CourseService);
+  private dialog = inject(MatDialog);
+  private authService = inject(AuthService);
+  private modalDataService = inject(ModalDataService);
+  private router = inject(Router);
+
+  courses = toSignal(this.courseService.entities$, { initialValue: [] });
+  isAuthenticated = this.authService.isLoggedIn;
+
   columns: Column[] = [
     { key: 'title', name: 'Title', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'instructor', name: 'Instructor', width: '400px', type: 'sort', position: 'left' },
@@ -54,26 +64,9 @@ export default class CourseListComponent implements OnInit, OnDestroy {
     { key: 'source', name: 'Source', width: '150px', type: 'sort', position: 'left' },
     { key: 'action', name: '', width: '50px', type: 'action', position: 'left' },
   ];
-  public defaultSortColumn = 'title';
-  loading = false;
-  courses: Course[];
-  componentIsDestroyed = new Subject<boolean>();
-
-  constructor(
-    private courseService: CourseService,
-    private dialog: MatDialog,
-    public authService: AuthService,
-    private modalDataService: ModalDataService,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.getAllCourses();
-  }
-
-  ngOnDestroy(): void {
-    this.componentIsDestroyed.next(true);
-    this.componentIsDestroyed.complete();
   }
 
   deleteCourse(id) {
@@ -101,14 +94,7 @@ export default class CourseListComponent implements OnInit, OnDestroy {
   }
 
   getAllCourses(): void {
-    this.courseService
-      .getAll()
-      .pipe(takeUntil(this.componentIsDestroyed))
-      .subscribe({
-        next: (data) => {
-          this.courses = data;
-        },
-      });
+    this.courseService.getAll().pipe(take(1));
   }
 
   newCourse() {

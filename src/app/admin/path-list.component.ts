@@ -1,15 +1,15 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { NgIf } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 
-import { ReplaySubject, take, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
 
 import { Column } from '../shared/models/column';
 import { DeleteComponent } from '../shared/modals/delete.component';
 import { DisplayTableComponent } from '../shared/display-table/display-table.component';
 import { ModalDataService } from '../shared/modals/modal-data.service';
-import { Path } from '../shared/models/paths';
 import { PathService } from '../shared/services/path.service';
 
 @Component({
@@ -20,7 +20,7 @@ import { PathService } from '../shared/services/path.service';
   template: `
     <section class="mt-5">
       <app-display-table
-        *ngIf="paths"
+        *ngIf="paths()"
         [isAuthenticated]="true"
         [isFilterable]="true"
         [includeAdd]="true"
@@ -28,7 +28,7 @@ import { PathService } from '../shared/services/path.service';
         [paginationSizes]="[5, 10, 25, 100]"
         [defaultPageSize]="10"
         [disableClear]="true"
-        [tableData]="paths"
+        [tableData]="paths()"
         [tableColumns]="columns"
         (add)="newPath()"
         (delete)="deletePath($event)"
@@ -48,25 +48,21 @@ import { PathService } from '../shared/services/path.service';
     `,
   ],
 })
-export default class PathListComponent implements OnInit, OnDestroy {
-  pathService = inject(PathService);
-  dialog = inject(MatDialog);
-  modalDataService = inject(ModalDataService);
-  router = inject(Router);
+export default class PathListComponent {
+  private pathService = inject(PathService);
+  private dialog = inject(MatDialog);
+  private modalDataService = inject(ModalDataService);
+  private router = inject(Router);
 
   columns: Column[] = [
     { key: 'name', name: 'Path', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
-  paths: Path[];
-  destroyed$ = new ReplaySubject<void>(1);
 
-  ngOnInit() {
-    this.getAllPaths();
-  }
+  paths = toSignal(this.pathService.entities$, { initialValue: [] });
 
-  ngOnDestroy(): void {
-    this.destroyed$.next();
+  constructor() {
+    this.pathService.getAll().pipe(take(1));
   }
 
   deletePath(id) {
@@ -83,24 +79,13 @@ export default class PathListComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result == 'delete') {
           this.pathService.delete(id);
-          this.getAllPaths();
+          this.pathService.getAll().pipe(take(1));
         }
       });
   }
 
   editPath(id: number) {
     this.router.navigate(['/admin/paths', id]);
-  }
-
-  getAllPaths(): void {
-    this.pathService
-      .getAll()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (data) => {
-          this.paths = data;
-        },
-      });
   }
 
   newPath() {

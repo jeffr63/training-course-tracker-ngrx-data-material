@@ -1,15 +1,15 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 
-import { ReplaySubject, take, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
 
 import { Column } from '../shared/models/column';
 import { DeleteComponent } from '../shared/modals/delete.component';
 import { DisplayTableComponent } from '../shared/display-table/display-table.component';
 import { ModalDataService } from '../shared/modals/modal-data.service';
-import { Source } from '../shared/models/sources';
 import { SourceService } from '../shared/services/source.service';
 
 @Component({
@@ -20,7 +20,7 @@ import { SourceService } from '../shared/services/source.service';
   template: `
     <section class="mt-5">
       <app-display-table
-        *ngIf="sources"
+        *ngIf="sources()"
         [isAuthenticated]="true"
         [isFilterable]="true"
         [includeAdd]="true"
@@ -28,7 +28,7 @@ import { SourceService } from '../shared/services/source.service';
         [paginationSizes]="[5, 10, 25, 100]"
         [defaultPageSize]="10"
         [disableClear]="true"
-        [tableData]="sources"
+        [tableData]="sources()"
         [tableColumns]="columns"
         (add)="newSource()"
         (delete)="deleteSource($event)"
@@ -48,25 +48,21 @@ import { SourceService } from '../shared/services/source.service';
     `,
   ],
 })
-export default class SourceListComponent implements OnInit, OnDestroy {
-  sourceService = inject(SourceService);
-  dialog = inject(MatDialog);
-  modalDataService = inject(ModalDataService);
-  router = inject(Router);
+export default class SourceListComponent implements OnInit {
+  private sourceService = inject(SourceService);
+  private dialog = inject(MatDialog);
+  private modalDataService = inject(ModalDataService);
+  private router = inject(Router);
+
+  sources = toSignal(this.sourceService.entities$, { initialValue: [] });
 
   columns: Column[] = [
     { key: 'name', name: 'Source', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
-  destroyed$ = new ReplaySubject<void>(1);
-  sources: Source[];
 
   ngOnInit() {
     this.getAllSources();
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
   }
 
   deleteSource(id) {
@@ -93,14 +89,7 @@ export default class SourceListComponent implements OnInit, OnDestroy {
   }
 
   getAllSources(): void {
-    this.sourceService
-      .getAll()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (data) => {
-          this.sources = data;
-        },
-      });
+    this.sourceService.getAll().pipe(take(1));
   }
 
   newSource() {

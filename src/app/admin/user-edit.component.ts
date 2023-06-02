@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 
-import { ReplaySubject, take, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
 
 import { UserService } from '../shared/services/user.service';
 import { User } from '../shared/models/user';
@@ -116,13 +116,12 @@ import { User } from '../shared/models/user';
     `,
   ],
 })
-export default class UserEditComponent implements OnInit, OnDestroy {
-  route = inject(ActivatedRoute);
-  location = inject(Location);
-  userService = inject(UserService);
-  fb = inject(FormBuilder);
+export default class UserEditComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private location = inject(Location);
+  private userService = inject(UserService);
 
-  destroyed$ = new ReplaySubject<void>(1);
+  @Input() id;
   user = <User>{};
   userEditForm!: FormGroup;
 
@@ -133,21 +132,15 @@ export default class UserEditComponent implements OnInit, OnDestroy {
       role: ['', Validators.required],
     });
 
-    this.route.params.subscribe((params) => {
-      if (params.id !== 'new') {
-        this.loadFormValues(params.id);
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
+    if (this.id !== 'new') {
+      this.loadFormValues(+this.id);
+    }
   }
 
   loadFormValues(id: number) {
     this.userService
       .getByKey(id)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(take(1))
       .subscribe((user: User) => {
         this.user = { ...user };
         this.userEditForm.patchValue({

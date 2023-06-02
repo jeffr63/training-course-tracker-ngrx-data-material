@@ -6,7 +6,7 @@ import { Title } from '@angular/platform-browser';
   providedIn: 'root',
 })
 export class CustomTitleStrategyService extends TitleStrategy {
-  title = inject(Title);
+  private title = inject(Title);
 
   override updateTitle(snapshot: RouterStateSnapshot): void {
     const title = this.buildTitle(snapshot);

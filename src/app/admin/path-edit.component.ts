@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,11 +6,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 import { Path } from '../shared/models/paths';
 import { PathService } from '../shared/services/path.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-path-edit',
@@ -86,13 +85,12 @@ import { PathService } from '../shared/services/path.service';
     `,
   ],
 })
-export default class PathEditComponent implements OnInit, OnDestroy {
-  fb = inject(FormBuilder);
-  location = inject(Location);
-  pathService = inject(PathService);
-  route = inject(ActivatedRoute);
+export default class PathEditComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private location = inject(Location);
+  private pathService = inject(PathService);
 
-  destroyed$ = new ReplaySubject<void>(1);
+  @Input() id;
   isNew = true;
   path = <Path>{};
   pathEditForm!: FormGroup;
@@ -101,22 +99,16 @@ export default class PathEditComponent implements OnInit, OnDestroy {
     this.pathEditForm = this.fb.group({
       name: ['', Validators.required],
     });
-    this.route.params.subscribe((params) => {
-      if (params.id !== 'new') {
-        this.isNew = false;
-        this.loadFormValues(params.id);
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
+    if (this.id !== 'new') {
+      this.isNew = false;
+      this.loadFormValues(+this.id);
+    }
   }
 
   loadFormValues(id: number) {
     this.pathService
       .getByKey(id)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(take(1))
       .subscribe((path: Path) => {
         this.path = { ...path };
         this.pathEditForm.get('name').setValue(this.path.name);

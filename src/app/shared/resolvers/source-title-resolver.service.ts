@@ -9,7 +9,7 @@ import { SourceService } from '../services/source.service';
   providedIn: 'root',
 })
 export class SourceTitleResolverService {
-  sourceService = inject(SourceService);
+  private sourceService = inject(SourceService);
 
   resolve(route: ActivatedRouteSnapshot): string | Observable<string> | Promise<string> {
     const id = route.paramMap.get('id');
