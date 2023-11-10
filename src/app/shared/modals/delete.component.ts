@@ -1,5 +1,4 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { NgIf } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -9,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-delete',
   standalone: true,
-  imports: [MatDialogModule, MatIconModule, MatButtonModule, NgIf],
+  imports: [MatDialogModule, MatIconModule, MatButtonModule],
 
   template: `
     <div style="margin:10px">
@@ -20,7 +19,9 @@ import { MatButtonModule } from '@angular/material/button';
         </p>
         <p>
           {{ modalOptions.body }}
-          <span class="text-danger" *ngIf="modalOptions.warning">{{ modalOptions.warning }}</span>
+          @if (modalOptions.warning) {
+          <span class="text-danger">{{ modalOptions.warning }}</span>
+          }
         </p>
       </mat-dialog-content>
       <mat-dialog-actions align="end">

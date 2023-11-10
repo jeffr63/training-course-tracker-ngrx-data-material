@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NgIf } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -15,12 +14,12 @@ import { PathService } from '../shared/services/path.service';
 @Component({
   selector: 'app-path-list',
   standalone: true,
-  imports: [DisplayTableComponent, NgIf, RouterLink],
+  imports: [DisplayTableComponent, RouterLink],
 
   template: `
     <section class="mt-5">
+      @if (paths()) {
       <app-display-table
-        *ngIf="paths()"
         [isAuthenticated]="true"
         [isFilterable]="true"
         [includeAdd]="true"
@@ -32,8 +31,8 @@ import { PathService } from '../shared/services/path.service';
         [tableColumns]="columns"
         (add)="newPath()"
         (delete)="deletePath($event)"
-        (edit)="editPath($event)"
-      ></app-display-table>
+        (edit)="editPath($event)"></app-display-table>
+      }
     </section>
   `,
 

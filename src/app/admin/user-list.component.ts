@@ -1,26 +1,24 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { MatDialog } from '@angular/material/dialog';
+import { take } from 'rxjs';
 
 import { Column } from '../shared/models/column';
 import { DeleteComponent } from '../shared/modals/delete.component';
 import { DisplayTableComponent } from '../shared/display-table/display-table.component';
 import { ModalDataService } from '../shared/modals/modal-data.service';
-import { User } from '../shared/models/user';
 import { UserService } from '../shared/services/user.service';
-import { ReplaySubject, take, takeUntil } from 'rxjs';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [DisplayTableComponent, NgIf],
+  imports: [DisplayTableComponent],
   template: `
     <section class="mt-5">
+      @if (users()) {
       <app-display-table
-        *ngIf="users()"
         [isAuthenticated]="true"
         [isFilterable]="true"
         [includeAdd]="false"
@@ -31,8 +29,8 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
         [tableData]="users()"
         [tableColumns]="columns"
         (delete)="deleteUser($event)"
-        (edit)="editUser($event)"
-      ></app-display-table>
+        (edit)="editUser($event)" />
+      }
     </section>
   `,
   styles: [

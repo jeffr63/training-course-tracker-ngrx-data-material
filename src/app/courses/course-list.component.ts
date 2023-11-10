@@ -1,14 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 
 import { take } from 'rxjs';
 
 import { AuthService } from '../shared/services/auth.service';
 import { Column } from '../shared/models/column';
-import { Course } from '../shared/models/course';
 import { CourseService } from '../shared/services/course.service';
 import { DeleteComponent } from '../shared/modals/delete.component';
 import { DisplayTableComponent } from '../shared/display-table/display-table.component';
@@ -17,12 +15,12 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [DisplayTableComponent, NgIf],
+  imports: [DisplayTableComponent],
 
   template: `
     <section class="mt-5">
+      @if (courses()) {
       <app-display-table
-        *ngIf="courses()"
         [includeAdd]="true"
         [isAuthenticated]="isAuthenticated()"
         [isFilterable]="true"
@@ -36,6 +34,7 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
         (delete)="deleteCourse($event)"
         (edit)="editCourse($event)"
       ></app-display-table>
+      }
     </section>
   `,
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Location, NgIf } from '@angular/common';
+import { Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,7 +21,6 @@ import { take } from 'rxjs';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    NgIf,
     ReactiveFormsModule,
     RouterLink,
   ],
@@ -30,7 +29,8 @@ import { take } from 'rxjs';
     <mat-card appearance="outlined">
       <mat-card-title>Source Edit</mat-card-title>
       <mat-card-content>
-        <form *ngIf="sourceEditForm" [formGroup]="sourceEditForm">
+        @if (sourceEditForm) {
+        <form [formGroup]="sourceEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="name">Source Name</mat-label>
             <input
@@ -39,13 +39,13 @@ import { take } from 'rxjs';
               id="title"
               matInput
               formControlName="name"
-              placeholder="Enter name of source"
-            />
-            <mat-error *ngIf="sourceEditForm.controls.name.errors?.required && sourceEditForm.controls.name?.touched">
-              Source name is required
-            </mat-error>
+              placeholder="Enter name of source" />
+            @if (sourceEditForm.controls.name.errors?.required && sourceEditForm.controls.name?.touched) {
+            <mat-error>Source name is required </mat-error>
+            }
           </mat-form-field>
         </form>
+        }
       </mat-card-content>
 
       <mat-card-actions align="end">
@@ -100,10 +100,10 @@ export default class SourceEditComponent implements OnInit {
       name: ['', Validators.required],
     });
 
-      if (this.id !== 'new') {
-        this.isNew = false;
-        this.loadFormValues(+this.id);
-      }
+    if (this.id !== 'new') {
+      this.isNew = false;
+      this.loadFormValues(+this.id);
+    }
   }
 
   loadFormValues(id: number) {

@@ -1,4 +1,4 @@
-import { AsyncPipe, Location, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, Location, NgForOf } from '@angular/common';
 import { Component, OnInit, inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,7 +30,6 @@ import { SourceService } from '../shared/services/source.service';
     MatIconModule,
     MatSelectModule,
     NgForOf,
-    NgIf,
     ReactiveFormsModule,
     RouterLink,
   ],
@@ -39,7 +38,8 @@ import { SourceService } from '../shared/services/source.service';
     <mat-card appearance="outlined">
       <mat-card-title>Course Edit</mat-card-title>
       <mat-card-content>
-        <form *ngIf="courseEditForm" [formGroup]="courseEditForm">
+        @if (courseEditForm) {
+        <form [formGroup]="courseEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="title">Title</mat-label>
             <input
@@ -48,11 +48,10 @@ import { SourceService } from '../shared/services/source.service';
               id="title"
               matInput
               formControlName="title"
-              placeholder="Enter title of course taken"
-            />
-            <mat-error *ngIf="courseEditForm.controls.title.errors?.required && courseEditForm.controls.title?.touched">
-              Title is required
-            </mat-error>
+              placeholder="Enter title of course taken" />
+            @if (courseEditForm.controls.title.errors?.required && courseEditForm.controls.title?.touched) {
+            <mat-error>Title is required</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -62,13 +61,10 @@ import { SourceService } from '../shared/services/source.service';
               id="instructor"
               matInput
               formControlName="instructor"
-              placeholder="Enter title of course taken"
-            />
-            <mat-error
-              *ngIf="courseEditForm.controls.instructor.errors?.required && courseEditForm.controls.instructor?.touched"
-            >
-              Instructor is required
-            </mat-error>
+              placeholder="Enter title of course taken" />
+            @if (courseEditForm.controls.instructor.errors?.required && courseEditForm.controls.instructor?.touched) {
+            <mat-error>Instructor is required</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -78,25 +74,26 @@ import { SourceService } from '../shared/services/source.service';
                 {{ path.name }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="courseEditForm.controls.path.errors?.required && courseEditForm.controls.path?.touched">
-              Path is required
-            </mat-error>
+            @if (courseEditForm.controls.path.errors?.required && courseEditForm.controls.path?.touched) {
+            <mat-error>Path is required</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Source</mat-label>
             <mat-select id="path" formControlName="source">
-              <mat-option *ngFor="let source of sources$ | async" [value]="source.name">
+              @for (source of sources$ | async; track source.id) {
+              <mat-option [value]="source.name">
                 {{ source.name }}
               </mat-option>
+              }
             </mat-select>
-            <mat-error
-              *ngIf="courseEditForm.controls.source.errors?.required && courseEditForm.controls.source?.touched"
-            >
-              Path is required
-            </mat-error>
+            @if (courseEditForm.controls.source.errors?.required && courseEditForm.controls.source?.touched) {
+            <mat-error> Path is required </mat-error>
+            }
           </mat-form-field>
         </form>
+        }
       </mat-card-content>
 
       <mat-card-actions align="end">

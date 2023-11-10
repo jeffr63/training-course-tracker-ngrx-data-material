@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Location, NgIf } from '@angular/common';
+import { Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,7 +21,6 @@ import { take } from 'rxjs';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    NgIf,
     RouterLink,
     ReactiveFormsModule,
   ],
@@ -30,7 +29,8 @@ import { take } from 'rxjs';
     <mat-card appearance="outlined">
       <mat-card-title>Path Edit</mat-card-title>
       <mat-card-content>
-        <form *ngIf="pathEditForm" [formGroup]="pathEditForm">
+        @if (pathEditForm) {
+        <form [formGroup]="pathEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="name">Path Name</mat-label>
             <input
@@ -39,13 +39,13 @@ import { take } from 'rxjs';
               id="title"
               matInput
               formControlName="name"
-              placeholder="Enter name of path"
-            />
-            <mat-error *ngIf="pathEditForm.controls.name.errors?.required && pathEditForm.controls.name?.touched">
-              Path name is required
-            </mat-error>
+              placeholder="Enter name of path" />
+            @if (pathEditForm.controls.name.errors?.required && pathEditForm.controls.name?.touched) {
+            <mat-error> Path name is required </mat-error>
+            }
           </mat-form-field>
         </form>
+        }
       </mat-card-content>
 
       <mat-card-actions align="end">

@@ -1,4 +1,4 @@
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,90 +21,67 @@ import { Column } from '../models/column';
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    NgIf,
     NgClass,
-    NgForOf,
   ],
   template: `
     <ng-container>
       <!-- Filter -->
-      <ng-container *ngIf="isFilterable">
+      @if (isFilterable) {
+      <ng-container>
         <mat-form-field>
           <mat-label>Filter </mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="filter" />
         </mat-form-field>
       </ng-container>
+      }
 
       <!-- Add Button -->
-      <ng-container *ngIf="includeAdd">
-        <a
-          mat-mini-fab
-          color="primary"
-          title="Add new"
-          aria-label="Add new"
-          class="ml-5 fl1"
-          *ngIf="isAuthenticated"
-          (click)="emitAdd()"
-        >
-          <mat-icon>add</mat-icon>
-        </a>
-      </ng-container>
+      @if (includeAdd && isAuthenticated) {
+      <a mat-mini-fab color="primary" title="Add new" aria-label="Add new" class="ml-5 fl1" (click)="emitAdd()">
+        <mat-icon>add</mat-icon>
+      </a>
+      }
 
       <!-- Table -->
       <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8">
         <ng-container [matColumnDef]="column.key" *ngFor="let column of tableColumns">
-          <ng-container *ngIf="column.type === 'sort'">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              mat-sort-header
-              [class.text-right]="column.position === 'right'"
-              [arrowPosition]="column.position === 'right' ? 'before' : 'after'"
-              style="min-width: {{ column.width }}"
-            >
-              {{ column.name }}
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
-          </ng-container>
-          <ng-container *ngIf="column.type === ''">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              [class.text-right]="column.position === 'right'"
-              style="min-width: {{ column.width }}"
-            >
-              {{ column.name }}
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
-          </ng-container>
-          <ng-container *ngIf="column.type === 'action'">
-            <th
-              mat-header-cell
-              *matHeaderCellDef
-              [class.text-right]="column.position === 'right'"
-              style="min-width: {{ column.width }}"
-            ></th>
-            <td mat-cell *matCellDef="let element">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="emitEdit(element.id)"
-                title="Edit"
-                *ngIf="isAuthenticated"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                color="warn"
-                (click)="emitDelete(element.id)"
-                title="Delete"
-                *ngIf="isAuthenticated"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
+          @switch(column.type) { @case('sort') {
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            [class.text-right]="column.position === 'right'"
+            [arrowPosition]="column.position === 'right' ? 'before' : 'after'"
+            style="min-width: {{ column.width }}">
+            {{ column.name }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
+          } @case ('action') {
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            [class.text-right]="column.position === 'right'"
+            style="min-width: {{ column.width }}"></th>
+          <td mat-cell *matCellDef="let element">
+            @if (isAuthenticated) {
+            <button mat-icon-button color="primary" (click)="emitEdit(element.id)" title="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="emitDelete(element.id)" title="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+            }
+          </td>
+          } @default {
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            [class.text-right]="column.position === 'right'"
+            style="min-width: {{ column.width }}">
+            {{ column.name }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
+          } }
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -116,42 +93,38 @@ import { Column } from '../models/column';
       </table>
 
       <!-- Pagination -->
-      <mat-paginator
-        *ngIf="isPageable"
-        [pageSizeOptions]="paginationSizes"
-        [pageSize]="defaultPageSize"
-        showFirstLastButtons
-      >
-      </mat-paginator>
+      @if (isPageable) {
+      <mat-paginator [pageSizeOptions]="paginationSizes" [pageSize]="defaultPageSize" showFirstLastButtons />
+      }
     </ng-container>
   `,
   styles: [
     `
-           table {
-             width: 100%;
-           }
-           th,
-           td {
-             padding: 10px !important;
-           }
-           mat-form-field {
-             width: 40%;
-           }
-           .text-right {
-             text-align: right !important;
-           }
-           .ml-5 {
-             margin-left: 5px;
-           }
-           .fl1 {
-             float: right;
-             vertical-align: middle;
-           }
-           .mat-mdc-form-field {
-             font-size: 14px;
-             width: 80%;
-           }
-         `,
+      table {
+        width: 100%;
+      }
+      th,
+      td {
+        padding: 10px !important;
+      }
+      mat-form-field {
+        width: 40%;
+      }
+      .text-right {
+        text-align: right !important;
+      }
+      .ml-5 {
+        margin-left: 5px;
+      }
+      .fl1 {
+        float: right;
+        vertical-align: middle;
+      }
+      .mat-mdc-form-field {
+        font-size: 14px;
+        width: 80%;
+      }
+    `,
   ],
 })
 export class DisplayTableComponent implements OnInit, AfterViewInit {
@@ -194,7 +167,7 @@ export class DisplayTableComponent implements OnInit, AfterViewInit {
     this.totalColumns = columnNames.length;
   }
 
-  // we need this, in order to make pagination work with *ngIf
+  // we need this, in order to make pagination work with @if
   ngAfterViewInit(): void {
     this.tableDataSource.paginator = this.matPaginator;
   }

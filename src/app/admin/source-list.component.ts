@@ -1,5 +1,4 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { NgIf } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -15,12 +14,12 @@ import { SourceService } from '../shared/services/source.service';
 @Component({
   selector: 'app-source-list',
   standalone: true,
-  imports: [DisplayTableComponent, NgIf],
+  imports: [DisplayTableComponent],
 
   template: `
     <section class="mt-5">
+      @if (sources()) {
       <app-display-table
-        *ngIf="sources()"
         [isAuthenticated]="true"
         [isFilterable]="true"
         [includeAdd]="true"
@@ -32,8 +31,8 @@ import { SourceService } from '../shared/services/source.service';
         [tableColumns]="columns"
         (add)="newSource()"
         (delete)="deleteSource($event)"
-        (edit)="editSource($event)"
-      ></app-display-table>
+        (edit)="editSource($event)"></app-display-table>
+      }
     </section>
   `,
 
