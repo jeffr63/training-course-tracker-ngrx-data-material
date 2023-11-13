@@ -44,7 +44,8 @@ import { Column } from '../models/column';
 
       <!-- Table -->
       <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8">
-        <ng-container [matColumnDef]="column.key" *ngFor="let column of tableColumns">
+        @for (column of tableColumns; track column) {
+        <ng-container [matColumnDef]="column.key">
           @switch(column.type) { @case('sort') {
           <th
             mat-header-cell
@@ -83,6 +84,7 @@ import { Column } from '../models/column';
           <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
           } }
         </ng-container>
+        }
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns; let even = even" [ngClass]="{ gray: even }"></tr>

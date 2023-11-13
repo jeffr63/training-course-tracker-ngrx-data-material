@@ -1,4 +1,4 @@
-import { AsyncPipe, Location, NgForOf } from '@angular/common';
+import { AsyncPipe, Location } from '@angular/common';
 import { Component, OnInit, inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,7 +29,6 @@ import { SourceService } from '../shared/services/source.service';
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-    NgForOf,
     ReactiveFormsModule,
     RouterLink,
   ],
@@ -70,9 +69,11 @@ import { SourceService } from '../shared/services/source.service';
           <mat-form-field appearance="outline">
             <mat-label>Path</mat-label>
             <mat-select id="path" formControlName="path">
-              <mat-option *ngFor="let path of paths$ | async" [value]="path.name">
+              @for (path of paths$| async; track path.id) {
+              <mat-option [value]="path.name">
                 {{ path.name }}
               </mat-option>
+              }
             </mat-select>
             @if (courseEditForm.controls.path.errors?.required && courseEditForm.controls.path?.touched) {
             <mat-error>Path is required</mat-error>
