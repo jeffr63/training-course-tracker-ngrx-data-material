@@ -36,7 +36,7 @@ import { MatButtonModule } from '@angular/material/button';
   `,
   styles: [
     `
-      . ml-10 {
+      .ml-10 {
         margin-left: 10px;
       }
     `,
