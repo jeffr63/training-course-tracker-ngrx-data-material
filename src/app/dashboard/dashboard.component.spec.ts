@@ -1,17 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { of } from 'rxjs';
 
 import { DashboardComponent } from './dashboard.component';
-import { DOMHelperRoutines } from '../../testing/dom.helpers';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import { DOMHelperRouimport { EffectsModule } from '@ngrx/effects';oimport { concatLatestFrom } from '@ngrx/operators';
+rt { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';import { concatLatestFrom } from '@ngrx/operators';
+
 import { EntityDataModule } from '@ngrx/data';
 import { CourseService } from '../courses/course.service';
 import { CourseData } from '../models/course';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -49,19 +51,16 @@ describe('DashboardComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [DashboardComponent],
-        imports: [
-          BrowserAnimationsModule,
-          NgxChartsModule,
-          HttpClientTestingModule,
-          StoreModule.forRoot({}),
-          EffectsModule.forRoot([]),
-          EntityDataModule.forRoot({
+    declarations: [DashboardComponent],
+    imports: [BrowserAnimationsModule,
+        NgxChartsModule,
+        StoreModule.forRoot({}),
+        EffectsModule.forRoot([]),
+        EntityDataModule.forRoot({
             entityMetadata: entityMetaData,
-          }),
-        ],
-        providers: [],
-      }).compileComponents();
+        })],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+}).compileComponents();
       mockCourseService = TestBed.inject(CourseService);
       spyOn(mockCourseService, 'getAll').and.returnValue(of(mockData));
     })

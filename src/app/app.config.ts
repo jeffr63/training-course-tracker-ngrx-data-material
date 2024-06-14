@@ -5,7 +5,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { TitleStrategy, provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { DefaultDataServiceConfig, EntityDataModule } from '@ngrx/data';
-import { EffectsModule } from '@ngrx/effects';
+import { EffectsModule } from '@ngrx/effects';import { concatLatestFrom } from '@ngrx/operators';
+
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 
@@ -28,7 +29,7 @@ export const appConfig: ApplicationConfig = {
       StoreDevtoolsModule.instrument({
         maxAge: 5,
         logOnly: environment.production,
-      })
+      connectInZone: true})
     ),
     { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
     { provide: TitleStrategy, useClass: CustomTitleStrategyService },
