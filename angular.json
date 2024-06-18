@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "tctndm": {
+    "course-tracker": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/tctndm",
+            "outputPath": "dist/course-tracker",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "tctndm:build:production"
+              "buildTarget": "course-tracker:build:production"
             },
             "development": {
-              "buildTarget": "tctndm:build:development"
+              "buildTarget": "course-tracker:build:development"
             }
           },
           "defaultConfiguration": "development"
