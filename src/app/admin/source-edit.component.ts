@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, Input } from '@angular/core';
+import { Component, OnInit, inject, input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,15 +15,7 @@ import { take } from 'rxjs';
 @Component({
   selector: 'app-source-edit',
   standalone: true,
-  imports: [
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    RouterLink,
-  ],
+  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, ReactiveFormsModule, RouterLink],
 
   template: `
     <mat-card appearance="outlined">
@@ -33,13 +25,7 @@ import { take } from 'rxjs';
         <form [formGroup]="sourceEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="name">Source Name</mat-label>
-            <input
-              ngbAutofocus
-              type="text"
-              id="title"
-              matInput
-              formControlName="name"
-              placeholder="Enter name of source" />
+            <input ngbAutofocus type="text" id="title" matInput formControlName="name" placeholder="Enter name of source" />
             @if (sourceEditForm.controls.name.errors?.required && sourceEditForm.controls.name?.touched) {
             <mat-error>Source name is required </mat-error>
             }
@@ -49,12 +35,8 @@ import { take } from 'rxjs';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
-          <mat-icon>save</mat-icon> Save
-        </button>
-        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/sources']">
-          <mat-icon>cancel</mat-icon> Cancel
-        </button>
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid"><mat-icon>save</mat-icon> Save</button>
+        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/sources']"><mat-icon>cancel</mat-icon> Cancel</button>
       </mat-card-actions>
     </mat-card>
   `,
@@ -86,43 +68,43 @@ import { take } from 'rxjs';
   ],
 })
 export default class SourceEditComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private location = inject(Location);
-  private sourceService = inject(SourceService);
+  readonly #fb = inject(FormBuilder);
+  readonly #location = inject(Location);
+  readonly #sourceService = inject(SourceService);
 
-  @Input() id;
-  isNew = true;
-  source = <Source>{};
-  sourceEditForm!: FormGroup;
+  protected readonly id = input.required();
+  #isNew = true;
+  #source = <Source>{};
+  protected sourceEditForm!: FormGroup;
 
   ngOnInit() {
-    this.sourceEditForm = this.fb.group({
+    this.sourceEditForm = this.#fb.group({
       name: ['', Validators.required],
     });
 
-    if (this.id !== 'new') {
-      this.isNew = false;
-      this.loadFormValues(+this.id);
+    if (this.id() !== 'new') {
+      this.#isNew = false;
+      this.loadFormValues(+this.id());
     }
   }
 
   loadFormValues(id: number) {
-    this.sourceService
+    this.#sourceService
       .getByKey(id)
       .pipe(take(1))
       .subscribe((source: Source) => {
-        this.source = { ...source };
-        this.sourceEditForm.get('name').setValue(this.source.name);
+        this.#source = { ...source };
+        this.sourceEditForm.get('name').setValue(this.#source.name);
       });
   }
 
   save() {
-    this.source.name = this.sourceEditForm.controls.name.value;
-    if (this.isNew) {
-      this.sourceService.add(this.source);
+    this.#source.name = this.sourceEditForm.controls.name.value;
+    if (this.#isNew) {
+      this.#sourceService.add(this.#source);
     } else {
-      this.sourceService.update(this.source);
+      this.#sourceService.update(this.#source);
     }
-    this.location.back();
+    this.#location.back();
   }
 }

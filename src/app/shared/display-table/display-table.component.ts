@@ -1,5 +1,5 @@
-import { NgClass } from '@angular/common';
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { CurrencyPipe, NgClass } from '@angular/common';
+import { Component, computed, effect, input, OnInit, output, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,92 +13,104 @@ import { Column } from '../models/column';
 @Component({
   selector: 'app-display-table',
   standalone: true,
-  imports: [
-    MatButtonModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatTableModule,
-    NgClass,
-  ],
+  imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule, MatTableModule, NgClass, CurrencyPipe],
   template: `
-    <ng-container>
-      <!-- Filter -->
-      @if (isFilterable) {
-      <ng-container>
-        <mat-form-field>
-          <mat-label>Filter </mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="filter" />
-        </mat-form-field>
+    <!-- Filter -->
+    @if (isFilterable()) {
+    <mat-form-field appearance="outline">
+      <mat-label>Filter </mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="filter" />
+    </mat-form-field>
+    }
+
+    <!-- Add Button -->
+    @if (includeAdd() && isAuthenticated()) {
+    <a mat-mini-fab color="primary" title="Add new" aria-label="Add new" class="ml-5 fl1" (click)="emitAdd()">
+      <mat-icon>add</mat-icon>
+    </a>
+    }
+
+    <!-- Table -->
+    <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8">
+      @for (column of tableColumns(); track $index) {
+      <ng-container [matColumnDef]="column.key">
+        @switch (column.type) { @case ('sort') {
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          [class.text-right]="column.position === 'right'"
+          [arrowPosition]="column.position === 'right' ? 'before' : 'after'"
+          style="min-width: {{ column.width }}">
+          {{ column.name }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element[column.key] }}
+        </td>
+        } @case ('currency_sort') {
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          [class.text-right]="column.position === 'right'"
+          [arrowPosition]="column.position === 'right' ? 'before' : 'after'"
+          style="min-width: {{ column.width }}">
+          {{ column.name }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element[column.key] | currency }}
+        </td>
+        } @case ('link') {
+        <th mat-header-cell *matHeaderCellDef [class.text-right]="column.position === 'right'" style="min-width: {{ column.width }}">
+          {{ column.name }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          @if (element[column.key]) {
+          <a href="{{ element[column.key] }}"><mat-icon>link</mat-icon></a>
+          }
+        </td>
+        } @case ('action') {
+        <th mat-header-cell *matHeaderCellDef [class.text-right]="column.position === 'right'" style="min-width: {{ column.width }}"></th>
+        <td mat-cell *matCellDef="let element">
+          @if (isAuthenticated()) {
+          <button mat-icon-button color="primary" (click)="emitEdit(element.id)" title="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="emitDelete(element.id)" title="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+          }
+        </td>
+        } @case ('view') {
+        <th mat-header-cell *matHeaderCellDef [class.text-right]="column.position === 'right'" style="min-width: {{ column.width }}"></th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="emitOpen(element.id)" title="View">
+            <mat-icon>view_list</mat-icon>
+          </button>
+        </td>
+        } @default {
+        <th mat-header-cell *matHeaderCellDef [class.text-right]="column.position === 'right'" style="min-width: {{ column.width }}">
+          {{ column.name }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element[column.key] }}
+        </td>
+        } }
       </ng-container>
       }
 
-      <!-- Add Button -->
-      @if (includeAdd && isAuthenticated) {
-      <a mat-mini-fab color="primary" title="Add new" aria-label="Add new" class="ml-5 fl1" (click)="emitAdd()">
-        <mat-icon>add</mat-icon>
-      </a>
-      }
+      <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns(); let even = even" [ngClass]="{ gray: even }"></tr>
 
-      <!-- Table -->
-      <table mat-table [dataSource]="tableDataSource" matSort class="mat-elevation-z8">
-        @for (column of tableColumns; track column) {
-        <ng-container [matColumnDef]="column.key">
-          @switch(column.type) { @case('sort') {
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            [class.text-right]="column.position === 'right'"
-            [arrowPosition]="column.position === 'right' ? 'before' : 'after'"
-            style="min-width: {{ column.width }}">
-            {{ column.name }}
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
-          } @case ('action') {
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            [class.text-right]="column.position === 'right'"
-            style="min-width: {{ column.width }}"></th>
-          <td mat-cell *matCellDef="let element">
-            @if (isAuthenticated) {
-            <button mat-icon-button color="primary" (click)="emitEdit(element.id)" title="Edit">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="emitDelete(element.id)" title="Delete">
-              <mat-icon>delete</mat-icon>
-            </button>
-            }
-          </td>
-          } @default {
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            [class.text-right]="column.position === 'right'"
-            style="min-width: {{ column.width }}">
-            {{ column.name }}
-          </th>
-          <td mat-cell *matCellDef="let element">{{ element[column.key] }}</td>
-          } }
-        </ng-container>
-        }
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="5">No data matching the filter</td>
+      </tr>
+    </table>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns; let even = even" [ngClass]="{ gray: even }"></tr>
-
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="5">No data matching the filter</td>
-        </tr>
-      </table>
-
-      <!-- Pagination -->
-      @if (isPageable) {
-      <mat-paginator [pageSizeOptions]="paginationSizes" [pageSize]="defaultPageSize" showFirstLastButtons />
-      }
-    </ng-container>
+    <!-- Pagination -->
+    @if (isPageable()) {
+    <mat-paginator [pageSizeOptions]="paginationSizes()" [pageSize]="defaultPageSize()" showFirstLastButtons> </mat-paginator>
+    }
   `,
   styles: [
     `
@@ -129,72 +141,72 @@ import { Column } from '../models/column';
     `,
   ],
 })
-export class DisplayTableComponent implements OnInit, AfterViewInit {
-  public tableDataSource = new MatTableDataSource([]);
-  public displayedColumns: string[];
-  totalColumns: number = 1;
+export class DisplayTableComponent<TData> implements OnInit {
+  // input parms
+  defaultPageSize = input<number>(10);
+  disableClear = input<boolean>(false);
+  includeAdd = input<boolean>(false);
+  isAuthenticated = input<boolean>(false);
+  isFilterable = input<boolean>(false);
+  isPageable = input<boolean>(false);
+  paginationSizes = input<number[]>([5, 10, 15]);
+  tableColumns = input<Column[]>([]);
+  tableData = input.required<TData[]>();
+  protected tableDataSource = new MatTableDataSource([]);
 
-  @ViewChild(MatPaginator, { static: false }) matPaginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) matSort: MatSort;
+  // output parms
+  protected readonly add = output();
+  protected readonly delete = output<number>();
+  protected readonly edit = output<number>();
+  protected readonly open = output<number>();
 
-  // this property needs to have a setter, to dynamically get changes from parent component
-  @Input() set tableData(data: any[]) {
-    this.setTableDataSource(data);
+  // signals and computed values
+  matPaginator = viewChild(MatPaginator);
+  matSort = viewChild.required(MatSort);
+  protected displayedColumns = computed<String[]>(() => this.tableColumns().map((column: Column) => column.key));
+
+  constructor() {
+    effect(() => this.setTableDataSource(this.tableData()));
+    effect(() => (this.tableDataSource.paginator = this.matPaginator()!));
   }
-  @Input() isAuthenticated = false;
-  @Input() isFilterable = false;
-  @Input() isPageable = false;
-  @Input() includeAdd = false;
-  @Input() paginationSizes: number[] = [5, 10, 15];
-  @Input() defaultPageSize = this.paginationSizes[1];
-  @Input() disableClear = false;
-  @Input() tableColumns: Column[] = [];
-
-  @Output() add: EventEmitter<any> = new EventEmitter();
-  @Output() delete: EventEmitter<number> = new EventEmitter();
-  @Output() edit: EventEmitter<number> = new EventEmitter();
 
   ngOnInit(): void {
-    const columnNames = this.tableColumns.map((column: Column) => column.key);
     let defaultSort = '';
-    this.tableColumns.map((column: Column) => {
+    this.tableColumns().map((column: Column) => {
       if (column.sortDefault) {
         defaultSort = column.key;
       }
     });
     if (defaultSort !== '') {
-      this.matSort.sort({ id: defaultSort, start: 'asc' } as MatSortable);
+      this.matSort().sort({ id: defaultSort, start: 'asc' } as MatSortable);
     }
-    this.displayedColumns = columnNames;
-    this.totalColumns = columnNames.length;
   }
 
-  // we need this, in order to make pagination work with @if
-  ngAfterViewInit(): void {
-    this.tableDataSource.paginator = this.matPaginator;
-  }
-
-  setTableDataSource(data: any) {
-    this.tableDataSource = new MatTableDataSource<any>(data);
-    this.tableDataSource.paginator = this.matPaginator;
-    this.matSort.disableClear = this.disableClear;
-    this.tableDataSource.sort = this.matSort;
-  }
-
-  applyFilter(event: Event) {
+  protected applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.tableDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  emitAdd() {
+  protected emitAdd() {
     this.add.emit();
   }
 
-  emitDelete(id) {
+  protected emitDelete(id) {
     this.delete.emit(id);
   }
 
-  emitEdit(id) {
+  protected emitEdit(id) {
     this.edit.emit(id);
+  }
+
+  protected emitOpen(id: number) {
+    this.open.emit(id);
+  }
+
+  private setTableDataSource(data: any) {
+    this.tableDataSource = new MatTableDataSource<any>(data);
+    this.tableDataSource.paginator = this.matPaginator();
+    this.matSort().disableClear = this.disableClear();
+    this.tableDataSource.sort = this.matSort();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -17,16 +17,7 @@ import { User } from '../shared/models/user';
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatRadioModule,
-    ReactiveFormsModule,
-    RouterLink,
-  ],
+  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatRadioModule, ReactiveFormsModule, RouterLink],
 
   template: `
     <mat-card appearance="outlined">
@@ -36,13 +27,7 @@ import { User } from '../shared/models/user';
         <form [formGroup]="userEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="name">Name</mat-label>
-            <input
-              ngbAutofocus
-              type="text"
-              id="name"
-              matInput
-              formControlName="name"
-              placeholder="Enter name of user" />
+            <input ngbAutofocus type="text" id="name" matInput formControlName="name" placeholder="Enter name of user" />
             @if (userEditForm.controls.name.errors?.required && userEditForm.controls.name?.touched) {
             <mat-error>Name is required</mat-error>
             }
@@ -69,12 +54,8 @@ import { User } from '../shared/models/user';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!userEditForm.valid">
-          <mat-icon>save</mat-icon> Save
-        </button>
-        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/users']">
-          <mat-icon>cancel</mat-icon> Cancel
-        </button>
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!userEditForm.valid"><mat-icon>save</mat-icon> Save</button>
+        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/users']"><mat-icon>cancel</mat-icon> Cancel</button>
       </mat-card-actions>
     </mat-card>
   `,
@@ -117,32 +98,32 @@ import { User } from '../shared/models/user';
   ],
 })
 export default class UserEditComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private location = inject(Location);
-  private userService = inject(UserService);
+  readonly #fb = inject(FormBuilder);
+  readonly #location = inject(Location);
+  readonly #userService = inject(UserService);
 
-  @Input() id;
-  user = <User>{};
-  userEditForm!: FormGroup;
+  protected readonly id = input.required();
+  #user = <User>{};
+  protected userEditForm!: FormGroup;
 
   ngOnInit() {
-    this.userEditForm = this.fb.group({
+    this.userEditForm = this.#fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       role: ['', Validators.required],
     });
 
-    if (this.id !== 'new') {
-      this.loadFormValues(+this.id);
+    if (this.id() !== 'new') {
+      this.loadFormValues(+this.id());
     }
   }
 
-  loadFormValues(id: number) {
-    this.userService
+  protected loadFormValues(id: number) {
+    this.#userService
       .getByKey(id)
       .pipe(take(1))
       .subscribe((user: User) => {
-        this.user = { ...user };
+        this.#user = { ...user };
         this.userEditForm.patchValue({
           name: user.name,
           email: user.email,
@@ -151,9 +132,9 @@ export default class UserEditComponent implements OnInit {
       });
   }
 
-  save() {
+  protected save() {
     const patchData = this.userEditForm.getRawValue();
-    this.userService.patch(this.user.id, patchData).pipe(take(1)).subscribe();
-    this.location.back();
+    this.#userService.patch(this.#user.id, patchData).pipe(take(1)).subscribe();
+    this.#location.back();
   }
 }

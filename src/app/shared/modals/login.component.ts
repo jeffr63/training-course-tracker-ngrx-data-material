@@ -19,13 +19,7 @@ import { MatInputModule } from '@angular/material/input';
           <mat-form-field appearance="outline" class="mt-5">
             <mat-label for="email">Email Address</mat-label>
             <mat-icon matIconSuffix>mail_outline</mat-icon>
-            <input
-              ngbAutofocus
-              type="email"
-              id="email"
-              matInput
-              formControlName="email"
-              placeholder="Enter email address" />
+            <input ngbAutofocus type="email" id="email" matInput formControlName="email" placeholder="Enter email address" />
             @if (loginForm.controls.email.errors?.required && loginForm.controls.email?.touched) {
             <mat-error>Email is required</mat-error>
             } @if (loginForm.controls.email.errors?.email && loginForm.controls.email?.touched) {
@@ -65,32 +59,32 @@ import { MatInputModule } from '@angular/material/input';
   ],
 })
 export class LoginComponent implements OnInit {
-  dialogRef = inject(MatDialogRef<LoginComponent>);
-  fb = inject(FormBuilder);
+  readonly #dialogRef = inject(MatDialogRef<LoginComponent>);
+  readonly #fb = inject(FormBuilder);
 
-  loginForm!: FormGroup;
-  flag = true;
-  user = {
+  protected loginForm!: FormGroup;
+  protected flag = true;
+  readonly #user = {
     email: '',
     password: '',
   };
 
   ngOnInit(): void {
-    this.loginForm = this.fb.group({
+    this.loginForm = this.#fb.group({
       email: ['', [Validators.required, , Validators.email]],
       password: ['', Validators.required],
     });
   }
 
-  login(): void {
+  protected login(): void {
     if (this.loginForm.valid) {
-      this.user.email = this.loginForm.controls.email.value;
-      this.user.password = this.loginForm.controls.password.value;
-      this.dialogRef.close(this.user);
+      this.#user.email = this.loginForm.controls.email.value;
+      this.#user.password = this.loginForm.controls.password.value;
+      this.#dialogRef.close(this.#user);
     }
   }
 
-  cancel(): void {
-    this.dialogRef.close();
+  protected cancel(): void {
+    this.#dialogRef.close();
   }
 }

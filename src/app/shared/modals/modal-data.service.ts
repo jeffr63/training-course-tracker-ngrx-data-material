@@ -4,17 +4,17 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ModalDataService {
-  private deleteModalOptions = {
+  #deleteModalOptions = {
     title: '',
     body: '',
     warning: '',
   };
 
-  getDeleteModalOtions(): any {
-    return this.deleteModalOptions;
+  public getDeleteModalOtions(): any {
+    return this.#deleteModalOptions;
   }
 
-  setDeleteModalOptions(options: any) {
-    this.deleteModalOptions = options;
+  public setDeleteModalOptions(options: any) {
+    this.#deleteModalOptions = options;
   }
 }

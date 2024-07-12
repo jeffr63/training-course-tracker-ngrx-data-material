@@ -14,15 +14,15 @@ class AuthToken {
   providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(HttpClient);
+  readonly #http = inject(HttpClient);
 
-  #isAdmin = signal<boolean>(false);
-  #isLoggedIn = signal<boolean>(false);
-  isLoggedIn = this.#isLoggedIn.asReadonly();
-  isLoggedInAsAdmin = computed(() => this.#isLoggedIn() && this.#isAdmin());
+  readonly #isAdmin = signal<boolean>(false);
+  readonly #isLoggedIn = signal<boolean>(false);
+  public isLoggedIn = this.#isLoggedIn.asReadonly();
+  public isLoggedInAsAdmin = computed(() => this.#isLoggedIn() && this.#isAdmin());
 
-  login(email: string, password: string) {
-    return this.http.post<any>('http://localhost:3000/login', { email, password }).pipe(
+  public login(email: string, password: string) {
+    return this.#http.post<any>('http://localhost:3000/login', { email, password }).pipe(
       map((response) => {
         // login successful if there's a jwt token in the response and if that token is valid
         if (response && response.accessToken) {
@@ -43,13 +43,13 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+  public logout(): void {
     localStorage.removeItem('tct_auth');
     this.#isLoggedIn.set(false);
     this.#isAdmin.set(false);
   }
 
-  checkLogin() {
+  public checkLogin() {
     let auth: AuthToken = JSON.parse(localStorage.getItem('tct_auth'));
     if (!auth) return;
 

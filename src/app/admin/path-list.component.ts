@@ -48,46 +48,46 @@ import { PathService } from '../shared/services/path.service';
   ],
 })
 export default class PathListComponent {
-  private pathService = inject(PathService);
-  private dialog = inject(MatDialog);
-  private modalDataService = inject(ModalDataService);
-  private router = inject(Router);
+  readonly #pathService = inject(PathService);
+  readonly #dialog = inject(MatDialog);
+  readonly #modalDataService = inject(ModalDataService);
+  readonly #router = inject(Router);
 
-  columns: Column[] = [
+  protected readonly columns: Column[] = [
     { key: 'name', name: 'Path', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
 
-  paths = toSignal(this.pathService.entities$, { initialValue: [] });
+  protected readonly paths = toSignal(this.#pathService.entities$, { initialValue: [] });
 
   constructor() {
-    this.pathService.getAll().pipe(take(1));
+    this.#pathService.getAll().pipe(take(1));
   }
 
-  deletePath(id) {
+  protected deletePath(id) {
     const modalOptions = {
       title: 'Are you sure you want to delete this path?',
       body: 'All information associated to this path will be permanently deleted.',
       warning: 'This operation cannot be undone.',
     };
-    this.modalDataService.setDeleteModalOptions(modalOptions);
-    const dialogRef = this.dialog.open(DeleteComponent, { width: '500px' });
+    this.#modalDataService.setDeleteModalOptions(modalOptions);
+    const dialogRef = this.#dialog.open(DeleteComponent, { width: '500px' });
     dialogRef
       .afterClosed()
       .pipe(take(1))
       .subscribe((result) => {
         if (result == 'delete') {
-          this.pathService.delete(id);
-          this.pathService.getAll().pipe(take(1));
+          this.#pathService.delete(id);
+          this.#pathService.getAll().pipe(take(1));
         }
       });
   }
 
-  editPath(id: number) {
-    this.router.navigate(['/admin/paths', id]);
+  protected editPath(id: number) {
+    this.#router.navigate(['/admin/paths', id]);
   }
 
-  newPath() {
-    this.router.navigate(['/admin/paths/new']);
+  protected newPath() {
+    this.#router.navigate(['/admin/paths/new']);
   }
 }

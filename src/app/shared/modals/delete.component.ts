@@ -25,12 +25,8 @@ import { MatButtonModule } from '@angular/material/button';
         </p>
       </mat-dialog-content>
       <mat-dialog-actions align="end">
-        <button mat-flat-button color="warn" (click)="dialog.close('delete')" title="Delete">
-          <mat-icon>delete</mat-icon> Delete
-        </button>
-        <button mat-flat-button color="accent" (click)="dialog.close()" title="Cancel" class="ml-10">
-          <mat-icon>cancel</mat-icon> Cancel
-        </button>
+        <button mat-flat-button color="warn" (click)="dialog.close('delete')" title="Delete"><mat-icon>delete</mat-icon> Delete</button>
+        <button mat-flat-button color="accent" (click)="dialog.close()" title="Cancel" class="ml-10"><mat-icon>cancel</mat-icon> Cancel</button>
       </mat-dialog-actions>
     </div>
   `,
@@ -43,16 +39,16 @@ import { MatButtonModule } from '@angular/material/button';
   ],
 })
 export class DeleteComponent implements OnInit {
-  dialog = inject(MatDialogRef<DeleteComponent>);
-  modalDataService = inject(ModalDataService);
+  protected readonly dialog = inject(MatDialogRef<DeleteComponent>);
+  #modalDataService = inject(ModalDataService);
 
-  modalOptions = {
+  protected modalOptions = {
     title: '',
     body: '',
     warning: '',
   };
 
   ngOnInit() {
-    this.modalOptions = this.modalDataService.getDeleteModalOtions();
+    this.modalOptions = this.#modalDataService.getDeleteModalOtions();
   }
 }

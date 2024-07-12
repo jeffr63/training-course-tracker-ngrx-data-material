@@ -41,19 +41,19 @@ import { take } from 'rxjs';
   ],
 })
 export class MenuComponent {
-  private auth = inject(AuthService);
-  private dialog = inject(MatDialog);
-  private router = inject(Router);
+  readonly #auth = inject(AuthService);
+  readonly #dialog = inject(MatDialog);
+  readonly #router = inject(Router);
 
-  isLoggedIn = this.auth.isLoggedIn;
-  isLoggedInAsAdmin = this.auth.isLoggedInAsAdmin;
-  email: string;
-  password: string;
+  protected readonly isLoggedIn = this.#auth.isLoggedIn;
+  protected readonly isLoggedInAsAdmin = this.#auth.isLoggedInAsAdmin;
+  #email: string;
+  #password: string;
 
-  open() {
-    const dialogRef = this.dialog.open(LoginComponent, {
+  protected open() {
+    const dialogRef = this.#dialog.open(LoginComponent, {
       width: '500px',
-      data: { email: this.email, password: this.password },
+      data: { email: this.#email, password: this.#password },
     });
 
     dialogRef
@@ -61,13 +61,13 @@ export class MenuComponent {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          this.auth.login(result.email, result.password).pipe(take(1)).subscribe();
+          this.#auth.login(result.email, result.password).pipe(take(1)).subscribe();
         },
       });
   }
 
-  logout() {
-    this.auth.logout();
-    this.router.navigate(['/']);
+  protected logout() {
+    this.#auth.logout();
+    this.#router.navigate(['/']);
   }
 }

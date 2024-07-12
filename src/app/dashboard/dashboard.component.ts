@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -23,14 +23,7 @@ import { CourseService } from '../shared/services/course.service';
               <mat-card-title color="primary">Completed Courses - Paths</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              <ngx-charts-pie-chart
-                [view]="[400, 400]"
-                [results]="courses()"
-                [labels]="true"
-                [doughnut]="true"
-                [arcWidth]="0.5"
-              >
-              </ngx-charts-pie-chart>
+              <ngx-charts-pie-chart [view]="[400, 400]" [results]="courses()" [labels]="true" [doughnut]="true" [arcWidth]="0.5"> </ngx-charts-pie-chart>
             </mat-card-content>
           </mat-card>
         </mat-grid-tile>
@@ -41,14 +34,7 @@ import { CourseService } from '../shared/services/course.service';
               <mat-card-title color="primary">Completed Courses - Sources</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              <ngx-charts-pie-chart
-                [view]="[400, 400]"
-                [results]="sources()"
-                [labels]="true"
-                [doughnut]="true"
-                [arcWidth]="0.5"
-              >
-              </ngx-charts-pie-chart>
+              <ngx-charts-pie-chart [view]="[400, 400]" [results]="sources()" [labels]="true" [doughnut]="true" [arcWidth]="0.5"> </ngx-charts-pie-chart>
             </mat-card-content>
           </mat-card>
         </mat-grid-tile>
@@ -59,13 +45,13 @@ import { CourseService } from '../shared/services/course.service';
   styles: [],
 })
 export class DashboardComponent {
-  private courseService = inject(CourseService);
+  readonly #courseService = inject(CourseService);
 
-  #courses = toSignal(this.courseService.getAll(), { initialValue: [] });
-  courses = computed(() => this.getByPathValue(this.#courses()));
-  sources = computed(() => this.getBySourceValue(this.#courses()));
+  readonly #courses = toSignal(this.#courseService.getAll(), { initialValue: [] });
+  protected readonly courses = computed(() => this.getByPathValue(this.#courses()));
+  protected readonly sources = computed(() => this.getBySourceValue(this.#courses()));
 
-  getByPathValue(courses: Course[]): CourseData[] {
+  private getByPathValue(courses: Course[]): CourseData[] {
     let byPath = _.chain(courses)
       .groupBy('path')
       .map((values, key) => {
@@ -85,7 +71,7 @@ export class DashboardComponent {
     return byPath;
   }
 
-  getBySourceValue(course: Course[]): CourseData[] {
+  private getBySourceValue(course: Course[]): CourseData[] {
     let bySource = _.chain(course)
       .groupBy('source')
       .map((values, key) => {

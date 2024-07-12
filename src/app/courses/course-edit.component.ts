@@ -1,5 +1,5 @@
 import { AsyncPipe, Location } from '@angular/common';
-import { Component, OnInit, inject, Input } from '@angular/core';
+import { Component, OnInit, inject, input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -21,17 +21,7 @@ import { SourceService } from '../shared/services/source.service';
 @Component({
   selector: 'app-course-edit',
   standalone: true,
-  imports: [
-    AsyncPipe,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    RouterLink,
-  ],
+  imports: [AsyncPipe, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule, ReactiveFormsModule, RouterLink],
 
   template: `
     <mat-card appearance="outlined">
@@ -41,13 +31,7 @@ import { SourceService } from '../shared/services/source.service';
         <form [formGroup]="courseEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="title">Title</mat-label>
-            <input
-              ngbAutofocus
-              type="text"
-              id="title"
-              matInput
-              formControlName="title"
-              placeholder="Enter title of course taken" />
+            <input ngbAutofocus type="text" id="title" matInput formControlName="title" placeholder="Enter title of course taken" />
             @if (courseEditForm.controls.title.errors?.required && courseEditForm.controls.title?.touched) {
             <mat-error>Title is required</mat-error>
             }
@@ -55,12 +39,7 @@ import { SourceService } from '../shared/services/source.service';
 
           <mat-form-field appearance="outline">
             <mat-label for="title">Instructor</mat-label>
-            <input
-              type="text"
-              id="instructor"
-              matInput
-              formControlName="instructor"
-              placeholder="Enter title of course taken" />
+            <input type="text" id="instructor" matInput formControlName="instructor" placeholder="Enter title of course taken" />
             @if (courseEditForm.controls.instructor.errors?.required && courseEditForm.controls.instructor?.touched) {
             <mat-error>Instructor is required</mat-error>
             }
@@ -98,12 +77,8 @@ import { SourceService } from '../shared/services/source.service';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!courseEditForm.valid">
-          <mat-icon>save</mat-icon> Save
-        </button>
-        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/courses']">
-          <mat-icon>cancel</mat-icon> Cancel
-        </button>
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!courseEditForm.valid"><mat-icon>save</mat-icon> Save</button>
+        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/courses']"><mat-icon>cancel</mat-icon> Cancel</button>
       </mat-card-actions>
     </mat-card>
   `,
@@ -135,44 +110,44 @@ import { SourceService } from '../shared/services/source.service';
   ],
 })
 export default class CourseEditComponent implements OnInit {
-  private courseService = inject(CourseService);
-  private fb = inject(FormBuilder);
-  private location = inject(Location);
-  private pathService = inject(PathService);
-  private sourceService = inject(SourceService);
+  readonly #courseService = inject(CourseService);
+  readonly #fb = inject(FormBuilder);
+  readonly #location = inject(Location);
+  readonly #pathService = inject(PathService);
+  readonly #sourceService = inject(SourceService);
 
-  @Input() id;
-  course = <Course>{};
-  courseEditForm!: FormGroup;
-  isNew = true;
-  paths$: Observable<Path[]>;
-  sources$: Observable<Source[]>;
+  protected readonly id = input.required();
+  #course = <Course>{};
+  protected courseEditForm!: FormGroup;
+  #isNew = true;
+  protected paths$: Observable<Path[]>;
+  protected sources$: Observable<Source[]>;
 
   ngOnInit() {
-    this.courseEditForm = this.fb.group({
+    this.courseEditForm = this.#fb.group({
       title: ['', Validators.required],
       instructor: ['', Validators.required],
       path: ['', Validators.required],
       source: ['', Validators.required],
     });
 
-    if (this.id !== 'new') {
-      this.isNew = false;
-      this.loadFormValues(+this.id);
+    if (this.id() !== 'new') {
+      this.#isNew = false;
+      this.loadFormValues(+this.id());
     }
 
-    this.pathService.getAll();
-    this.paths$ = this.pathService.entities$;
-    this.sourceService.getAll();
-    this.sources$ = this.sourceService.entities$;
+    this.#pathService.getAll();
+    this.paths$ = this.#pathService.entities$;
+    this.#sourceService.getAll();
+    this.sources$ = this.#sourceService.entities$;
   }
 
-  loadFormValues(id) {
-    this.courseService
+  private loadFormValues(id) {
+    this.#courseService
       .getByKey(id)
       .pipe(take(1))
       .subscribe((course: Course) => {
-        this.course = { ...course };
+        this.#course = { ...course };
         this.courseEditForm.patchValue({
           title: course.title,
           instructor: course.instructor,
@@ -182,18 +157,18 @@ export default class CourseEditComponent implements OnInit {
       });
   }
 
-  save() {
+  protected save() {
     const { title, instructor, path, source } = this.courseEditForm.getRawValue();
-    this.course.title = title;
-    this.course.instructor = instructor;
-    this.course.path = path;
-    this.course.source = source;
+    this.#course.title = title;
+    this.#course.instructor = instructor;
+    this.#course.path = path;
+    this.#course.source = source;
 
-    if (this.isNew) {
-      this.courseService.add(this.course);
+    if (this.#isNew) {
+      this.#courseService.add(this.#course);
     } else {
-      this.courseService.update(this.course);
+      this.#courseService.update(this.#course);
     }
-    this.location.back();
+    this.#location.back();
   }
 }

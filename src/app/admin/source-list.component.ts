@@ -48,14 +48,14 @@ import { SourceService } from '../shared/services/source.service';
   ],
 })
 export default class SourceListComponent implements OnInit {
-  private sourceService = inject(SourceService);
-  private dialog = inject(MatDialog);
-  private modalDataService = inject(ModalDataService);
-  private router = inject(Router);
+  readonly #sourceService = inject(SourceService);
+  readonly #dialog = inject(MatDialog);
+  readonly #modalDataService = inject(ModalDataService);
+  readonly #router = inject(Router);
 
-  sources = toSignal(this.sourceService.entities$, { initialValue: [] });
+  protected readonly sources = toSignal(this.#sourceService.entities$, { initialValue: [] });
 
-  columns: Column[] = [
+  protected readonly columns: Column[] = [
     { key: 'name', name: 'Source', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
@@ -64,34 +64,34 @@ export default class SourceListComponent implements OnInit {
     this.getAllSources();
   }
 
-  deleteSource(id) {
+  protected deleteSource(id) {
     const modalOptions = {
       title: 'Are you sure you want to delete this source?',
       body: 'All information associated to this path will be permanently deleted.',
       warning: 'This operation cannot be undone.',
     };
-    this.modalDataService.setDeleteModalOptions(modalOptions);
-    const dialogRef = this.dialog.open(DeleteComponent, { width: '500px' });
+    this.#modalDataService.setDeleteModalOptions(modalOptions);
+    const dialogRef = this.#dialog.open(DeleteComponent, { width: '500px' });
     dialogRef
       .afterClosed()
       .pipe(take(1))
       .subscribe((result) => {
         if (result == 'delete') {
-          this.sourceService.delete(id);
+          this.#sourceService.delete(id);
           this.getAllSources();
         }
       });
   }
 
-  editSource(id: number) {
-    this.router.navigate(['/admin/sources', id]);
+  protected editSource(id: number) {
+    this.#router.navigate(['/admin/sources', id]);
   }
 
-  getAllSources(): void {
-    this.sourceService.getAll().pipe(take(1));
+  private getAllSources(): void {
+    this.#sourceService.getAll().pipe(take(1));
   }
 
-  newSource() {
-    this.router.navigate(['/admin/sources/new']);
+  protected newSource() {
+    this.#router.navigate(['/admin/sources/new']);
   }
 }

@@ -45,47 +45,47 @@ import { UserService } from '../shared/services/user.service';
   ],
 })
 export default class UserListComponent implements OnInit {
-  private dialog = inject(MatDialog);
-  private modalDataService = inject(ModalDataService);
-  private router = inject(Router);
-  private userService = inject(UserService);
+  readonly #dialog = inject(MatDialog);
+  readonly #modalDataService = inject(ModalDataService);
+  readonly #router = inject(Router);
+  readonly #userService = inject(UserService);
 
-  columns: Column[] = [
+  protected readonly columns: Column[] = [
     { key: 'name', name: 'Name', width: '400px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'email', name: 'Email', width: '400px', type: 'sort', position: 'left' },
     { key: 'role', name: 'Role', width: '150px', type: 'sort', position: 'left' },
     { key: 'action', name: '', width: '50px', type: 'action', position: 'left' },
   ];
-  users = toSignal(this.userService.entities$, { initialValue: [] });
+  protected readonly users = toSignal(this.#userService.entities$, { initialValue: [] });
 
   ngOnInit() {
     this.getAllUsers();
   }
 
-  deleteUser(id) {
+  protected deleteUser(id) {
     const modalOptions = {
       title: 'Are you sure you want to delete this user?',
       body: 'All information associated to this path will be permanently deleted.',
       warning: 'This operation cannot be undone.',
     };
-    this.modalDataService.setDeleteModalOptions(modalOptions);
-    const dialogRef = this.dialog.open(DeleteComponent, { width: '500px' });
+    this.#modalDataService.setDeleteModalOptions(modalOptions);
+    const dialogRef = this.#dialog.open(DeleteComponent, { width: '500px' });
     dialogRef
       .afterClosed()
       .pipe(take(1))
       .subscribe((result) => {
         if (result == 'delete') {
-          this.userService.delete(id);
+          this.#userService.delete(id);
           this.getAllUsers();
         }
       });
   }
 
-  editUser(id: number) {
-    this.router.navigate(['/admin/users', id]);
+  protected editUser(id: number) {
+    this.#router.navigate(['/admin/users', id]);
   }
 
-  getAllUsers(): void {
-    this.userService.getAll().pipe(take(1));
+  private getAllUsers(): void {
+    this.#userService.getAll().pipe(take(1));
   }
 }
