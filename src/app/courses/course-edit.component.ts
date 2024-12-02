@@ -19,11 +19,9 @@ import { Source } from '../shared/models/sources';
 import { SourceService } from '../shared/services/source.service';
 
 @Component({
-  selector: 'app-course-edit',
-  standalone: true,
-  imports: [AsyncPipe, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule, ReactiveFormsModule, RouterLink],
-
-  template: `
+    selector: 'app-course-edit',
+    imports: [AsyncPipe, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule, ReactiveFormsModule, RouterLink],
+    template: `
     <mat-card appearance="outlined">
       <mat-card-title>Course Edit</mat-card-title>
       <mat-card-content>
@@ -82,9 +80,8 @@ import { SourceService } from '../shared/services/source.service';
       </mat-card-actions>
     </mat-card>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
       mat-card {
         margin: 30px;
@@ -107,7 +104,7 @@ import { SourceService } from '../shared/services/source.service';
         margin-left: 10px;
       }
     `,
-  ],
+    ]
 })
 export default class CourseEditComponent implements OnInit {
   readonly #courseService = inject(CourseService);

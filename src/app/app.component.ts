@@ -5,17 +5,15 @@ import { AuthService } from './shared/services/auth.service';
 import { MenuComponent } from './menu/menu.component';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [MenuComponent, RouterOutlet],
-
-  template: `
+    selector: 'app-root',
+    imports: [MenuComponent, RouterOutlet],
+    template: `
     <app-menu></app-menu>
     <main>
       <router-outlet></router-outlet>
     </main>
   `,
-  styles: [],
+    styles: []
 })
 export class AppComponent implements OnInit {
   readonly #authService = inject(AuthService);

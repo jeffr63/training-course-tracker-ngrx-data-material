@@ -6,11 +6,9 @@ import { ModalDataService } from './modal-data.service';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-delete',
-  standalone: true,
-  imports: [MatDialogModule, MatIconModule, MatButtonModule],
-
-  template: `
+    selector: 'app-delete',
+    imports: [MatDialogModule, MatIconModule, MatButtonModule],
+    template: `
     <div style="margin:10px">
       <h2 mat-dialog-title>Delete?</h2>
       <mat-dialog-content>
@@ -30,13 +28,13 @@ import { MatButtonModule } from '@angular/material/button';
       </mat-dialog-actions>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .ml-10 {
         margin-left: 10px;
       }
     `,
-  ],
+    ]
 })
 export class DeleteComponent implements OnInit {
   protected readonly dialog = inject(MatDialogRef<DeleteComponent>);

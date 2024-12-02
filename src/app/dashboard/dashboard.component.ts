@@ -10,11 +10,9 @@ import { Course, CourseData } from '../shared/models/course';
 import { CourseService } from '../shared/services/course.service';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [MatGridListModule, MatCardModule, NgxChartsModule],
-
-  template: `
+    selector: 'app-dashboard',
+    imports: [MatGridListModule, MatCardModule, NgxChartsModule],
+    template: `
     <section>
       <mat-grid-list cols="2">
         <mat-grid-tile>
@@ -41,8 +39,7 @@ import { CourseService } from '../shared/services/course.service';
       </mat-grid-list>
     </section>
   `,
-
-  styles: [],
+    styles: []
 })
 export class DashboardComponent {
   readonly #courseService = inject(CourseService);

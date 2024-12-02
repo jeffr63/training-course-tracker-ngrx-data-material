@@ -13,11 +13,9 @@ import { SourceService } from '../shared/services/source.service';
 import { take } from 'rxjs';
 
 @Component({
-  selector: 'app-source-edit',
-  standalone: true,
-  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, ReactiveFormsModule, RouterLink],
-
-  template: `
+    selector: 'app-source-edit',
+    imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, ReactiveFormsModule, RouterLink],
+    template: `
     <mat-card appearance="outlined">
       <mat-card-title>Source Edit</mat-card-title>
       <mat-card-content>
@@ -40,9 +38,8 @@ import { take } from 'rxjs';
       </mat-card-actions>
     </mat-card>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
       mat-card {
         margin: 30px;
@@ -65,7 +62,7 @@ import { take } from 'rxjs';
         margin-left: 10px;
       }
     `,
-  ],
+    ]
 })
 export default class SourceEditComponent implements OnInit {
   readonly #fb = inject(FormBuilder);

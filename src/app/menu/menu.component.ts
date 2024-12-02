@@ -10,11 +10,9 @@ import { LoginComponent } from '../shared/modals/login.component';
 import { take } from 'rxjs';
 
 @Component({
-  selector: 'app-menu',
-  standalone: true,
-  imports: [MatDialogModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterLink],
-
-  template: `
+    selector: 'app-menu',
+    imports: [MatDialogModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterLink],
+    template: `
     <mat-toolbar color="primary">
       <button mat-flat-button color="primary" [routerLink]="['/']" id="brand">
         <span style="font-size:20px">Training Courses Tracker</span>
@@ -31,14 +29,13 @@ import { take } from 'rxjs';
       }
     </mat-toolbar>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       div .nav-item {
         cursor: pointer;
       }
     `,
-  ],
+    ]
 })
 export class MenuComponent {
   readonly #auth = inject(AuthService);

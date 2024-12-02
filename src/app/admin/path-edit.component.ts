@@ -14,11 +14,9 @@ import { take } from 'rxjs';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-path-edit',
-  standalone: true,
-  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, RouterLink, ReactiveFormsModule],
-
-  template: `
+    selector: 'app-path-edit',
+    imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, RouterLink, ReactiveFormsModule],
+    template: `
     <mat-card appearance="outlined">
       <mat-card-title>Path Edit</mat-card-title>
       <mat-card-content>
@@ -41,9 +39,8 @@ import { Location } from '@angular/common';
       </mat-card-actions>
     </mat-card>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
       mat-card {
         margin: 30px;
@@ -66,7 +63,7 @@ import { Location } from '@angular/common';
         margin-left: 10px;
       }
     `,
-  ],
+    ]
 })
 export default class PathEditComponent implements OnInit {
   readonly #fb = inject(FormBuilder);

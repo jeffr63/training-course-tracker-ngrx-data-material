@@ -11,10 +11,9 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Column } from '../models/column';
 
 @Component({
-  selector: 'app-display-table',
-  standalone: true,
-  imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule, MatTableModule, NgClass, CurrencyPipe],
-  template: `
+    selector: 'app-display-table',
+    imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule, MatTableModule, NgClass, CurrencyPipe],
+    template: `
     <!-- Filter -->
     @if (isFilterable()) {
     <mat-form-field appearance="outline">
@@ -112,8 +111,8 @@ import { Column } from '../models/column';
     <mat-paginator [pageSizeOptions]="paginationSizes()" [pageSize]="defaultPageSize()" showFirstLastButtons> </mat-paginator>
     }
   `,
-  styles: [
-    `
+    styles: [
+        `
       table {
         width: 100%;
       }
@@ -139,7 +138,7 @@ import { Column } from '../models/column';
         width: 80%;
       }
     `,
-  ],
+    ]
 })
 export class DisplayTableComponent<TData> implements OnInit {
   // input parms

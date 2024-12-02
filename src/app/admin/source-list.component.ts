@@ -12,11 +12,9 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
 import { SourceService } from '../shared/services/source.service';
 
 @Component({
-  selector: 'app-source-list',
-  standalone: true,
-  imports: [DisplayTableComponent],
-
-  template: `
+    selector: 'app-source-list',
+    imports: [DisplayTableComponent],
+    template: `
     <section class="mt-5">
       @if (sources()) {
       <app-display-table
@@ -35,9 +33,8 @@ import { SourceService } from '../shared/services/source.service';
       }
     </section>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       table {
         width: 100%;
       }
@@ -45,7 +42,7 @@ import { SourceService } from '../shared/services/source.service';
         margin: 10px 20px;
       }
     `,
-  ],
+    ]
 })
 export default class SourceListComponent implements OnInit {
   readonly #sourceService = inject(SourceService);

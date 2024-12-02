@@ -12,10 +12,9 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
 import { UserService } from '../shared/services/user.service';
 
 @Component({
-  selector: 'app-user-list',
-  standalone: true,
-  imports: [DisplayTableComponent],
-  template: `
+    selector: 'app-user-list',
+    imports: [DisplayTableComponent],
+    template: `
     <section class="mt-5">
       @if (users()) {
       <app-display-table
@@ -33,8 +32,8 @@ import { UserService } from '../shared/services/user.service';
       }
     </section>
   `,
-  styles: [
-    `
+    styles: [
+        `
       table {
         width: 100%;
       }
@@ -42,7 +41,7 @@ import { UserService } from '../shared/services/user.service';
         margin: 10px 20px;
       }
     `,
-  ],
+    ]
 })
 export default class UserListComponent implements OnInit {
   readonly #dialog = inject(MatDialog);

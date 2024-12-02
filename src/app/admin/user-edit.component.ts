@@ -15,11 +15,9 @@ import { UserService } from '../shared/services/user.service';
 import { User } from '../shared/models/user';
 
 @Component({
-  selector: 'app-user-edit',
-  standalone: true,
-  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatRadioModule, ReactiveFormsModule, RouterLink],
-
-  template: `
+    selector: 'app-user-edit',
+    imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatRadioModule, ReactiveFormsModule, RouterLink],
+    template: `
     <mat-card appearance="outlined">
       <mat-card-title>User Edit</mat-card-title>
       <mat-card-content>
@@ -59,9 +57,8 @@ import { User } from '../shared/models/user';
       </mat-card-actions>
     </mat-card>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
       mat-card {
         margin: 30px;
@@ -95,7 +92,7 @@ import { User } from '../shared/models/user';
         margin: 5px;
       }
     `,
-  ],
+    ]
 })
 export default class UserEditComponent implements OnInit {
   readonly #fb = inject(FormBuilder);

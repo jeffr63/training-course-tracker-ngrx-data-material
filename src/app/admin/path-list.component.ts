@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { take } from 'rxjs';
@@ -12,11 +12,9 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
 import { PathService } from '../shared/services/path.service';
 
 @Component({
-  selector: 'app-path-list',
-  standalone: true,
-  imports: [DisplayTableComponent, RouterLink],
-
-  template: `
+    selector: 'app-path-list',
+    imports: [DisplayTableComponent],
+    template: `
     <section class="mt-5">
       @if (paths()) {
       <app-display-table
@@ -35,9 +33,8 @@ import { PathService } from '../shared/services/path.service';
       }
     </section>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       table {
         width: 100%;
       }
@@ -45,7 +42,7 @@ import { PathService } from '../shared/services/path.service';
         margin: 10px 20px;
       }
     `,
-  ],
+    ]
 })
 export default class PathListComponent {
   readonly #pathService = inject(PathService);

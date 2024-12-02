@@ -7,11 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatDialogModule, ReactiveFormsModule],
-
-  template: `
+    selector: 'app-login',
+    imports: [MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatDialogModule, ReactiveFormsModule],
+    template: `
     <div style="margin:10px">
       <h2 mat-dialog-title>Login</h2>
       <mat-dialog-content>
@@ -42,8 +40,8 @@ import { MatInputModule } from '@angular/material/input';
       </mat-dialog-actions>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       mat-form-field {
         width: 100%;
       }
@@ -56,7 +54,7 @@ import { MatInputModule } from '@angular/material/input';
         margin-left: 8px;
       }
     `,
-  ],
+    ]
 })
 export class LoginComponent implements OnInit {
   readonly #dialogRef = inject(MatDialogRef<LoginComponent>);

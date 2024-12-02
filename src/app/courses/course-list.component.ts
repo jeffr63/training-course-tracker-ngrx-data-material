@@ -13,11 +13,9 @@ import { DisplayTableComponent } from '../shared/display-table/display-table.com
 import { ModalDataService } from '../shared/modals/modal-data.service';
 
 @Component({
-  selector: 'app-course-list',
-  standalone: true,
-  imports: [DisplayTableComponent],
-
-  template: `
+    selector: 'app-course-list',
+    imports: [DisplayTableComponent],
+    template: `
     <section class="mt-5">
       @if (courses()) {
       <app-display-table
@@ -36,14 +34,13 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
       }
     </section>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       section {
         margin: 10px 20px;
       }
     `,
-  ],
+    ]
 })
 export default class CourseListComponent implements OnInit {
   readonly #authService = inject(AuthService);
