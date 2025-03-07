@@ -9,7 +9,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { APP_ROUTES } from './app.routes';
-import { CustomTitleStrategyService } from './shared/resolvers/custom-title-strategy.service';
+import { CustomTitleStrategyService } from './shared/services/common/custom-title-strategy.service';
 import { entityConfig } from './entity-metadata';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {

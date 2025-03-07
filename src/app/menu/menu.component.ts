@@ -1,41 +1,21 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
-import { AuthService } from '../shared/services/auth.service';
-import { LoginComponent } from '../shared/modals/login.component';
 import { take } from 'rxjs';
 
+import { AuthService } from '@services/auth/auth.service';
+import { LoginModalComponent } from '@modals/login/login-modal.component';
+import { MenuToolbarComponent } from './menu-toolbar.component';
+
 @Component({
-    selector: 'app-menu',
-    imports: [MatDialogModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterLink],
-    template: `
-    <mat-toolbar color="primary">
-      <button mat-flat-button color="primary" [routerLink]="['/']" id="brand">
-        <span style="font-size:20px">Training Courses Tracker</span>
-      </button>
-      <span style="flex: 1 1 auto;"></span>
-      <button mat-flat-button color="primary" [routerLink]="['/']" id="home">Home</button>
-      <button mat-flat-button color="primary" [routerLink]="['/courses']" id="courses">Courses</button>
-      @if (isLoggedIn()) { @if (isLoggedInAsAdmin()) {
-      <button mat-flat-button color="primary" [routerLink]="['/admin']" id="admin">Admin</button>
-      }
-      <button mat-flat-button color="primary" (click)="logout()" id="logout">Logout</button>
-      } @else {
-      <button mat-flat-button color="primary" (click)="open()" id="login">Login</button>
-      }
-    </mat-toolbar>
-  `,
-    styles: [
-        `
-      div .nav-item {
-        cursor: pointer;
-      }
-    `,
-    ]
+  selector: 'app-menu',
+  imports: [MenuToolbarComponent],
+  template: `<app-menu-toolbar
+    (login)="login()"
+    (logout)="logout()"
+    [isLoggedIn]="isLoggedIn()"
+    [isLoggedInAsAdmin]="isLoggedInAsAdmin()" />`,
 })
 export class MenuComponent {
   readonly #auth = inject(AuthService);
@@ -47,8 +27,8 @@ export class MenuComponent {
   #email: string;
   #password: string;
 
-  protected open() {
-    const dialogRef = this.#dialog.open(LoginComponent, {
+  protected login() {
+    const dialogRef = this.#dialog.open(LoginModalComponent, {
       width: '500px',
       data: { email: this.#email, password: this.#password },
     });

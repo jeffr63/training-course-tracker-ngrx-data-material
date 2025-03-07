@@ -5,17 +5,17 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { take } from 'rxjs';
 
-import { AuthService } from '../shared/services/auth.service';
-import { Column } from '../shared/models/column';
-import { CourseService } from '../shared/services/course.service';
-import { DeleteComponent } from '../shared/modals/delete.component';
-import { DisplayTableComponent } from '../shared/display-table/display-table.component';
-import { ModalDataService } from '../shared/modals/modal-data.service';
+import { AuthService } from '@services/auth/auth.service';
+import { Column } from '@models/column';
+import { CourseService } from '@services/course/course.service';
+import { DeleteModalComponent } from '@modals/delete/delete-modal.component';
+import { DisplayTableComponent } from '@components/display-table.component';
+import { ModalDataService } from '@services/common/modal-data.service';
 
 @Component({
-    selector: 'app-course-list',
-    imports: [DisplayTableComponent],
-    template: `
+  selector: 'app-course-list',
+  imports: [DisplayTableComponent],
+  template: `
     <section class="mt-5">
       @if (courses()) {
       <app-display-table
@@ -34,13 +34,13 @@ import { ModalDataService } from '../shared/modals/modal-data.service';
       }
     </section>
   `,
-    styles: [
-        `
+  styles: [
+    `
       section {
         margin: 10px 20px;
       }
     `,
-    ]
+  ],
 })
 export default class CourseListComponent implements OnInit {
   readonly #authService = inject(AuthService);
@@ -71,7 +71,7 @@ export default class CourseListComponent implements OnInit {
       warning: 'This operation can not be undone.',
     };
     this.#modalDataService.setDeleteModalOptions(modalOptions);
-    const dialogRef = this.#dialog.open(DeleteComponent, { width: '500px' });
+    const dialogRef = this.#dialog.open(DeleteModalComponent, { width: '500px' });
 
     dialogRef
       .afterClosed()

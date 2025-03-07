@@ -1,51 +1,23 @@
-import { Component, computed, inject} from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import * as _ from 'lodash';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-import { Course, CourseData } from '../shared/models/course';
-import { CourseService } from '../shared/services/course.service';
+import { Course, CourseData } from '@models/course';
+import { CourseService } from '@services/course/course.service';
+import { DashboardGridComponent } from './dashboard-grid.component';
 
 @Component({
-    selector: 'app-dashboard',
-    imports: [MatGridListModule, MatCardModule, NgxChartsModule],
-    template: `
-    <section>
-      <mat-grid-list cols="2">
-        <mat-grid-tile>
-          <mat-card appearance="outlined">
-            <mat-card-header>
-              <mat-card-title color="primary">Completed Courses - Paths</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <ngx-charts-pie-chart [view]="[400, 400]" [results]="courses()" [labels]="true" [doughnut]="true" [arcWidth]="0.5"> </ngx-charts-pie-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          <mat-card appearance="outlined">
-            <mat-card-header>
-              <mat-card-title color="primary">Completed Courses - Sources</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <ngx-charts-pie-chart [view]="[400, 400]" [results]="sources()" [labels]="true" [doughnut]="true" [arcWidth]="0.5"> </ngx-charts-pie-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-      </mat-grid-list>
-    </section>
-  `,
-    styles: []
+  selector: 'app-dashboard',
+  imports: [DashboardGridComponent],
+  template: `<app-dashboard-grid [paths]="paths()" [sources]="sources()" />`,
+  styles: [],
 })
 export class DashboardComponent {
   readonly #courseService = inject(CourseService);
 
   readonly #courses = toSignal(this.#courseService.getAll(), { initialValue: [] });
-  protected readonly courses = computed(() => this.getByPathValue(this.#courses()));
+  protected readonly paths = computed(() => this.getByPathValue(this.#courses()));
   protected readonly sources = computed(() => this.getBySourceValue(this.#courses()));
 
   private getByPathValue(courses: Course[]): CourseData[] {
