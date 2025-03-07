@@ -11,9 +11,19 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Column } from '../models/column';
 
 @Component({
-    selector: 'app-display-table',
-    imports: [MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule, MatTableModule, NgClass, CurrencyPipe],
-    template: `
+  selector: 'app-display-table',
+  imports: [
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatTableModule,
+    NgClass,
+    CurrencyPipe,
+  ],
+  template: `
     <!-- Filter -->
     @if (isFilterable()) {
     <mat-form-field appearance="outline">
@@ -24,7 +34,7 @@ import { Column } from '../models/column';
 
     <!-- Add Button -->
     @if (includeAdd() && isAuthenticated()) {
-    <a mat-mini-fab color="primary" title="Add new" aria-label="Add new" class="ml-5 fl1" (click)="emitAdd()">
+    <a mat-mini-fab color="primary" title="Add new" aria-label="Add new" class="ml-5 fl1" (click)="add.emit()">
       <mat-icon>add</mat-icon>
     </a>
     }
@@ -60,7 +70,11 @@ import { Column } from '../models/column';
           {{ element[column.key] | currency }}
         </td>
         } @case ('link') {
-        <th mat-header-cell *matHeaderCellDef [class.text-right]="column.position === 'right'" style="min-width: {{ column.width }}">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [class.text-right]="column.position === 'right'"
+          style="min-width: {{ column.width }}">
           {{ column.name }}
         </th>
         <td mat-cell *matCellDef="let element">
@@ -69,26 +83,38 @@ import { Column } from '../models/column';
           }
         </td>
         } @case ('action') {
-        <th mat-header-cell *matHeaderCellDef [class.text-right]="column.position === 'right'" style="min-width: {{ column.width }}"></th>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [class.text-right]="column.position === 'right'"
+          style="min-width: {{ column.width }}"></th>
         <td mat-cell *matCellDef="let element">
           @if (isAuthenticated()) {
-          <button mat-icon-button color="primary" (click)="emitEdit(element.id)" title="Edit">
+          <button mat-icon-button color="primary" (click)="edit.emit(element.id)" title="Edit">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="emitDelete(element.id)" title="Delete">
+          <button mat-icon-button color="warn" (click)="delete.emit(element.id)" title="Delete">
             <mat-icon>delete</mat-icon>
           </button>
           }
         </td>
         } @case ('view') {
-        <th mat-header-cell *matHeaderCellDef [class.text-right]="column.position === 'right'" style="min-width: {{ column.width }}"></th>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [class.text-right]="column.position === 'right'"
+          style="min-width: {{ column.width }}"></th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" (click)="emitOpen(element.id)" title="View">
+          <button mat-icon-button color="primary" (click)="open.emit(element.id)" title="View">
             <mat-icon>view_list</mat-icon>
           </button>
         </td>
         } @default {
-        <th mat-header-cell *matHeaderCellDef [class.text-right]="column.position === 'right'" style="min-width: {{ column.width }}">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [class.text-right]="column.position === 'right'"
+          style="min-width: {{ column.width }}">
           {{ column.name }}
         </th>
         <td mat-cell *matCellDef="let element">
@@ -108,11 +134,12 @@ import { Column } from '../models/column';
 
     <!-- Pagination -->
     @if (isPageable()) {
-    <mat-paginator [pageSizeOptions]="paginationSizes()" [pageSize]="defaultPageSize()" showFirstLastButtons> </mat-paginator>
+    <mat-paginator [pageSizeOptions]="paginationSizes()" [pageSize]="defaultPageSize()" showFirstLastButtons>
+    </mat-paginator>
     }
   `,
-    styles: [
-        `
+  styles: [
+    `
       table {
         width: 100%;
       }
@@ -138,11 +165,11 @@ import { Column } from '../models/column';
         width: 80%;
       }
     `,
-    ]
+  ],
 })
 export class DisplayTableComponent<TData> implements OnInit {
   // input parms
-  defaultPageSize = input<number>(10);
+  readonly defaultPageSize = input<number>(10);
   disableClear = input<boolean>(false);
   includeAdd = input<boolean>(false);
   isAuthenticated = input<boolean>(false);
@@ -184,22 +211,6 @@ export class DisplayTableComponent<TData> implements OnInit {
   protected applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.tableDataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  protected emitAdd() {
-    this.add.emit();
-  }
-
-  protected emitDelete(id) {
-    this.delete.emit(id);
-  }
-
-  protected emitEdit(id) {
-    this.edit.emit(id);
-  }
-
-  protected emitOpen(id: number) {
-    this.open.emit(id);
   }
 
   private setTableDataSource(data: any) {
