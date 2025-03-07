@@ -7,25 +7,25 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'app-path-edit-card',
+  selector: 'app-source-edit-card',
   imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, ReactiveFormsModule],
   template: `
     <mat-card appearance="outlined">
-      <mat-card-title>Path Edit</mat-card-title>
+      <mat-card-title>Source Edit</mat-card-title>
       <mat-card-content>
-        @if (pathEditForm()) {
-        <form [formGroup]="pathEditForm()">
+        @if (sourceEditForm()) {
+        <form [formGroup]="sourceEditForm()">
           <mat-form-field appearance="outline">
-            <mat-label for="name">Path Name</mat-label>
+            <mat-label for="name">Source Name</mat-label>
             <input
               ngbAutofocus
               type="text"
               id="title"
               matInput
               formControlName="name"
-              placeholder="Enter name of path" />
-            @if (pathEditForm().controls.name.errors?.required && pathEditForm().controls.name?.touched) {
-            <mat-error> Path name is required </mat-error>
+              placeholder="Enter name of source" />
+            @if (sourceEditForm().controls.name.errors?.required && sourceEditForm().controls.name?.touched) {
+            <mat-error>Source name is required </mat-error>
             }
           </mat-form-field>
         </form>
@@ -33,7 +33,7 @@ import { MatInputModule } from '@angular/material/input';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save.emit()" title="Save" [disabled]="!pathEditForm().valid">
+        <button mat-flat-button color="primary" (click)="save.emit()" title="Save" [disabled]="!sourceEditForm().valid">
           <mat-icon>save</mat-icon> Save
         </button>
         <button mat-flat-button color="accent" class="ml-10" (click)="cancel.emit()">
@@ -66,8 +66,8 @@ import { MatInputModule } from '@angular/material/input';
       }
     `,
 })
-export class PathEditCardComponent {
-  pathEditForm = model.required<FormGroup>();
+export class SourceEditCardComponent {
+  sourceEditForm = model.required<FormGroup>();
   cancel = output();
   save = output();
 }

@@ -1,91 +1,24 @@
 import { Component, OnInit, inject, input } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+
+import { take } from 'rxjs';
 
 import { Source } from '@models/sources';
+import { SourceEditCardComponent } from './source-edit-card.component';
 import { SourceService } from '@services/source/source.service';
-import { take } from 'rxjs';
 
 @Component({
   selector: 'app-source-edit',
-  imports: [
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    RouterLink,
-  ],
-  template: `
-    <mat-card appearance="outlined">
-      <mat-card-title>Source Edit</mat-card-title>
-      <mat-card-content>
-        @if (sourceEditForm) {
-        <form [formGroup]="sourceEditForm">
-          <mat-form-field appearance="outline">
-            <mat-label for="name">Source Name</mat-label>
-            <input
-              ngbAutofocus
-              type="text"
-              id="title"
-              matInput
-              formControlName="name"
-              placeholder="Enter name of source" />
-            @if (sourceEditForm.controls.name.errors?.required && sourceEditForm.controls.name?.touched) {
-            <mat-error>Source name is required </mat-error>
-            }
-          </mat-form-field>
-        </form>
-        }
-      </mat-card-content>
-
-      <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
-          <mat-icon>save</mat-icon> Save
-        </button>
-        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/sources']">
-          <mat-icon>cancel</mat-icon> Cancel
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  `,
-  styles: [
-    `
-      /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
-      mat-card {
-        margin: 30px;
-        padding-left: 15px;
-        padding-right: 15px;
-        width: 30%;
-      }
-
-      mat-content {
-        width: 100%;
-      }
-
-      mat-form-field {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-      }
-
-      .ml-10 {
-        margin-left: 10px;
-      }
-    `,
-  ],
+  imports: [SourceEditCardComponent],
+  template: `<app-source-edit-card [(sourceEditForm)]="sourceEditForm" (cancel)="cancel()" (save)="save()" />`,
 })
 export default class SourceEditComponent implements OnInit {
   readonly #fb = inject(FormBuilder);
   readonly #location = inject(Location);
   readonly #sourceService = inject(SourceService);
+  readonly #router = inject(Router);
 
   protected readonly id = input.required();
   #isNew = true;
@@ -103,7 +36,7 @@ export default class SourceEditComponent implements OnInit {
     }
   }
 
-  loadFormValues(id: number) {
+  private loadFormValues(id: number) {
     this.#sourceService
       .getByKey(id)
       .pipe(take(1))
@@ -113,7 +46,7 @@ export default class SourceEditComponent implements OnInit {
       });
   }
 
-  save() {
+  protected save() {
     this.#source.name = this.sourceEditForm.controls.name.value;
     if (this.#isNew) {
       this.#sourceService.add(this.#source);
@@ -121,5 +54,9 @@ export default class SourceEditComponent implements OnInit {
       this.#sourceService.update(this.#source);
     }
     this.#location.back();
+  }
+
+  protected cancel() {
+    this.#router.navigate(['/admin/sources']);
   }
 }
