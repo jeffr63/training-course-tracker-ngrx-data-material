@@ -8,14 +8,22 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 
-import { Source } from '../shared/models/sources';
-import { SourceService } from '../shared/services/source.service';
+import { Source } from '@models/sources';
+import { SourceService } from '@services/source/source.service';
 import { take } from 'rxjs';
 
 @Component({
-    selector: 'app-source-edit',
-    imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, ReactiveFormsModule, RouterLink],
-    template: `
+  selector: 'app-source-edit',
+  imports: [
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    RouterLink,
+  ],
+  template: `
     <mat-card appearance="outlined">
       <mat-card-title>Source Edit</mat-card-title>
       <mat-card-content>
@@ -23,7 +31,13 @@ import { take } from 'rxjs';
         <form [formGroup]="sourceEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="name">Source Name</mat-label>
-            <input ngbAutofocus type="text" id="title" matInput formControlName="name" placeholder="Enter name of source" />
+            <input
+              ngbAutofocus
+              type="text"
+              id="title"
+              matInput
+              formControlName="name"
+              placeholder="Enter name of source" />
             @if (sourceEditForm.controls.name.errors?.required && sourceEditForm.controls.name?.touched) {
             <mat-error>Source name is required </mat-error>
             }
@@ -33,13 +47,17 @@ import { take } from 'rxjs';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid"><mat-icon>save</mat-icon> Save</button>
-        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/sources']"><mat-icon>cancel</mat-icon> Cancel</button>
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!sourceEditForm.valid">
+          <mat-icon>save</mat-icon> Save
+        </button>
+        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/sources']">
+          <mat-icon>cancel</mat-icon> Cancel
+        </button>
       </mat-card-actions>
     </mat-card>
   `,
-    styles: [
-        `
+  styles: [
+    `
       /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
       mat-card {
         margin: 30px;
@@ -62,7 +80,7 @@ import { take } from 'rxjs';
         margin-left: 10px;
       }
     `,
-    ]
+  ],
 })
 export default class SourceEditComponent implements OnInit {
   readonly #fb = inject(FormBuilder);

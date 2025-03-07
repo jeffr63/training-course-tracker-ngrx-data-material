@@ -11,17 +11,27 @@ import { RouterLink } from '@angular/router';
 
 import { Observable, take } from 'rxjs';
 
-import { Course } from '../shared/models/course';
-import { CourseService } from '../shared/services/course.service';
-import { Path } from '../shared/models/paths';
-import { PathService } from '../shared/services/path.service';
-import { Source } from '../shared/models/sources';
-import { SourceService } from '../shared/services/source.service';
+import { Course } from '@models/course';
+import { CourseService } from '@services/course/course.service';
+import { Path } from '@models/paths';
+import { PathService } from '@services/path/path.service';
+import { Source } from '@models/sources';
+import { SourceService } from '@services/source/source.service';
 
 @Component({
-    selector: 'app-course-edit',
-    imports: [AsyncPipe, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule, ReactiveFormsModule, RouterLink],
-    template: `
+  selector: 'app-course-edit',
+  imports: [
+    AsyncPipe,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    RouterLink,
+  ],
+  template: `
     <mat-card appearance="outlined">
       <mat-card-title>Course Edit</mat-card-title>
       <mat-card-content>
@@ -29,7 +39,13 @@ import { SourceService } from '../shared/services/source.service';
         <form [formGroup]="courseEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="title">Title</mat-label>
-            <input ngbAutofocus type="text" id="title" matInput formControlName="title" placeholder="Enter title of course taken" />
+            <input
+              ngbAutofocus
+              type="text"
+              id="title"
+              matInput
+              formControlName="title"
+              placeholder="Enter title of course taken" />
             @if (courseEditForm.controls.title.errors?.required && courseEditForm.controls.title?.touched) {
             <mat-error>Title is required</mat-error>
             }
@@ -37,7 +53,12 @@ import { SourceService } from '../shared/services/source.service';
 
           <mat-form-field appearance="outline">
             <mat-label for="title">Instructor</mat-label>
-            <input type="text" id="instructor" matInput formControlName="instructor" placeholder="Enter title of course taken" />
+            <input
+              type="text"
+              id="instructor"
+              matInput
+              formControlName="instructor"
+              placeholder="Enter title of course taken" />
             @if (courseEditForm.controls.instructor.errors?.required && courseEditForm.controls.instructor?.touched) {
             <mat-error>Instructor is required</mat-error>
             }
@@ -75,13 +96,17 @@ import { SourceService } from '../shared/services/source.service';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!courseEditForm.valid"><mat-icon>save</mat-icon> Save</button>
-        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/courses']"><mat-icon>cancel</mat-icon> Cancel</button>
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!courseEditForm.valid">
+          <mat-icon>save</mat-icon> Save
+        </button>
+        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/courses']">
+          <mat-icon>cancel</mat-icon> Cancel
+        </button>
       </mat-card-actions>
     </mat-card>
   `,
-    styles: [
-        `
+  styles: [
+    `
       /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
       mat-card {
         margin: 30px;
@@ -104,7 +129,7 @@ import { SourceService } from '../shared/services/source.service';
         margin-left: 10px;
       }
     `,
-    ]
+  ],
 })
 export default class CourseEditComponent implements OnInit {
   readonly #courseService = inject(CourseService);

@@ -5,16 +5,16 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { take } from 'rxjs';
 
-import { Column } from '../shared/models/column';
-import { DeleteComponent } from '../shared/modals/delete.component';
-import { DisplayTableComponent } from '../shared/display-table/display-table.component';
-import { ModalDataService } from '../shared/modals/modal-data.service';
-import { UserService } from '../shared/services/user.service';
+import { Column } from '@models/column';
+import { DeleteComponent } from '@modals/delete.component';
+import { DisplayTableComponent } from '@components/display-table.component';
+import { ModalDataService } from '@modals/modal-data.service';
+import { UserService } from '@services/user/user.service';
 
 @Component({
-    selector: 'app-user-list',
-    imports: [DisplayTableComponent],
-    template: `
+  selector: 'app-user-list',
+  imports: [DisplayTableComponent],
+  template: `
     <section class="mt-5">
       @if (users()) {
       <app-display-table
@@ -32,8 +32,8 @@ import { UserService } from '../shared/services/user.service';
       }
     </section>
   `,
-    styles: [
-        `
+  styles: [
+    `
       table {
         width: 100%;
       }
@@ -41,7 +41,7 @@ import { UserService } from '../shared/services/user.service';
         margin: 10px 20px;
       }
     `,
-    ]
+  ],
 })
 export default class UserListComponent implements OnInit {
   readonly #dialog = inject(MatDialog);

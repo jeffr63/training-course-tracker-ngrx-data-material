@@ -5,16 +5,16 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 import { take } from 'rxjs';
 
-import { Column } from '../shared/models/column';
-import { DeleteComponent } from '../shared/modals/delete.component';
-import { DisplayTableComponent } from '../shared/display-table/display-table.component';
-import { ModalDataService } from '../shared/modals/modal-data.service';
-import { PathService } from '../shared/services/path.service';
+import { Column } from '@models/column';
+import { DeleteComponent } from '@modals/delete.component';
+import { DisplayTableComponent } from '@components/display-table.component';
+import { ModalDataService } from '@modals/modal-data.service';
+import { PathService } from '@services/path/path.service';
 
 @Component({
-    selector: 'app-path-list',
-    imports: [DisplayTableComponent],
-    template: `
+  selector: 'app-path-list',
+  imports: [DisplayTableComponent],
+  template: `
     <section class="mt-5">
       @if (paths()) {
       <app-display-table
@@ -33,8 +33,8 @@ import { PathService } from '../shared/services/path.service';
       }
     </section>
   `,
-    styles: [
-        `
+  styles: [
+    `
       table {
         width: 100%;
       }
@@ -42,7 +42,7 @@ import { PathService } from '../shared/services/path.service';
         margin: 10px 20px;
       }
     `,
-    ]
+  ],
 })
 export default class PathListComponent {
   readonly #pathService = inject(PathService);

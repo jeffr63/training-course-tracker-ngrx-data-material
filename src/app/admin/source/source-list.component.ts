@@ -5,16 +5,16 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 import { take } from 'rxjs';
 
-import { Column } from '../shared/models/column';
-import { DeleteComponent } from '../shared/modals/delete.component';
-import { DisplayTableComponent } from '../shared/display-table/display-table.component';
-import { ModalDataService } from '../shared/modals/modal-data.service';
-import { SourceService } from '../shared/services/source.service';
+import { Column } from '@models/column';
+import { DeleteComponent } from '@modals/delete.component';
+import { DisplayTableComponent } from '@components/display-table.component';
+import { ModalDataService } from '@modals/modal-data.service';
+import { SourceService } from '@services/source/source.service';
 
 @Component({
-    selector: 'app-source-list',
-    imports: [DisplayTableComponent],
-    template: `
+  selector: 'app-source-list',
+  imports: [DisplayTableComponent],
+  template: `
     <section class="mt-5">
       @if (sources()) {
       <app-display-table
@@ -33,8 +33,8 @@ import { SourceService } from '../shared/services/source.service';
       }
     </section>
   `,
-    styles: [
-        `
+  styles: [
+    `
       table {
         width: 100%;
       }
@@ -42,7 +42,7 @@ import { SourceService } from '../shared/services/source.service';
         margin: 10px 20px;
       }
     `,
-    ]
+  ],
 })
 export default class SourceListComponent implements OnInit {
   readonly #sourceService = inject(SourceService);

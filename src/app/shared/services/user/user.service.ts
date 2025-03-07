@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } from '@ngrx/data';
 
-import { User } from '../models/user';
+import { User } from '@models/user';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends EntityCollectionServiceBase<User> {

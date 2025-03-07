@@ -1,9 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-
-import { ModalDataService } from './modal-data.service';
 import { MatButtonModule } from '@angular/material/button';
+
+import { ModalDataService } from '@modals/modal-data.service';
 
 @Component({
     selector: 'app-delete',

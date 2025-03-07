@@ -8,15 +8,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 
-import { Path } from '../shared/models/paths';
-import { PathService } from '../shared/services/path.service';
+import { Path } from '@models/paths';
+import { PathService } from '@services/path/path.service';
 import { take } from 'rxjs';
 import { Location } from '@angular/common';
 
 @Component({
-    selector: 'app-path-edit',
-    imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, RouterLink, ReactiveFormsModule],
-    template: `
+  selector: 'app-path-edit',
+  imports: [
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    RouterLink,
+    ReactiveFormsModule,
+  ],
+  template: `
     <mat-card appearance="outlined">
       <mat-card-title>Path Edit</mat-card-title>
       <mat-card-content>
@@ -24,7 +32,13 @@ import { Location } from '@angular/common';
         <form [formGroup]="pathEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="name">Path Name</mat-label>
-            <input ngbAutofocus type="text" id="title" matInput formControlName="name" placeholder="Enter name of path" />
+            <input
+              ngbAutofocus
+              type="text"
+              id="title"
+              matInput
+              formControlName="name"
+              placeholder="Enter name of path" />
             @if (pathEditForm.controls.name.errors?.required && pathEditForm.controls.name?.touched) {
             <mat-error> Path name is required </mat-error>
             }
@@ -34,13 +48,17 @@ import { Location } from '@angular/common';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!pathEditForm.valid"><mat-icon>save</mat-icon> Save</button>
-        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/paths']"><mat-icon>cancel</mat-icon> Cancel</button>
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!pathEditForm.valid">
+          <mat-icon>save</mat-icon> Save
+        </button>
+        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/paths']">
+          <mat-icon>cancel</mat-icon> Cancel
+        </button>
       </mat-card-actions>
     </mat-card>
   `,
-    styles: [
-        `
+  styles: [
+    `
       /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
       mat-card {
         margin: 30px;
@@ -63,7 +81,7 @@ import { Location } from '@angular/common';
         margin-left: 10px;
       }
     `,
-    ]
+  ],
 })
 export default class PathEditComponent implements OnInit {
   readonly #fb = inject(FormBuilder);

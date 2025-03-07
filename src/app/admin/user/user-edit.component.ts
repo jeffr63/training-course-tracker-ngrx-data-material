@@ -11,13 +11,22 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { take } from 'rxjs';
 
-import { UserService } from '../shared/services/user.service';
-import { User } from '../shared/models/user';
+import { UserService } from '@services/user/user.service';
+import { User } from '@models/user';
 
 @Component({
-    selector: 'app-user-edit',
-    imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatRadioModule, ReactiveFormsModule, RouterLink],
-    template: `
+  selector: 'app-user-edit',
+  imports: [
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatRadioModule,
+    ReactiveFormsModule,
+    RouterLink,
+  ],
+  template: `
     <mat-card appearance="outlined">
       <mat-card-title>User Edit</mat-card-title>
       <mat-card-content>
@@ -25,7 +34,13 @@ import { User } from '../shared/models/user';
         <form [formGroup]="userEditForm">
           <mat-form-field appearance="outline">
             <mat-label for="name">Name</mat-label>
-            <input ngbAutofocus type="text" id="name" matInput formControlName="name" placeholder="Enter name of user" />
+            <input
+              ngbAutofocus
+              type="text"
+              id="name"
+              matInput
+              formControlName="name"
+              placeholder="Enter name of user" />
             @if (userEditForm.controls.name.errors?.required && userEditForm.controls.name?.touched) {
             <mat-error>Name is required</mat-error>
             }
@@ -52,13 +67,17 @@ import { User } from '../shared/models/user';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!userEditForm.valid"><mat-icon>save</mat-icon> Save</button>
-        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/users']"><mat-icon>cancel</mat-icon> Cancel</button>
+        <button mat-flat-button color="primary" (click)="save()" title="Save" [disabled]="!userEditForm.valid">
+          <mat-icon>save</mat-icon> Save
+        </button>
+        <button mat-flat-button color="accent" class="ml-10" [routerLink]="['/admin/users']">
+          <mat-icon>cancel</mat-icon> Cancel
+        </button>
       </mat-card-actions>
     </mat-card>
   `,
-    styles: [
-        `
+  styles: [
+    `
       /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
       mat-card {
         margin: 30px;
@@ -92,7 +111,7 @@ import { User } from '../shared/models/user';
         margin: 5px;
       }
     `,
-    ]
+  ],
 })
 export default class UserEditComponent implements OnInit {
   readonly #fb = inject(FormBuilder);
