@@ -8,9 +8,9 @@ import { take } from 'rxjs';
 import { AuthService } from '@services/auth/auth.service';
 import { Column } from '@models/column';
 import { CourseService } from '@services/course/course.service';
-import { DeleteComponent } from '@modals/delete.component';
+import { DeleteModalComponent } from '@modals/delete/delete-modal.component';
 import { DisplayTableComponent } from '@components/display-table.component';
-import { ModalDataService } from '@modals/modal-data.service';
+import { ModalDataService } from '@services/common/modal-data.service';
 
 @Component({
   selector: 'app-course-list',
@@ -71,7 +71,7 @@ export default class CourseListComponent implements OnInit {
       warning: 'This operation can not be undone.',
     };
     this.#modalDataService.setDeleteModalOptions(modalOptions);
-    const dialogRef = this.#dialog.open(DeleteComponent, { width: '500px' });
+    const dialogRef = this.#dialog.open(DeleteModalComponent, { width: '500px' });
 
     dialogRef
       .afterClosed()

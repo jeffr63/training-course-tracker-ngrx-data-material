@@ -6,9 +6,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { take } from 'rxjs';
 
 import { Column } from '@models/column';
-import { DeleteComponent } from '@modals/delete.component';
+import { DeleteModalComponent } from '@modals/delete/delete-modal.component';
 import { DisplayTableComponent } from '@components/display-table.component';
-import { ModalDataService } from '@modals/modal-data.service';
+import { ModalDataService } from '@services/common/modal-data.service';
 import { UserService } from '@services/user/user.service';
 
 @Component({
@@ -68,7 +68,7 @@ export default class UserListComponent implements OnInit {
       warning: 'This operation cannot be undone.',
     };
     this.#modalDataService.setDeleteModalOptions(modalOptions);
-    const dialogRef = this.#dialog.open(DeleteComponent, { width: '500px' });
+    const dialogRef = this.#dialog.open(DeleteModalComponent, { width: '500px' });
     dialogRef
       .afterClosed()
       .pipe(take(1))

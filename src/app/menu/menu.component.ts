@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { take } from 'rxjs';
 
 import { AuthService } from '@services/auth/auth.service';
-import { LoginComponent } from '@modals/login.component';
+import { LoginModalComponent } from '@modals/login/login-modal.component';
 import { MenuToolbarComponent } from './menu-toolbar.component';
 
 @Component({
@@ -28,7 +28,7 @@ export class MenuComponent {
   #password: string;
 
   protected login() {
-    const dialogRef = this.#dialog.open(LoginComponent, {
+    const dialogRef = this.#dialog.open(LoginModalComponent, {
       width: '500px',
       data: { email: this.#email, password: this.#password },
     });
