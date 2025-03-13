@@ -1,19 +1,26 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { of } from 'rxjs';
+import { provideEntityData, withEffects } from '@ngrx/data';
+import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngrx/store';
 
 import { DashboardComponent } from './dashboard.component';
-import { DOMHelperRouimport { EffectsModule } from '@ngrx/effects';oimport { concatLatestFrom } from '@ngrx/operators';
-rt { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';import { concatLatestFrom } from '@ngrx/operators';
+import { DOMHelperRoutines } from '../../testing/dom.helpers';
+import { CourseData } from '@models/course';
+import { CourseService } from '@services/course/course.service';
+import { entityConfig } from '../entity-metadata';
+import { Component } from '@angular/core';
+import { DashboardGridComponent } from './dashboard-grid.component';
 
-import { EntityDataModule } from '@ngrx/data';
-import { CourseService } from '../courses/course.service';
-import { CourseData } from '../models/course';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+@Component({
+  selector: 'app-dashboard-grid',
+  template: `<h1>mocked dashboard grid</h1>`,
+})
+export class DashboardGridComponentMock {}
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -48,23 +55,26 @@ describe('DashboardComponent', () => {
     Courses: {},
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-    declarations: [DashboardComponent],
-    imports: [BrowserAnimationsModule,
-        NgxChartsModule,
-        StoreModule.forRoot({}),
-        EffectsModule.forRoot([]),
-        EntityDataModule.forRoot({
-            entityMetadata: entityMetaData,
-        })],
-    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-}).compileComponents();
-      mockCourseService = TestBed.inject(CourseService);
-      spyOn(mockCourseService, 'getAll').and.returnValue(of(mockData));
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [DashboardComponent],
+      providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+        provideStore(),
+        provideEffects(),
+        provideEntityData(entityConfig, withEffects()),
+        provideAnimationsAsync(),
+      ],
     })
-  );
+      .overrideComponent(DashboardComponent, {
+        remove: { inputs: [DashboardGridComponent] },
+        add: { inputs: [DashboardGridComponentMock] },
+      })
+      .compileComponents();
+    mockCourseService = TestBed.inject(CourseService);
+    spyOn(mockCourseService, 'getAll').and.returnValue(of(mockData));
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
@@ -72,55 +82,23 @@ describe('DashboardComponent', () => {
     dh = new DOMHelperRoutines(fixture);
   });
 
-  describe('HTML test', () => {
-    beforeEach(() => {
-      fixture.detectChanges();
-    });
-
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
-
-    it('should contain one section tag', () => {
-      expect(dh.queryAllCount('section')).toBe(1);
-    });
-
-    it('should contain a h4 tag for paths', () => {
-      const elements = dh.queryAll('h4');
-      expect(elements[0].nativeElement.textContent).toBe('Completed Courses - Paths');
-    });
-
-    it('should contain a h4 tag for sources', () => {
-      const elements = dh.queryAll('h4');
-      expect(elements[1].nativeElement.textContent).toBe('Completed Courses - Sources');
-    });
-
-    it('should contain two charts', () => {
-      expect(dh.queryAllCount('ngx-charts-pie-chart')).toBe(2);
-    });
-  });
-
   describe('NgOnInit', () => {
-    it('should declare the courses observable property', () => {
+    it('should declare the paths signal', () => {
       const paths: CourseData[] = [
         { name: 'Angular', value: 2 },
         { name: 'React', value: 1 },
       ];
       fixture.detectChanges();
-      component.courses$.subscribe((value) => {
-        expect(value).toEqual(paths);
-      });
+      expect(component.paths()).toEqual(paths);
     });
 
-    it('should declare the sourses observable property', () => {
+    it('should declare the sourses signal', () => {
       const sources: CourseData[] = [
         { name: 'Pluralsight', value: 2 },
         { name: 'Youtube', value: 1 },
       ];
       fixture.detectChanges();
-      component.sources$.subscribe((value) => {
-        expect(value).toEqual(sources);
-      });
+      expect(component.sources()).toEqual(sources);
     });
   });
 });

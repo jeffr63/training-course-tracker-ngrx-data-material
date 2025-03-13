@@ -12,6 +12,7 @@ export class DOMHelperRoutines<T> {
     if (element) {
       return element.nativeElement.textContent;
     }
+    return undefined;
   }
 
   queryAll(tagName: string) {

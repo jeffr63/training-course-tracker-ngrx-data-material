@@ -16,9 +16,9 @@ import { DashboardGridComponent } from './dashboard-grid.component';
 export class DashboardComponent {
   readonly #courseService = inject(CourseService);
 
-  readonly #courses = toSignal(this.#courseService.getAll(), { initialValue: [] });
-  protected readonly paths = computed(() => this.getByPathValue(this.#courses()));
-  protected readonly sources = computed(() => this.getBySourceValue(this.#courses()));
+  readonly courses = toSignal(this.#courseService.getAll(), { initialValue: [] });
+  readonly paths = computed(() => this.getByPathValue(this.courses()));
+  readonly sources = computed(() => this.getBySourceValue(this.courses()));
 
   private getByPathValue(courses: Course[]): CourseData[] {
     let byPath = _.chain(courses)
