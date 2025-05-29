@@ -8,7 +8,7 @@ import { DefaultDataServiceConfig, provideEntityData, withEffects } from '@ngrx/
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
-import { APP_ROUTES } from './app-routes';
+import { APP_ROUTES } from './app.routes';
 import { CustomTitleStrategy } from './shared/services/common/custom-title-strategy';
 import { entityConfig } from './entity-metadata';
 
