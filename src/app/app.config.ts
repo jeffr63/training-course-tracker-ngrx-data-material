@@ -8,8 +8,8 @@ import { DefaultDataServiceConfig, provideEntityData, withEffects } from '@ngrx/
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
-import { APP_ROUTES } from './app.routes';
-import { CustomTitleStrategyService } from './shared/services/common/custom-title-strategy.service';
+import { APP_ROUTES } from './app-routes';
+import { CustomTitleStrategy } from './shared/services/common/custom-title-strategy';
 import { entityConfig } from './entity-metadata';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
@@ -20,7 +20,7 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
-    { provide: TitleStrategy, useClass: CustomTitleStrategyService },
+    { provide: TitleStrategy, useClass: CustomTitleStrategy },
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideStore(),
     provideEffects(),
