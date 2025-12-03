@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 
 import { take } from 'rxjs';
 
@@ -10,26 +10,27 @@ import { DeleteModal } from '@modals/delete/delete-modal';
 import { DisplayTable } from '@components/display-table';
 import { ModalService } from '@services/common/modal-service';
 import { SourceData } from '@services/source/source-data';
+import { Source } from '@models/sources-interface';
 
 @Component({
   selector: 'app-source-list',
   imports: [DisplayTable],
   template: `
     <section class="mt-5">
-      @if (sources()) {
-      <app-display-table
-        [isAuthenticated]="true"
-        [isFilterable]="true"
-        [includeAdd]="true"
-        [isPageable]="true"
-        [paginationSizes]="[5, 10, 25, 100]"
-        [defaultPageSize]="10"
-        [disableClear]="true"
-        [tableData]="sources()"
-        [tableColumns]="columns"
-        (add)="newSource()"
-        (delete)="deleteSource($event)"
-        (edit)="editSource($event)"></app-display-table>
+      @if (sources.hasValue()) {
+        <app-display-table
+          [isAuthenticated]="true"
+          [isFilterable]="true"
+          [includeAdd]="true"
+          [isPageable]="true"
+          [paginationSizes]="[5, 10, 25, 100]"
+          [defaultPageSize]="10"
+          [disableClear]="true"
+          [tableData]="sources.value()"
+          [tableColumns]="columns"
+          (add)="newSource()"
+          (delete)="deleteSource($event)"
+          (edit)="editSource($event)"></app-display-table>
       }
     </section>
   `,
@@ -44,22 +45,22 @@ import { SourceData } from '@services/source/source-data';
     `,
   ],
 })
-export default class SourceList implements OnInit {
+export default class SourceList {
   readonly #sourceService = inject(SourceData);
   readonly #dialog = inject(MatDialog);
   readonly #modalDataService = inject(ModalService);
   readonly #router = inject(Router);
 
-  protected readonly sources = toSignal(this.#sourceService.entities$, { initialValue: [] });
+  protected readonly sources = rxResource<Source[], undefined>({
+    stream: () => {
+      return this.#sourceService.getAll();
+    },
+  });
 
   protected readonly columns: Column[] = [
     { key: 'name', name: 'Source', width: '600px', type: 'sort', position: 'left', sortDefault: true },
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
-
-  ngOnInit() {
-    this.getAllSources();
-  }
 
   protected deleteSource(id) {
     const modalOptions = {
@@ -75,17 +76,13 @@ export default class SourceList implements OnInit {
       .subscribe((result) => {
         if (result == 'delete') {
           this.#sourceService.delete(id);
-          this.getAllSources();
+          this.sources.reload();
         }
       });
   }
 
   protected editSource(id: number) {
     this.#router.navigate(['/admin/sources', id]);
-  }
-
-  private getAllSources(): void {
-    this.#sourceService.getAll().pipe(take(1));
   }
 
   protected newSource() {

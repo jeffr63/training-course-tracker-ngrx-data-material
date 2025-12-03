@@ -1,4 +1,3 @@
-import { JsonPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { Field, FieldTree } from '@angular/forms/signals';
 
@@ -22,7 +21,6 @@ import { User } from '@models/user-interface';
     MatRadioModule,
     Field,
     ValidationErrors,
-    JsonPipe,
   ],
   template: `
     <mat-card appearance="outlined">

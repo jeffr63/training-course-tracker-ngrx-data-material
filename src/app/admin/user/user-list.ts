@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 
 import { MatDialog } from '@angular/material/dialog';
 import { take } from 'rxjs';
@@ -10,25 +10,26 @@ import { DeleteModal } from '@modals/delete/delete-modal';
 import { DisplayTable } from '@components/display-table';
 import { ModalService } from '@services/common/modal-service';
 import { UserData } from '@services/user/user-data';
+import { User } from '@models/user-interface';
 
 @Component({
   selector: 'app-user-list',
   imports: [DisplayTable],
   template: `
     <section class="mt-5">
-      @if (users()) {
-      <app-display-table
-        [isAuthenticated]="true"
-        [isFilterable]="true"
-        [includeAdd]="false"
-        [isPageable]="true"
-        [paginationSizes]="[5, 10, 25, 100]"
-        [defaultPageSize]="10"
-        [disableClear]="true"
-        [tableData]="users()"
-        [tableColumns]="columns"
-        (delete)="deleteUser($event)"
-        (edit)="editUser($event)" />
+      @if (users.hasValue) {
+        <app-display-table
+          [isAuthenticated]="true"
+          [isFilterable]="true"
+          [includeAdd]="false"
+          [isPageable]="true"
+          [paginationSizes]="[5, 10, 25, 100]"
+          [defaultPageSize]="10"
+          [disableClear]="true"
+          [tableData]="users.value()"
+          [tableColumns]="columns"
+          (delete)="deleteUser($event)"
+          (edit)="editUser($event)" />
       }
     </section>
   `,
@@ -43,7 +44,7 @@ import { UserData } from '@services/user/user-data';
     `,
   ],
 })
-export default class UserList implements OnInit {
+export default class UserList {
   readonly #dialog = inject(MatDialog);
   readonly #modalDataService = inject(ModalService);
   readonly #router = inject(Router);
@@ -55,11 +56,12 @@ export default class UserList implements OnInit {
     { key: 'role', name: 'Role', width: '150px', type: 'sort', position: 'left' },
     { key: 'action', name: '', width: '50px', type: 'action', position: 'left' },
   ];
-  protected readonly users = toSignal(this.#userService.entities$, { initialValue: [] });
 
-  ngOnInit() {
-    this.getAllUsers();
-  }
+  protected readonly users = rxResource<User[], undefined>({
+    stream: () => {
+      return this.#userService.getAll();
+    },
+  });
 
   protected deleteUser(id) {
     const modalOptions = {
@@ -75,16 +77,12 @@ export default class UserList implements OnInit {
       .subscribe((result) => {
         if (result == 'delete') {
           this.#userService.delete(id);
-          this.getAllUsers();
+          this.users.reload();
         }
       });
   }
 
   protected editUser(id: number) {
     this.#router.navigate(['/admin/users', id]);
-  }
-
-  private getAllUsers(): void {
-    this.#userService.getAll().pipe(take(1));
   }
 }
