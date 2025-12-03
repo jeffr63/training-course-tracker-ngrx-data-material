@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { of } from 'rxjs';
@@ -10,11 +9,10 @@ import { provideStore } from '@ngrx/store';
 
 import { Dashboard } from './dashboard';
 import { DOMHelperRoutines } from '../../testing/dom.helpers';
-import { CourseData } from '@models/course-interface';
-import { CourseData } from '@services/course/course-data';
 import { entityConfig } from '../entity-metadata';
 import { Component } from '@angular/core';
 import { DashboardGrid } from './dashboard-grid';
+import { CourseData } from '@services/course/course-data';
 
 @Component({
   selector: 'app-dashboard-grid',
