@@ -1,6 +1,5 @@
-import { Component, OnInit, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { form } from '@angular/forms/signals';
 
@@ -16,13 +15,12 @@ import { PathEditCard } from './path-edit-card';
   template: ` <app-path-edit-card [form]="form" (cancel)="cancel()" (save)="save()" /> `,
   styles: ``,
 })
-export default class PathEdit implements OnInit {
-  readonly #location = inject(Location);
+export default class PathEdit {
   readonly #pathService = inject(PathData);
   readonly #router = inject(Router);
 
   protected readonly id = input.required<string>();
-  #isNew = true;
+  readonly #isNew = computed(() => this.id() === 'new' ? true : false);
 
   readonly #path = rxResource<Path, string>({
     params: () => this.id(),
@@ -35,19 +33,13 @@ export default class PathEdit implements OnInit {
 
   readonly form = form<Path>(this.#path.value, PATH_EDIT_SCHEMA);
 
-  ngOnInit() {
-    if (this.id() !== 'new') {
-      this.#isNew = false;
-    }
-  }
-
   protected save() {
-    if (this.#isNew) {
+    if (this.#isNew()) {
       this.#pathService.add(this.#path.value());
     } else {
       this.#pathService.update(this.#path.value());
     }
-    this.#location.back();
+    this.#router.navigate(['/admin/paths']);
   }
 
   protected cancel() {

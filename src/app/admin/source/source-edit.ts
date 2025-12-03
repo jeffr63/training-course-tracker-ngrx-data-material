@@ -1,59 +1,44 @@
-import { Component, OnInit, inject, input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Location } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { form } from '@angular/forms/signals';
 
-import { take } from 'rxjs';
+import { of } from 'rxjs';
 
-import { Source } from '@models/sources-interface';
+import { Source, SOURCE_EDIT_SCHEMA } from '@models/sources-interface';
 import { SourceEditCard } from './source-edit-card';
 import { SourceData } from '@services/source/source-data';
 
 @Component({
   selector: 'app-source-edit',
   imports: [SourceEditCard],
-  template: `<app-source-edit-card [(sourceEditForm)]="sourceEditForm" (cancel)="cancel()" (save)="save()" />`,
+  template: `<app-source-edit-card [form]="form" (cancel)="cancel()" (save)="save()" />`,
 })
-export default class SourceEdit implements OnInit {
-  readonly #fb = inject(FormBuilder);
-  readonly #location = inject(Location);
+export default class SourceEdit {
   readonly #sourceService = inject(SourceData);
   readonly #router = inject(Router);
 
-  protected readonly id = input.required();
-  #isNew = true;
-  #source = <Source>{};
-  protected sourceEditForm!: FormGroup;
+  protected readonly id = input.required<string>();
+  readonly #isNew = computed(() => (this.id() === 'new' ? true : false));
 
-  ngOnInit() {
-    this.sourceEditForm = this.#fb.group({
-      name: ['', Validators.required],
-    });
+  readonly #source = rxResource<Source, string>({
+    params: () => this.id(),
+    stream: ({ params: id }) => {
+      if (id === 'new') return of({ name: '' });
+      const source = this.#sourceService.getByKey(+id);
+      return source;
+    },
+  });
 
-    if (this.id() !== 'new') {
-      this.#isNew = false;
-      this.loadFormValues(+this.id());
-    }
-  }
-
-  private loadFormValues(id: number) {
-    this.#sourceService
-      .getByKey(id)
-      .pipe(take(1))
-      .subscribe((source: Source) => {
-        this.#source = { ...source };
-        this.sourceEditForm.get('name').setValue(this.#source.name);
-      });
-  }
+  protected readonly form = form<Source>(this.#source.value, SOURCE_EDIT_SCHEMA);
 
   protected save() {
-    this.#source.name = this.sourceEditForm.controls.name.value;
-    if (this.#isNew) {
-      this.#sourceService.add(this.#source);
+    if (this.#isNew()) {
+      this.#sourceService.add(this.#source.value());
     } else {
-      this.#sourceService.update(this.#source);
+      this.#sourceService.update(this.#source.value());
     }
-    this.#location.back();
+    this.#router.navigate(['/admin/sources']);
   }
 
   protected cancel() {

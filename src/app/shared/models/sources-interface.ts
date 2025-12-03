@@ -1,7 +1,7 @@
 import { required, schema } from '@angular/forms/signals';
 
 export interface Source {
-  id: number;
+  id?: number;
   name: string;
 }
 
