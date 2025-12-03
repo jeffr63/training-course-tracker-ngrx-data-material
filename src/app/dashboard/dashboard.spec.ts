@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { expect, vi, beforeEach, describe, it } from 'vitest';
 
 import { of } from 'rxjs';
 import { provideEntityData, withEffects } from '@ngrx/data';
@@ -13,6 +14,7 @@ import { entityConfig } from '../entity-metadata';
 import { Component } from '@angular/core';
 import { DashboardGrid } from './dashboard-grid';
 import { CourseData } from '@services/course/course-data';
+import { CourseChartData } from '@models/course-interface';
 
 @Component({
   selector: 'app-dashboard-grid',
@@ -62,7 +64,6 @@ describe('Dashboard', () => {
         provideStore(),
         provideEffects(),
         provideEntityData(entityConfig, withEffects()),
-        provideAnimationsAsync(),
       ],
     })
       .overrideComponent(Dashboard, {
@@ -71,7 +72,7 @@ describe('Dashboard', () => {
       })
       .compileComponents();
     mockCourseService = TestBed.inject(CourseData);
-    spyOn(mockCourseService, 'getAll').and.returnValue(of(mockData));
+    vi.spyOn(mockCourseService, 'getAll').and.returnValue(of(mockData));
   }));
 
   beforeEach(() => {
@@ -82,7 +83,7 @@ describe('Dashboard', () => {
 
   describe('NgOnInit', () => {
     it('should declare the paths signal', () => {
-      const paths: CourseData[] = [
+      const paths: CourseChartData[] = [
         { name: 'Angular', value: 2 },
         { name: 'React', value: 1 },
       ];
@@ -91,7 +92,7 @@ describe('Dashboard', () => {
     });
 
     it('should declare the sourses signal', () => {
-      const sources: CourseData[] = [
+      const sources: CourseChartData[] = [
         { name: 'Pluralsight', value: 2 },
         { name: 'Youtube', value: 1 },
       ];
