@@ -1,57 +1,51 @@
 import { Component, OnInit, inject, input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { form } from '@angular/forms/signals';
 
-import { take } from 'rxjs';
+import { of } from 'rxjs';
 
-import { Path } from '@models/paths-interface';
+import { Path, PATH_EDIT_SCHEMA } from '@models/paths-interface';
 import { PathData } from '@services/path/path-data';
 import { PathEditCard } from './path-edit-card';
 
 @Component({
   selector: 'app-path-edit',
   imports: [PathEditCard],
-  template: ` <app-path-edit-card [(pathEditForm)]="pathEditForm" (cancel)="cancel()" (save)="save()" /> `,
+  template: ` <app-path-edit-card [form]="form" (cancel)="cancel()" (save)="save()" /> `,
   styles: ``,
 })
 export default class PathEdit implements OnInit {
-  readonly #fb = inject(FormBuilder);
   readonly #location = inject(Location);
   readonly #pathService = inject(PathData);
   readonly #router = inject(Router);
 
-  protected readonly id = input.required();
+  protected readonly id = input.required<string>();
   #isNew = true;
-  #path = <Path>{};
-  protected pathEditForm!: FormGroup;
+
+  readonly #path = rxResource<Path, string>({
+    params: () => this.id(),
+    stream: ({ params: id }) => {
+      if (id === 'new') return of({ name: '' });
+      const publisher = this.#pathService.getByKey(+id);
+      return publisher;
+    },
+  });
+
+  readonly form = form<Path>(this.#path.value, PATH_EDIT_SCHEMA);
 
   ngOnInit() {
-    this.pathEditForm = this.#fb.group({
-      name: ['', Validators.required],
-    });
     if (this.id() !== 'new') {
       this.#isNew = false;
-      this.loadFormValues(+this.id());
     }
   }
 
-  private loadFormValues(id: number) {
-    this.#pathService
-      .getByKey(id)
-      .pipe(take(1))
-      .subscribe((path: Path) => {
-        this.#path = { ...path };
-        this.pathEditForm.get('name').setValue(this.#path.name);
-      });
-  }
-
   protected save() {
-    this.#path.name = this.pathEditForm.controls.name.value;
     if (this.#isNew) {
-      this.#pathService.add(this.#path);
+      this.#pathService.add(this.#path.value());
     } else {
-      this.#pathService.update(this.#path);
+      this.#pathService.update(this.#path.value());
     }
     this.#location.back();
   }
