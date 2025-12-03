@@ -1,59 +1,40 @@
-import { Component, OnInit, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Location } from '@angular/common';
+import { form } from '@angular/forms/signals';
+import { rxResource } from '@angular/core/rxjs-interop';
 
-import { take } from 'rxjs';
+import { of, take } from 'rxjs';
 
-import { User } from '@models/user-interface';
+import { User, USER_EDIT_SCHEMA } from '@models/user-interface';
 import { UserData } from '@services/user/user-data';
 import { UserEditCard } from './user-edit-card';
 
 @Component({
   selector: 'app-user-edit',
   imports: [UserEditCard],
-  template: `<app-user-edit-card [(userEditForm)]="userEditForm" (cancel)="cancel()" (save)="save()" />`,
+  template: `<app-user-edit-card [form]="form" (cancel)="cancel()" (save)="save()" />`,
 })
-export default class UserEdit implements OnInit {
-  readonly #fb = inject(FormBuilder);
-  readonly #location = inject(Location);
+export default class UserEdit {
   readonly #userService = inject(UserData);
   readonly #router = inject(Router);
 
-  protected readonly id = input.required();
-  #user = <User>{};
-  protected userEditForm!: FormGroup;
+  protected readonly id = input.required<string>();
+  readonly #isNew = computed(() => this.id() === 'new' ? true : false);
 
-  ngOnInit() {
-    this.userEditForm = this.#fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      role: ['', Validators.required],
-    });
+  readonly #user = rxResource<User, string>({
+    params: () => this.id(),
+    stream: ({ params: id }) => {
+      if (id === 'new') return of({ email: '', name: '', role: '', password: '' });
+      const user = this.#userService.getByKey(+id);
+      return user;
+    },
+  });
 
-    if (this.id() !== 'new') {
-      this.loadFormValues(+this.id());
-    }
-  }
-
-  private loadFormValues(id: number) {
-    this.#userService
-      .getByKey(id)
-      .pipe(take(1))
-      .subscribe((user: User) => {
-        this.#user = { ...user };
-        this.userEditForm.patchValue({
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        });
-      });
-  }
+  readonly form = form<User>(this.#user.value, USER_EDIT_SCHEMA);
 
   protected save() {
-    const patchData = this.userEditForm.getRawValue();
-    this.#userService.patch(this.#user.id, patchData).pipe(take(1)).subscribe();
-    this.#location.back();
+    this.#userService.patch(this.#user.value().id, this.#user.value()).pipe(take(1)).subscribe();
+    this.#router.navigate(['/admin/users']);
   }
 
   protected cancel() {

@@ -1,11 +1,15 @@
-import { Component, input, model, output } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, input, output } from '@angular/core';
+import { Field, FieldTree } from '@angular/forms/signals';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { ValidationErrors } from '@components/validation-errors';
+
+import { Course } from '@models/course-interface';
 import { Path } from '@models/paths-interface';
 import { Source } from '@models/sources-interface';
 
@@ -18,75 +22,79 @@ import { Source } from '@models/sources-interface';
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-    ReactiveFormsModule,
+    Field,
+    ValidationErrors,
   ],
   template: `
     <mat-card appearance="outlined">
       <mat-card-title>Course Edit</mat-card-title>
       <mat-card-content>
-        @if (courseEditForm()) {
-        <form [formGroup]="courseEditForm()">
-          <mat-form-field appearance="outline">
-            <mat-label for="title">Title</mat-label>
-            <input
-              ngbAutofocus
-              type="text"
-              id="title"
-              matInput
-              formControlName="title"
-              placeholder="Enter title of course taken" />
-            @if (courseEditForm().controls.title.errors?.required && courseEditForm().controls.title?.touched) {
-            <mat-error>Title is required</mat-error>
-            }
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label for="title">Instructor</mat-label>
-            <input
-              type="text"
-              id="instructor"
-              matInput
-              formControlName="instructor"
-              placeholder="Enter title of course taken" />
-            @if (courseEditForm().controls.instructor.errors?.required && courseEditForm().controls.instructor?.touched)
-            {
-            <mat-error>Instructor is required</mat-error>
-            }
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Path</mat-label>
-            <mat-select id="path" formControlName="path">
-              @for (path of paths(); track path.id) {
-              <mat-option [value]="path.name">
-                {{ path.name }}
-              </mat-option>
+        @if (form()) {
+          <form>
+            <mat-form-field appearance="outline">
+              <mat-label for="title">Title</mat-label>
+              <input
+                ngbAutofocus
+                type="text"
+                id="title"
+                matInput
+                [field]="form().title"
+                placeholder="Enter title of course taken" />
+              @let ftitle = form().title();
+              @if (ftitle.invalid() && ftitle.touched()) {
+                <app-validation-errors matError [errors]="ftitle.errors()" />
               }
-            </mat-select>
-            @if (courseEditForm().controls.path.errors?.required && courseEditForm().controls.path?.touched) {
-            <mat-error>Path is required</mat-error>
-            }
-          </mat-form-field>
+            </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Source</mat-label>
-            <mat-select id="path" formControlName="source">
-              @for (source of sources(); track source.id) {
-              <mat-option [value]="source.name">
-                {{ source.name }}
-              </mat-option>
+            <mat-form-field appearance="outline">
+              <mat-label for="title">Instructor</mat-label>
+              <input
+                type="text"
+                id="instructor"
+                matInput
+                [field]="form().instructor"
+                placeholder="Enter title of course taken" />
+              @let finstructor = form().instructor();
+              @if (finstructor.invalid() && finstructor.touched()) {
+                <app-validation-errors matError [errors]="finstructor.errors()" />
               }
-            </mat-select>
-            @if (courseEditForm().controls.source.errors?.required && courseEditForm().controls.source?.touched) {
-            <mat-error> Path is required </mat-error>
-            }
-          </mat-form-field>
-        </form>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Path</mat-label>
+              <mat-select id="path" [field]="form().path">
+                @for (path of paths(); track path.id) {
+                  <mat-option [value]="path.name">
+                    {{ path.name }}
+                  </mat-option>
+                }
+              </mat-select>
+              @let fpath = form().path();
+              @if (fpath.invalid() && fpath.touched()) {
+                <app-validation-errors matError [errors]="fpath.errors()" />
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Source</mat-label>
+              <mat-select id="path" [field]="form().source">
+                @for (source of sources(); track source.id) {
+                  <mat-option [value]="source.name">
+                    {{ source.name }}
+                  </mat-option>
+                }
+              </mat-select>
+              @let fsource = form().source();
+              @if (fsource.invalid() && fsource.touched()) {
+                <app-validation-errors matError [errors]="fsource.errors()" />
+              }
+            </mat-form-field>
+          </form>
         }
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-flat-button color="primary" (click)="save.emit()" title="Save" [disabled]="!courseEditForm().valid">
+        <button mat-flat-button color="primary" (click)="save.emit()" title="Save" [disabled]="form()().invalid()">
           <mat-icon>save</mat-icon> Save
         </button>
         <button mat-flat-button color="accent" class="ml-10" (click)="cancel.emit()">
@@ -96,31 +104,30 @@ import { Source } from '@models/sources-interface';
     </mat-card>
   `,
   styles: `
-      /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
-      mat-card {
-        margin: 30px;
-        padding-left: 15px;
-        padding-right: 15px;
-        width: 30%;
-      }
+    mat-card {
+      margin: 30px;
+      padding-left: 15px;
+      padding-right: 15px;
+      width: 30%;
+    }
 
-      mat-content {
-        width: 100%;
-      }
+    mat-content {
+      width: 100%;
+    }
 
-      mat-form-field {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-      }
+    mat-form-field {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
 
-      .ml-10 {
-        margin-left: 10px;
-      }
-    `,
+    .ml-10 {
+      margin-left: 10px;
+    }
+  `,
 })
 export class CourseEditCard {
-  courseEditForm = model.required<FormGroup>();
+  form = input.required<FieldTree<Course>>();
   paths = input.required<Path[]>();
   sources = input.required<Source[]>();
   cancel = output();

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 
 import { take } from 'rxjs';
 
@@ -10,26 +10,27 @@ import { DeleteModal } from '@modals/delete/delete-modal';
 import { DisplayTable } from '@components/display-table';
 import { ModalService } from '@services/common/modal-service';
 import { PathData } from '@services/path/path-data';
+import { Path } from '@models/paths-interface';
 
 @Component({
   selector: 'app-path-list',
   imports: [DisplayTable],
   template: `
     <section class="mt-5">
-      @if (paths()) {
-      <app-display-table
-        [isAuthenticated]="true"
-        [isFilterable]="true"
-        [includeAdd]="true"
-        [isPageable]="true"
-        [paginationSizes]="[5, 10, 25, 100]"
-        [defaultPageSize]="10"
-        [disableClear]="true"
-        [tableData]="paths()"
-        [tableColumns]="columns"
-        (add)="newPath()"
-        (delete)="deletePath($event)"
-        (edit)="editPath($event)"></app-display-table>
+      @if (paths.hasValue()) {
+        <app-display-table
+          [isAuthenticated]="true"
+          [isFilterable]="true"
+          [includeAdd]="true"
+          [isPageable]="true"
+          [paginationSizes]="[5, 10, 25, 100]"
+          [defaultPageSize]="10"
+          [disableClear]="true"
+          [tableData]="paths.value()"
+          [tableColumns]="columns"
+          (add)="newPath()"
+          (delete)="deletePath($event)"
+          (edit)="editPath($event)"></app-display-table>
       }
     </section>
   `,
@@ -55,11 +56,11 @@ export default class PathList {
     { key: 'action', name: '', width: '', type: 'action', position: 'left' },
   ];
 
-  protected readonly paths = toSignal(this.#pathService.entities$, { initialValue: [] });
-
-  constructor() {
-    this.#pathService.getAll().pipe(take(1));
-  }
+  protected readonly paths = rxResource<Path[], undefined>({
+    stream: () => {
+      return this.#pathService.getAll();
+    },
+  });
 
   protected deletePath(id) {
     const modalOptions = {
@@ -75,7 +76,7 @@ export default class PathList {
       .subscribe((result) => {
         if (result == 'delete') {
           this.#pathService.delete(id);
-          this.#pathService.getAll().pipe(take(1));
+          this.paths.reload();
         }
       });
   }
