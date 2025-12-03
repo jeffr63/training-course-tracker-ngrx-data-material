@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 
 import { take } from 'rxjs';
@@ -11,26 +11,27 @@ import { CourseData } from '@services/course/course-data';
 import { DeleteModal } from '@modals/delete/delete-modal';
 import { DisplayTable } from '@components/display-table';
 import { ModalService } from '@services/common/modal-service';
+import { Course } from '@models/course-interface';
 
 @Component({
   selector: 'app-course-list',
   imports: [DisplayTable],
   template: `
     <section class="mt-5">
-      @if (courses()) {
-      <app-display-table
-        [includeAdd]="true"
-        [isAuthenticated]="isAuthenticated()"
-        [isFilterable]="true"
-        [isPageable]="true"
-        [paginationSizes]="[5, 10, 25, 100]"
-        [defaultPageSize]="10"
-        [disableClear]="true"
-        [tableData]="courses()"
-        [tableColumns]="columns"
-        (add)="newCourse()"
-        (delete)="deleteCourse($event)"
-        (edit)="editCourse($event)"></app-display-table>
+      @if (courses.hasValue()) {
+        <app-display-table
+          [includeAdd]="true"
+          [isAuthenticated]="isAuthenticated()"
+          [isFilterable]="true"
+          [isPageable]="true"
+          [paginationSizes]="[5, 10, 25, 100]"
+          [defaultPageSize]="10"
+          [disableClear]="true"
+          [tableData]="courses.value()"
+          [tableColumns]="columns"
+          (add)="newCourse()"
+          (delete)="deleteCourse($event)"
+          (edit)="editCourse($event)"></app-display-table>
       }
     </section>
   `,
@@ -42,14 +43,19 @@ import { ModalService } from '@services/common/modal-service';
     `,
   ],
 })
-export default class CourseList implements OnInit {
+export default class CourseList {
   readonly #authService = inject(AuthService);
   readonly #courseService = inject(CourseData);
   readonly #dialog = inject(MatDialog);
   readonly #modalDataService = inject(ModalService);
   readonly #router = inject(Router);
 
-  protected readonly courses = toSignal(this.#courseService.entities$, { initialValue: [] });
+  protected readonly courses = rxResource<Course[], undefined>({
+    stream: () => {
+      return this.#courseService.getAll();
+    },
+  });
+
   protected readonly isAuthenticated = this.#authService.isLoggedIn;
 
   protected readonly columns: Column[] = [
@@ -59,10 +65,6 @@ export default class CourseList implements OnInit {
     { key: 'source', name: 'Source', width: '150px', type: 'sort', position: 'left' },
     { key: 'action', name: '', width: '50px', type: 'action', position: 'left' },
   ];
-
-  ngOnInit() {
-    this.getAllCourses();
-  }
 
   protected deleteCourse(id) {
     const modalOptions = {
@@ -79,7 +81,7 @@ export default class CourseList implements OnInit {
       .subscribe((result) => {
         if (result == 'delete') {
           this.#courseService.delete(id);
-          this.getAllCourses();
+          this.courses.reload();
         }
       });
   }
