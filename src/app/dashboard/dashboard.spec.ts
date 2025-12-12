@@ -17,87 +17,88 @@ import { CourseData } from '@services/course/course-data';
 import { CourseChartData } from '@models/course-interface';
 
 @Component({
-  selector: 'app-dashboard-grid',
-  template: `<h1>mocked dashboard grid</h1>`,
+    selector: 'app-dashboard-grid',
+    template: `<h1>mocked dashboard grid</h1>`,
 })
-export class DashboardGridMock {}
+export class DashboardGridMock {
+}
 
 describe('Dashboard', () => {
-  let component: Dashboard;
-  let dh: DOMHelperRoutines<Dashboard>;
-  let fixture: ComponentFixture<Dashboard>;
-  let mockCourseService;
-  let mockData = [
-    {
-      id: 1,
-      title: '1',
-      instructor: '1',
-      path: 'Angular',
-      source: 'Youtube',
-    },
-    {
-      id: 2,
-      title: '2',
-      instructor: '2',
-      path: 'Angular',
-      source: 'Pluralsight',
-    },
-    {
-      id: 3,
-      title: '3',
-      instructor: '3',
-      path: 'React',
-      source: 'Pluralsight',
-    },
-  ];
+    let component: Dashboard;
+    let dh: DOMHelperRoutines<Dashboard>;
+    let fixture: ComponentFixture<Dashboard>;
+    let mockCourseService;
+    let mockData = [
+        {
+            id: 1,
+            title: '1',
+            instructor: '1',
+            path: 'Angular',
+            source: 'Youtube',
+        },
+        {
+            id: 2,
+            title: '2',
+            instructor: '2',
+            path: 'Angular',
+            source: 'Pluralsight',
+        },
+        {
+            id: 3,
+            title: '3',
+            instructor: '3',
+            path: 'React',
+            source: 'Pluralsight',
+        },
+    ];
 
-  let entityMetaData = {
-    Courses: {},
-  };
+    let entityMetaData = {
+        Courses: {},
+    };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [Dashboard],
-      providers: [
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-        provideStore(),
-        provideEffects(),
-        provideEntityData(entityConfig, withEffects()),
-      ],
-    })
-      .overrideComponent(Dashboard, {
-        remove: { inputs: [DashboardGrid] },
-        add: { inputs: [DashboardGridMock] },
-      })
-      .compileComponents();
-    mockCourseService = TestBed.inject(CourseData);
-    vi.spyOn(mockCourseService, 'getAll').and.returnValue(of(mockData));
-  }));
+    beforeEach(waitForAsync(() => {
+        TestBed.configureTestingModule({
+            imports: [Dashboard],
+            providers: [
+                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClientTesting(),
+                provideStore(),
+                provideEffects(),
+                provideEntityData(entityConfig, withEffects()),
+            ],
+        })
+            .overrideComponent(Dashboard, {
+            remove: { inputs: [DashboardGrid] },
+            add: { inputs: [DashboardGridMock] },
+        })
+            .compileComponents();
+        mockCourseService = TestBed.inject(CourseData);
+        vi.spyOn(mockCourseService, 'getAll').mockReturnValue(of(mockData));
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(Dashboard);
-    component = fixture.componentInstance;
-    dh = new DOMHelperRoutines(fixture);
-  });
-
-  describe('NgOnInit', () => {
-    it('should declare the paths signal', () => {
-      const paths: CourseChartData[] = [
-        { name: 'Angular', value: 2 },
-        { name: 'React', value: 1 },
-      ];
-      fixture.detectChanges();
-      expect(component.paths()).toEqual(paths);
+    beforeEach(() => {
+        fixture = TestBed.createComponent(Dashboard);
+        component = fixture.componentInstance;
+        dh = new DOMHelperRoutines(fixture);
     });
 
-    it('should declare the sourses signal', () => {
-      const sources: CourseChartData[] = [
-        { name: 'Pluralsight', value: 2 },
-        { name: 'Youtube', value: 1 },
-      ];
-      fixture.detectChanges();
-      expect(component.sources()).toEqual(sources);
+    describe('NgOnInit', () => {
+        it('should declare the paths signal', () => {
+            const paths: CourseChartData[] = [
+                { name: 'Angular', value: 2 },
+                { name: 'React', value: 1 },
+            ];
+            fixture.detectChanges();
+            expect(component.paths()).toEqual(paths);
+        });
+
+        it('should declare the sourses signal', () => {
+            const sources: CourseChartData[] = [
+                { name: 'Pluralsight', value: 2 },
+                { name: 'Youtube', value: 1 },
+            ];
+            fixture.detectChanges();
+            expect(component.sources()).toEqual(sources);
+        });
     });
-  });
 });

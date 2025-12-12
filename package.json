@@ -1,6 +1,6 @@
 {
-  "name": "course-list",
-  "version": "21.1.0",
+  "name": "training-course-tracker",
+  "version": "21.0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -38,6 +38,7 @@
     "@angular/build": "^21.0.2",
     "@angular/cli": "^21.0.2",
     "@angular/compiler-cli": "^21.0.3",
+    "@vitest/browser-playwright": "^4.0.15",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.3",
     "vitest": "^4.0.8"
