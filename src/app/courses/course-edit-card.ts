@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { Field, FieldTree } from '@angular/forms/signals';
+import { FormField, FieldTree, ValidationError } from '@angular/forms/signals';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,11 +7,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ValidationErrors } from '@components/validation-errors';
 
 import { Course } from '@models/course-interface';
 import { Path } from '@models/paths-interface';
 import { Source } from '@models/sources-interface';
+import * as validate from '@services/common/validation-error';
 
 @Component({
   selector: 'app-course-edit-card',
@@ -22,8 +22,7 @@ import { Source } from '@models/sources-interface';
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-    Field,
-    ValidationErrors,
+    FormField,
   ],
   template: `
     <mat-card appearance="outlined">
@@ -38,11 +37,15 @@ import { Source } from '@models/sources-interface';
                 type="text"
                 id="title"
                 matInput
-                [field]="form().title"
+                [formField]="form().title"
                 placeholder="Enter title of course taken" />
               @let ftitle = form().title();
               @if (ftitle.invalid() && ftitle.touched()) {
-                <app-validation-errors matError [errors]="ftitle.errors()" />
+                <mat-error>
+                  @for (error of ftitle.errors(); track error.kind) {
+                    {{ getError(error) }}
+                  }
+                </mat-error>
               }
             </mat-form-field>
 
@@ -52,17 +55,21 @@ import { Source } from '@models/sources-interface';
                 type="text"
                 id="instructor"
                 matInput
-                [field]="form().instructor"
+                [formField]="form().instructor"
                 placeholder="Enter title of course taken" />
               @let finstructor = form().instructor();
               @if (finstructor.invalid() && finstructor.touched()) {
-                <app-validation-errors matError [errors]="finstructor.errors()" />
+                <mat-error>
+                  @for (error of finstructor.errors(); track error.kind) {
+                    {{ getError(error) }}
+                  }
+                </mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Path</mat-label>
-              <mat-select id="path" [field]="form().path">
+              <mat-select id="path" [formField]="form().path">
                 @for (path of paths(); track path.id) {
                   <mat-option [value]="path.name">
                     {{ path.name }}
@@ -71,13 +78,17 @@ import { Source } from '@models/sources-interface';
               </mat-select>
               @let fpath = form().path();
               @if (fpath.invalid() && fpath.touched()) {
-                <app-validation-errors matError [errors]="fpath.errors()" />
+                <mat-error>
+                  @for (error of fpath.errors(); track error.kind) {
+                    {{ getError(error) }}
+                  }
+                </mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Source</mat-label>
-              <mat-select id="path" [field]="form().source">
+              <mat-select id="path" [formField]="form().source">
                 @for (source of sources(); track source.id) {
                   <mat-option [value]="source.name">
                     {{ source.name }}
@@ -86,7 +97,11 @@ import { Source } from '@models/sources-interface';
               </mat-select>
               @let fsource = form().source();
               @if (fsource.invalid() && fsource.touched()) {
-                <app-validation-errors matError [errors]="fsource.errors()" />
+                <mat-error>
+                  @for (error of fsource.errors(); track error.kind) {
+                    {{ getError(error) }}
+                  }
+                </mat-error>
               }
             </mat-form-field>
           </form>
@@ -132,4 +147,8 @@ export class CourseEditCard {
   sources = input.required<Source[]>();
   cancel = output();
   save = output();
+
+  getError(error: ValidationError) {
+    return validate.getError(error);
+  }
 }

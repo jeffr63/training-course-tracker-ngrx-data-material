@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { Field, FieldTree } from '@angular/forms/signals';
+import { FormField, FieldTree, ValidationError } from '@angular/forms/signals';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -8,11 +8,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 import { Source } from '@models/sources-interface';
-import { ValidationErrors } from '@components/validation-errors';
+import * as validate from '@services/common/validation-error';
 
 @Component({
   selector: 'app-source-edit-card',
-  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, Field, ValidationErrors],
+  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, FormField],
   template: `
     <mat-card appearance="outlined">
       <mat-card-title>Source Edit</mat-card-title>
@@ -26,11 +26,15 @@ import { ValidationErrors } from '@components/validation-errors';
                 type="text"
                 id="title"
                 matInput
-                [field]="form().name"
+                [formField]="form().name"
                 placeholder="Enter name of source" />
               @let fname = form().name();
               @if (fname.invalid() && fname.touched()) {
-                <app-validation-errors matError [errors]="fname.errors()" />
+                <mat-error>
+                  @for (error of fname.errors(); track error.kind) {
+                    {{ getError(error) }}
+                  }
+                </mat-error>
               }
             </mat-form-field>
           </form>
@@ -75,4 +79,8 @@ export class SourceEditCard {
   form = input.required<FieldTree<Source>>();
   cancel = output();
   save = output();
+
+  getError(error: ValidationError) {
+    return validate.getError(error);
+  }
 }
