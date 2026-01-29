@@ -21,12 +21,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
     { provide: TitleStrategy, useClass: CustomTitleStrategy },
-    provideZoneChangeDetection({ eventCoalescing: true }),
     provideStore(),
     provideEffects(),
     provideEntityData(entityConfig, withEffects()),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideAnimationsAsync(),
     provideHttpClient(),
     provideRouter(APP_ROUTES, withComponentInputBinding()),
   ],

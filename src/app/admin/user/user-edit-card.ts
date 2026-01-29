@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { Field, FieldTree } from '@angular/forms/signals';
+import { FormField, FieldTree, ValidationError } from '@angular/forms/signals';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,8 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { ValidationErrors } from '@components/validation-errors';
+
 import { User } from '@models/user-interface';
+import * as validate from '@services/common/validation-error';
 
 @Component({
   selector: 'app-user-edit-card',
@@ -19,8 +20,7 @@ import { User } from '@models/user-interface';
     MatIconModule,
     MatInputModule,
     MatRadioModule,
-    Field,
-    ValidationErrors,
+    FormField,
   ],
   template: `
     <mat-card appearance="outlined">
@@ -35,31 +35,43 @@ import { User } from '@models/user-interface';
                 type="text"
                 id="name"
                 matInput
-                [field]="form().name"
+                [formField]="form().name"
                 placeholder="Enter name of user" />
               @let fname = form().name();
               @if (fname.invalid() && fname.touched()) {
-                <app-validation-errors matError [errors]="fname.errors()" />
+                <mat-error>
+                  @for (error of fname.errors(); track error.kind) {
+                    {{ getError(error) }}
+                  }
+                </mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label for="email">Email</mat-label>
-              <input type="text" id="email" matInput [field]="form().email" placeholder="Enter email of user" />
+              <input type="text" id="email" matInput [formField]="form().email" placeholder="Enter email of user" />
               @let femail = form().email();
               @if (femail.invalid() && femail.touched()) {
-                <app-validation-errors matError [errors]="femail.errors()" />
+                <mat-error>
+                  @for (error of femail.errors(); track error.kind) {
+                    {{ getError(error) }}
+                  }
+                </mat-error>
               }
             </mat-form-field>
 
             <label id="role">Role</label>
-            <mat-radio-group aria-labelledby="Role" class="radio-group" id="role" [field]="form().role">
+            <mat-radio-group aria-labelledby="Role" class="radio-group" id="role" [formField]="form().role">
               <mat-radio-button class="radio-button" value="admin">Admin</mat-radio-button>
               <mat-radio-button class="radio-button" value="user">User</mat-radio-button>
             </mat-radio-group>
             @let frole = form().role();
             @if (frole.invalid() && frole.touched()) {
-              <app-validation-errors matError [errors]="frole.errors()" />
+              <mat-error>
+                @for (error of frole.errors(); track error.kind) {
+                  {{ getError(error) }}
+                }
+              </mat-error>
             }
           </form>
         }
@@ -113,4 +125,8 @@ export class UserEditCard {
   form = input.required<FieldTree<User>>();
   cancel = output();
   save = output();
+
+  getError(error: ValidationError) {
+    return validate.getError(error);
+  }
 }

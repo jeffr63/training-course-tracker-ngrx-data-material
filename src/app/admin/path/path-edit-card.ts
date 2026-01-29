@@ -1,17 +1,18 @@
 import { Component, input, output } from '@angular/core';
-import { Field, FieldTree } from '@angular/forms/signals';
+import { FieldTree, FormField, ValidationError } from '@angular/forms/signals';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ValidationErrors } from '@components/validation-errors';
+
 import { Path } from '@models/paths-interface';
+import * as validate from '@services/common/validation-error';
 
 @Component({
   selector: 'app-path-edit-card',
-  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, Field, ValidationErrors],
+  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, FormField, FormField],
   template: `
     <mat-card appearance="outlined">
       <mat-card-title>Path Edit</mat-card-title>
@@ -25,11 +26,15 @@ import { Path } from '@models/paths-interface';
                 type="text"
                 id="title"
                 matInput
-                [field]="form().name"
+                [formField]="form().name"
                 placeholder="Enter name of path" />
               @let fname = form().name();
               @if (fname.invalid() && fname.touched()) {
-                <app-validation-errors matError [errors]="fname.errors()" />
+                <mat-error>
+                  @for (error of fname.errors(); track error.kind) {
+                    {{ getError(error) }}
+                  }
+                </mat-error>
               }
             </mat-form-field>
           </form>
@@ -73,4 +78,8 @@ export class PathEditCard {
   form = input.required<FieldTree<Path>>();
   cancel = output();
   save = output();
+
+  getError(error: ValidationError) {
+    return validate.getError(error);
+  }
 }
